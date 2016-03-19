@@ -44,3 +44,9 @@ Posts and replies can be assigned statuses and due dates similar to a bug tracki
 
 ### Code Uploaded
 We have created a basic version of models.py, started with stubs for all the view methods that we need to implement in the first two sprints and created static HTML pages for the template.
+
+### Rough templates of Views.py and Urls.py
+
+   [Urls.py](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/plaza/urls.py)
+
+   [Views.py](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/plaza/views.py)
