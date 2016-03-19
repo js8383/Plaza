@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 ############################################## Functionality #############################################
 
-# Login/register
+####### Login/register #######
 
 @transaction.atomic
 def register(request):
@@ -70,21 +70,24 @@ def login(request):
 	# If we want perform some pre-check of login credential or add some verification, we might nedd this function.
 	# Also, we could let users to login using their SNS account (fb, twitter etc.)
 
-# For course_create_page
+####### For course_create_page #######
 
-@login_required
-@transaction.atomic
-def create_course(request):
-	# Creation of a new course
+# @login_required
+# @transaction.atomic
+# def create_course(request):
+# 	# Creation of a new course
 
-# For administration_page
+####### For team_create_page #######
 
-@login_required
-@transaction.atomic
-def create_team(request):
-	# Creation of a new team 
-	# Email notification to targer students
-	# Two different ways of team formation
+# @login_required
+# @transaction.atomic
+# def create_team(request):
+# 	# Creation of a new team 
+# 	# Email notification to targer students
+# 	# Two different ways of team formation
+
+
+####### For administration_page #######
 
 @login_required
 @transaction.atomic
@@ -93,7 +96,7 @@ def create_tags(request):
 
 @login_required
 @transaction.atomic
-def delete_tags(request):
+def delete_tags(request, id):
 	# Delete a tag
 
 @login_required
@@ -101,7 +104,7 @@ def delete_tags(request):
 def delete_post(request):
 	# Delete a post, only for staff 
 
-# For home_page
+####### For home_page #######
 
 @login_required
 @transaction.atomic
@@ -133,28 +136,51 @@ def follow_tag(request):
 def unfollow_tag(request):
 	# unfollow a specific tag
 
-# For ajax to get new post in home_page
+####### For ajax  #######
 def get_post(request):
 	# With specification of what posts to get (all or just those have specific tags) and how the post is going to 
 	# be sorted (by number of upvotes or date or length)
 
-# For ajax to get new notification in all pages (notifications is in homepage, but for other pages, just do it 
-# as a dropdown from nav bar.
+
 def get_notication(request):
-	#
+	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it 
+	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
+
+####### For resource page #######
+
+@login_required
+@transaction.atomic
+def upoad_resource(request):
+	#  Staff only
+
+
+####### Other functionalities #######
+
+@login_required
+@transaction.atomic
+def edit_post(request, id):
+	# Edit content
+	# Change visibility
+	# Assign to students
+
+@login_required
+@transaction.atomic
+def edit_course(request, id):
+	# Edit general settings
+
+@login_required
+def search(request):
+	# Search for keywords, time, tags
+	# Popup (modal in bootstrap) previous posts before someone wants to ask questions contains some similar content
+	
+# More to be added 
 
 ############################################## Display pages #############################################
 
 
 @login_required
-def student_home_page(request):
-	# Show the homepage of student in Plaza
-
-@login_required
-def staff_home_page(request):
-	# Show the homepage of staff in Plaza
-
-# Those two above could be combined actually (we just need to add more menus in the nav-bar for staff)
+def home_page(request):
+	# With different users, display either home/staff home page
 
 @login_required
 def profile_page(request, id):
@@ -165,18 +191,27 @@ def edit_profile_page(request, id):
 	# Show the page of editing self profile
 
 @login_required
-def administration_page(request):
+def administration_page(request, id):
 	# Show the page of administration (link to course_creation)
 	# This is only accessible by staffs (from staff_home_page)
 
+
 @login_required
+@transaction.atomic
 def course_creation_page(request):
 	# Show the page to create courses
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
 
+
+@login_required
+@transaction.atomic
+def team_creation_page(request):
+	# Show the page to create teams
+
 @login_required
 def resource_page(request):
 	# Show the page of resources (notes, videos)
+	# For staff, there's an optiona for uploading new resources
 
 @login_required
 def resource_slide_page(request):
