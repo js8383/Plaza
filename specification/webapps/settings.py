@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'plaza'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,6 +53,11 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'webapps.urls'
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 TEMPLATES = [
     {
