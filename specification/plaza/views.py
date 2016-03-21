@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.db import transaction
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -14,7 +18,7 @@ def register(request):
 	# TODO: Have some default profile picture for new users if they do not upload
 	#       Option to register as staff (for staff, might need code) or student
 
-	context = {}
+    context = {}
     # Just display the registration form if this is a GET request.
     if request.method == 'GET':
         context['form'] = RegistrationForm()
@@ -64,11 +68,13 @@ def register(request):
 def confirm_registration(request, username, token):
 	# confirm registration 
 	# TODO: have a better confirmation page than hw6 
+    return
 
 def login(request):
 	# Not sure if this is needed. For previous homework, we can redirect to "auth_views.login" in url
 	# If we want perform some pre-check of login credential or add some verification, we might nedd this function.
 	# Also, we could let users to login using their SNS account (fb, twitter etc.)
+    return
 
 ####### For course_create_page #######
 
@@ -81,10 +87,11 @@ def login(request):
 
 # @login_required
 # @transaction.atomic
-# def create_team(request):
-# 	# Creation of a new team 
-# 	# Email notification to targer students
-# 	# Two different ways of team formation
+def create_team(request):
+ 	# Creation of a new team 
+ 	# Email notification to targer students
+ 	# Two different ways of team formation
+    return
 
 
 ####### For administration_page #######
@@ -93,16 +100,25 @@ def login(request):
 @transaction.atomic
 def create_tags(request):
 	# Create a tag for students to follow
+    return
 
 @login_required
 @transaction.atomic
 def delete_tags(request, id):
 	# Delete a tag
+    return
 
 @login_required
 @transaction.atomic
 def delete_post(request):
 	# Delete a post, only for staff 
+    return
+
+@login_required
+@transaction.atomic
+def delete_comment(request):
+	# Delete a post, only for staff 
+    return
 
 ####### For home_page #######
 
@@ -110,51 +126,68 @@ def delete_post(request):
 @transaction.atomic
 def make_post(request):
 	# Publish a new post
+    return
 
 @login_required
 @transaction.atomic
 def make_comment(request):
 	# Publish a new comment
+    return
 
 @login_required
 @transaction.atomic
 def upvote(request):
 	# Upvote a post
+    return
 
 @login_required
 @transaction.atomic
 def downvote(request):
 	# Downvote a post
+    return
 
 @login_required
 @transaction.atomic
 def follow_tag(request):
 	# Follow a specific tag
+    return
 
 @login_required
 @transaction.atomic
 def unfollow_tag(request):
 	# unfollow a specific tag
+    return
 
 ####### For ajax  #######
 def get_post(request):
 	# With specification of what posts to get (all or just those have specific tags) and how the post is going to 
 	# be sorted (by number of upvotes or date or length)
+    return
 
 
 def get_notication(request):
 	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it 
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
+    return
 
 ####### For resource page #######
 
 @login_required
 @transaction.atomic
-def upoad_resource(request):
+def upload_resource(request):
 	#  Staff only
+    return
 
 
 ####### Other functionalities #######
+@login_required
+def get_notification(request, id):
+	# Edit content
+	# Change visibility
+	# Assign to students
+    return
+
+
 
 @login_required
 @transaction.atomic
@@ -162,17 +195,20 @@ def edit_post(request, id):
 	# Edit content
 	# Change visibility
 	# Assign to students
+    return
 
 @login_required
 @transaction.atomic
 def edit_course(request, id):
 	# Edit general settings
+    return
 
 @login_required
 def search(request):
 	# Search for keywords, time, tags
 	# Popup (modal in bootstrap) previous posts before someone wants to ask questions contains some similar content
-	
+	return
+
 # More to be added 
 
 ############################################## Display pages #############################################
@@ -181,19 +217,23 @@ def search(request):
 @login_required
 def home_page(request):
 	# With different users, display either home/staff home page
+	return
 
 @login_required
 def profile_page(request, id):
 	# Show profile page of "id"
+	return
 
 @login_required
 def edit_profile_page(request, id):
 	# Show the page of editing self profile
+	return
 
 @login_required
 def administration_page(request, id):
 	# Show the page of administration (link to course_creation)
 	# This is only accessible by staffs (from staff_home_page)
+	return
 
 
 @login_required
@@ -201,20 +241,24 @@ def administration_page(request, id):
 def course_creation_page(request):
 	# Show the page to create courses
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
+	return
 
 
 @login_required
 @transaction.atomic
 def team_creation_page(request):
 	# Show the page to create teams
+	return
 
 @login_required
 def resource_page(request):
 	# Show the page of resources (notes, videos)
 	# For staff, there's an optiona for uploading new resources
+	return
 
 @login_required
 def resource_slide_page(request):
 	# Show the page a slide (could be a pdf slide, or just streaming the video)
 	# Students could post comments to each slide / video
+	return
 

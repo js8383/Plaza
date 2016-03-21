@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include,url
+from django.contrib.auth import views as auth_views
 from plaza import views as plaza_views
 
 urlpatterns = [
@@ -35,9 +36,9 @@ urlpatterns = [
     url(r'^upvote/(?P<id>\d+)$', plaza_views.upvote, name='upvote'),
     url(r'^downvote/(?P<id>\d+)$', plaza_views.downvote, name='downvote'),
     url(r'^getpost$', plaza_views.get_post, name='getpost'),
-    url(r'^getnotification$', plaza_views.get_nofitcation, name='getnotification'),
+    url(r'^getnotification$', plaza_views.get_notification, name='getnotification'),
     url(r'^resource$', plaza_views.resource_page, name='resource'),
-    url(r'^uploadr$', plaza_views.uoload_resource, name='uploadr'),
+    url(r'^uploadr$', plaza_views.upload_resource, name='uploadr'),
     url(r'^register$', plaza_views.register, name='register'),
     url(r'^login$', auth_views.login, {'template_name':'login.html'}, name='login'),
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
