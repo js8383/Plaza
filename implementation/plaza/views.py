@@ -3,6 +3,8 @@ from django.db import transaction
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from plaza.forms import *
+
 
 # Create your views here.
 
@@ -48,21 +50,29 @@ def register(request):
     new_user_profile, created = UserProfile.objects.get_or_create(user=new_user)
     new_user_profile.save()
 
-    # Email validation
-    token = default_token_generator.make_token(new_user)
-    email_body = """
-    Welcome to the Social Network.  Please click the link below to
-    verify your email address and complete the registration of your account:
+    # # Email validation
+    # token = default_token_generator.make_token(new_user)
+    # email_body = """
+    # Welcome to the Social Network.  Please click the link below to
+    # verify your email address and complete the registration of your account:
 
-      http://%s%s
-    """ % (request.get_host(), reverse('confirm', args=(new_user.username, token)))
+    #   http://%s%s
+    # """ % (request.get_host(), reverse('confirm', args=(new_user.username, token)))
 
-    send_mail(subject="Verify your email address",
-              message= email_body,
-              from_email="jiachens@andrew.cmu.edu",
-              recipient_list=[new_user.email])
-    context['email'] = form.cleaned_data['email']
-    return render(request,'needs-confirmation.html',context)
+    # send_mail(subject="Verify your email address",
+    #           message= email_body,
+    #           from_email="jiachens@andrew.cmu.edu",
+    #           recipient_list=[new_user.email])
+    # context['email'] = form.cleaned_data['email']
+    # return render(request,'needs-confirmation.html',context)
+
+    # Logs in the new user and redirects to the home page
+    new_user= authenticate(username=form.cleaned_data['username'],
+                            password=form.cleaned_data['password1'])
+    login(request, new_user)
+    return redirect(reverse('home'))
+
+
 
 @transaction.atomic
 def confirm_registration(request, username, token):
