@@ -14,10 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include,url
-from plaza import views as plaza_views
+from plaza import views
 
 urlpatterns = [
-    url(r'^$', plaza_views.base, name='base'),
+    url(r'^', plaza_views.base, name='base'),
    """
     url(r'^$', plaza_views.home_page, name='home'),
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
