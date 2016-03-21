@@ -17,6 +17,8 @@ from django.conf.urls import include,url
 from plaza import views as plaza_views
 
 urlpatterns = [
+    url(r'^$', plaza_views.base, name='base'),
+   """
     url(r'^$', plaza_views.home_page, name='home'),
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
     url(r'^editprofile$', plaza_views.edit_profile_page, name='editprofile'),
@@ -43,4 +45,5 @@ urlpatterns = [
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
     url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$',
         plaza_views.confirm_registration, name='confirm'),
+   """
 ]
