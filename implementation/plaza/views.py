@@ -230,10 +230,10 @@ def home_page(request):
 	# With different users, display either home/staff home page
     return render(request, "nav.html",{})
 
-@login_required
+# @login_required
 def profile_page(request, id):
 	# Show profile page of "id"
-	return
+	return render(request, "profile.html", {})
 
 @login_required
 def edit_profile_page(request, id):
