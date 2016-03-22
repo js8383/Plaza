@@ -228,7 +228,7 @@ def search(request):
 @login_required
 def home_page(request):
     # With different users, display either home/staff home page
-    return render(request, "nav.html",{})
+    return render(request, "home.html",{})
 
 # @login_required
 def profile_page(request, id):
