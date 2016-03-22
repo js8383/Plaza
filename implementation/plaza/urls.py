@@ -19,12 +19,13 @@ from plaza import views as plaza_views
 
 urlpatterns = [
     url(r'^$', plaza_views.home_page, name='home'),
+    url(r'^staffhome/(?P<id>\d+)$', plaza_views.staffhome_page, name='staffhome'),
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
     url(r'^editprofile$', plaza_views.edit_profile_page, name='editprofile'),
     url(r'^administration/(?P<id>\d+)$', plaza_views.administration_page, name='administration'),
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
     url(r'^editcourse/(?P<id>\d+)$', plaza_views.edit_post, name='editcourse'), # Maybe also delete a course?
-    url(r'^createteam$', plaza_views.create_team, name='createteam'),
+    url(r'^createteam$', plaza_views.team_creation_page, name='createteam'),
     url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
     url(r'^makepost$', plaza_views.make_post, name='makepost'),
     url(r'^editpost/(?P<id>\d+)$', plaza_views.edit_post, name='editpost'),

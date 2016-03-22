@@ -224,11 +224,16 @@ def search(request):
 ############################################## Display pages #############################################
 
 
-# TODO: uncomment!
 @login_required
 def home_page(request):
     # With different users, display either home/staff home page
     return render(request, "nav.html",{})
+
+
+# @login_required
+def staffhome_page(request, id):
+    # With different users, display either home/staff home page
+    return render(request, "staff_home.html",{})
 
 # @login_required
 def profile_page(request, id):
@@ -254,12 +259,11 @@ def course_creation_page(request):
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
 	return
 
-
-@login_required
+# @login_required
 @transaction.atomic
 def team_creation_page(request):
 	# Show the page to create teams
-	return
+	return render(request, "team_creation.html", {})
 
 def resource_page(request):
 	# Show the page of resources (notes, videos)
