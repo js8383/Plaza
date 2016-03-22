@@ -261,11 +261,10 @@ def team_creation_page(request):
 	# Show the page to create teams
 	return
 
-@login_required
 def resource_page(request):
 	# Show the page of resources (notes, videos)
 	# For staff, there's an optiona for uploading new resources
-	return
+	return render(request, "resources.html", {})
 
 @login_required
 def resource_slide_page(request):
