@@ -1,53 +1,7 @@
-<!-- Parts borrowed from official bootstrap templates --!>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
+{% extends "parent.html" %}
 
-        <title>15437</title>
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    </head>
-
-    <body>
-
-        <nav class="navbar navbar-static-top navbar-dark bg-inverse">
+{% block content %}
         <div class="container">
-            <div class="collapse navbar-collapse">
-                <a class="navbar-brand" href="#">Plaza</a>
-                <ul class="nav navbar-nav">
-                    <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="nav-item">
-                    <a class="nav-link" href="#">Kaan Dogrusoz</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        </nav>
-
-        <div class="container">
-
-
             <div class = "row">
                 <div class = "col-md-4">
                     <div>
@@ -79,28 +33,29 @@
                 <div class = "col-md-8">
                     <div class="row">
 
-                    <h1 class="page-header">Statistics</h1>
+                    <h1 class="page-header">John Assistante's Statistics</h1>
+
 
                     <div class="row placeholders">
                         <div class="col-xs-6 col-sm-3 placeholder">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
+                            <h4>Hours Spent</h4>
+                            <span class="text-muted">Hours spent per week</span>
                         </div>
                         <div class="col-xs-6 col-sm-3 placeholder">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
+                            <h4>Response Time</h4>
+                            <span class="text-muted">Response time throughout the course</span>
                         </div>
                         <div class="col-xs-6 col-sm-3 placeholder">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
+                            <h4>Share of Responses</h4>
+                            <span class="text-muted">Percentage of responses within staff</span>
                         </div>
                         <div class="col-xs-6 col-sm-3 placeholder">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
+                            <h4>Approval</h4>
+                            <span class="text-muted">Approval by students</span>
                         </div>
                     </div>
 
@@ -240,16 +195,5 @@
             <p>&copy; Plaza 2016</p>
             </footer>
         </div> <!-- /container -->
-
-
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>    
-    </body>
-</html>
-
-
+{% endblock %}
 
