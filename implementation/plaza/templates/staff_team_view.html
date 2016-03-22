@@ -1,0 +1,108 @@
+{% extends "parent.html" %}
+
+{% block content %}
+<div class="container">
+    <div class = "row">
+        <div>
+            <h1 class="display3">15437</h1>
+        </div>
+
+        <div class = "col-md-8 col-md-offset-2">
+            <div class="row">
+                <h1>Formed Teams</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Team ID</th>
+                            <th>Team Name</th>
+                            <th>Member 1</th>
+                            <th>Member 2</th>
+                            <th>Member 3</th>
+                            <th>Member 4</th>
+                            <th>Member 5</th>
+                            <th>Pending </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="success">
+                            <td>1</td>
+                            <td>Ducks</td>
+                            <td>kdogruso</td>
+                            <td>jiachen</td>
+                            <td>mkalvani</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr class="warning">
+                            <td>2</td>
+                            <td>People</td>
+                            <td>abcheng</td>
+                            <td>soglu</td>
+                            <td>dbaby</td>
+                            <td>xgc</td>
+                            <td>-</td>
+                            <td>cfourtet</td>
+                        </tr>
+                        <tr class="success">
+                            <td>2</td>
+                            <td>Cats</td>
+                            <td>jkan</td>
+                            <td>abiar</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <h1>Idle Students</h1>
+                <p>
+                Click on a studet to place them in a team manually.
+                </p>
+                <ul>
+                    <li><a href="#">Jack Studentman</a></li>
+                    <li><a href="#">John Studenttante</a></li>
+                    <li><a href="#">Jill Studenttov</a></li>
+                    <li><a href="#">Jamie Studenttyan</a></li>
+                    <li><a href="#">Jordan Studentoglu</a></li>
+                </ul>
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 
+                        <a data-toggle="collapse" href="#collapse1"> Ping these students: </a>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form role="form">            
+                                <div class="form-group">
+                                    <label for="usr">Message:</label>
+                                    <input type="text" class="form-control" id="msg">
+                                </div>
+                                <button type="button" class="btn btn-seconday">Ping</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading"> 
+                        <a data-toggle="collapse" href="#collapse2"> Randomly assign these students to teams:</a>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form role="form">            
+                                <div class="form-group">
+                                    <label for="usr">Message:</label>
+                                    <input type="text" class="form-control" id="msg">
+                                </div>
+                                <button type="button" class="btn btn-danger">Randomly Assign</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+{% endblock %}
+
