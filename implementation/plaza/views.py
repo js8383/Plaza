@@ -247,12 +247,12 @@ def administration_page(request, id):
 	return
 
 
-@login_required
-@transaction.atomic
+# @login_required
+# @transaction.atomic
 def course_creation_page(request):
 	# Show the page to create courses
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
-	return
+	return render(request, "course_creation.html", {})
 
 
 @login_required
