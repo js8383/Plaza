@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from plaza.forms import *
+from django.contrib.auth import login, authenticate, update_session_auth_hash
 
 
 # Create your views here.
@@ -44,9 +46,7 @@ def register(request):
                                         email=form.cleaned_data['email'])
     
     # Mark the user as inactive to prevent login before email confirmation.
-    new_user.is_active = False
     new_user.save()
-
     new_user_profile, created = UserProfile.objects.get_or_create(user=new_user)
     new_user_profile.save()
 
@@ -80,7 +80,7 @@ def confirm_registration(request, username, token):
 	# TODO: have a better confirmation page than hw6 
     return
 
-def login(request):
+def clogin(request):
 	# Not sure if this is needed. For previous homework, we can redirect to "auth_views.login" in url
 	# If we want perform some pre-check of login credential or add some verification, we might nedd this function.
 	# Also, we could let users to login using their SNS account (fb, twitter etc.)
