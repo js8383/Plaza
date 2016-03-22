@@ -261,6 +261,12 @@ def course_creation_page(request):
 
 # @login_required
 @transaction.atomic
+def staff_team_page(request, id):
+	# Show the page to create teams
+	return render(request, "staff_team_view.html", {})
+
+# @login_required
+@transaction.atomic
 def team_creation_page(request):
 	# Show the page to create teams
 	return render(request, "team_creation.html", {})
