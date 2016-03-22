@@ -225,9 +225,9 @@ def search(request):
 
 
 # TODO: uncomment!
-# @login_required
+@login_required
 def home_page(request):
-	# With different users, display either home/staff home page
+    # With different users, display either home/staff home page
     return render(request, "nav.html",{})
 
 # @login_required
