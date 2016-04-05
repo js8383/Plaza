@@ -11,17 +11,28 @@ $("#person_search_field").keyup(function(event){
     }
 });
 
-function display_error(xhr, status, errorThrown)
+function append_error(errorThrown)
 {
-    console.log( "Error: " + errorThrown );
-    console.log( "Status: " + status );
-    console.dir( xhr );
     $("#errors").append(
             '<div class="alert alert-danger">' +
             '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
             errorThrown +
             '</div>'
             );
+}
+
+function display_error(xhr, status, errorThrown)
+{
+    console.log( "Error: " + errorThrown );
+    console.log( "Status: " + status );
+    console.dir( xhr );
+    append_error(errorThrown);
+}
+
+function submit_team()
+{
+    var team_name = $("#team_name_field").val();
+    var members = $("#added: .btn")
 }
 
 function remove_all_people()
@@ -36,13 +47,20 @@ function remove_person(username)
 
 function add_person(user)
 {
-    $("#added").append(
-            create_tag_html(
-                user.username,
-                user.username + "_tag",
-                "profile/" + user.userid,
-                'default',
-                "remove_person('"+user.username+"')"));
+    if (user.username == user.username)
+    {
+        append_error("Can't invite yourself to a team.");
+    }
+    else
+    {
+        $("#added").append(
+                create_tag_html(
+                    user.username,
+                    user.username + "_tag",
+                    "profile/" + user.userid,
+                    'default',
+                    "remove_person('"+user.username+"')"));
+    }
 }
 
 function get_person(username)
