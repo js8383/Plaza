@@ -68,11 +68,10 @@
                                                 <label class="control-label col-md-3" for="description">Tags</label>
                                                 <div class="col-md-9">
                                                     <select multiple class="form-control">
-                                                        <option>1</option>
-                                                        <option>2</option>
-                                                        <option>3</option>
-                                                        <option>4</option>
-                                                        <option>5</option>
+                                                        <option>Tag 1</option>
+                                                        <option>Tag 2</option>
+                                                        <option>Tag 3</option>
+                                                        <option>Tag 4</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -166,66 +165,82 @@
 
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="Students">
-                        <ul class="list-group" id="ul-students">
-                            <li class="list-group-item">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#AddStudent">
-                                                <span class="glyphicon glyphicon-plus" title="Add student"></span>
-                            </button>
+                        <ul class="list-group" id="ul-Student">
                             
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="AddStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                            <h4 class="modal-title" id="myModalLabel">Add to your course </h4>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <div class="form-horizontal" role="form" method="post" action="">
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-3" for="number"> Student</label>
-                                                    <div class="col-md-9">
-                                                        <input id="target1" type="text" class="form-control" placeholder="Username/Email">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <button class="btn btn-primary pull-right" onclick="add()">Confirm</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <script>
-                                           function add() {
-                                              var name = document.getElementById('target1').value;
-                                              var listnode = "<li class='list-group-item'>" + name + "</li>"
-                                              $("#ul-students").prepend(listnode);
-                                              $('#AddStudent').modal('hide');
-                                            }
-                                        </script>
-
-                                    </div>
-                                </div>
-                            </div>
-                            </li>
                         </ul>
 
                     </div>
 
                     <div class="tab-pane fade in active" id="TAs">
+                        <ul class="list-group" id="ul-TA">
+                            
+                        </ul>
                     </div>
                     <div class="tab-pane fade in active" id="Instructors">
+                        <ul class="list-group" id="ul-Instructor">
+                            
+                        </ul>
                     </div>
                 </div>
-            </div>
 
-<!--             <div class="panel-footer">
+                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#AddStudent">
+                    <span class="glyphicon glyphicon-plus" title="Add student"></span>
+                </button>
                 
 
-            </div> -->
+                <!-- Modal -->
+                <div class="modal fade" id="AddStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Add to your course </h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="form-horizontal" role="form" method="post" action="">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" for="number"> ID</label>
+                                        <div class="col-md-9">
+                                            <input id="target1" type="text" class="form-control" placeholder="Username or Email">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3" for="number"> Role </label>
+                                        <div class="col-md-9">
+                                            <select class="form-control" id="roleselection">
+                                                <option>Student</option>
+                                                <option>TA</option>
+                                                <option>Instructor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button class="btn btn-primary pull-right" onclick="add()">Confirm</button>
+                                        </div>
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+
+                            <script>
+                               function add() {
+                                  var name = document.getElementById('target1').value;
+                                  var role = document.getElementById('roleselection').value;
+                                  var listnode = "<li class='list-group-item'>" + name+  "</li>"
+                                  $("#ul-" + role).append(listnode);
+                                  $('#AddStudent').modal('hide');
+                                }
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
 
 
 
