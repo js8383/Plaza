@@ -1,4 +1,5 @@
 
+
 $("#person_search_field").keyup(function(event){
     if(event.keyCode == 13)
     {
@@ -6,14 +7,94 @@ $("#person_search_field").keyup(function(event){
     }
     else
     {
-        
+        // TODO: search people and display suggestions
     }
 });
 
+function append_error(errorThrown)
+{
+    $("#errors").append(
+            '<div class="alert alert-danger">' +
+            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+            errorThrown +
+            '</div>'
+            );
+}
+
+function display_error(xhr, status, errorThrown)
+{
+    console.log( "Error: " + errorThrown );
+    console.log( "Status: " + status );
+    console.dir( xhr );
+    append_error(errorThrown);
+}
+
+function submit_team()
+{
+    var team_name = $("#team_name_field").val();
+    var members = $("#added: .btn")
+}
+
+function remove_all_people()
+{
+    $("#added").empty();
+}
+
+function remove_person(username)
+{
+    $("#" + username + "_tag").remove();
+}
+
+function add_person(user)
+{
+    if (user.username == user.username)
+    {
+        append_error("Can't invite yourself to a team.");
+    }
+    else
+    {
+        $("#added").append(
+                create_tag_html(
+                    user.username,
+                    user.username + "_tag",
+                    "profile/" + user.userid,
+                    'default',
+                    "remove_person('"+user.username+"')"));
+    }
+}
+
+function get_person(username)
+{
+    if (username == null)
+    {
+        return null
+    }
+    else
+    {
+        $.ajax({
+
+            url: "/search_student/",
+ 
+            data: {
+                username: username,
+                csrfmiddlewaretoken: getCSRFToken()
+            },
+
+            type: "POST",
+
+            dataType: "json",
+
+            success: function (user) {
+                add_person(user);
+            },
+
+            error: function (xhr, status, errorThrown) {
+                display_error(xhr, status, errorThrown);
+            }
+        });
+    }
+}
 
 $("#add_person").click(function(event){
-    $("#added").append(
-        $("<p/>", {
-                text: $("#person_search_field").val()
-        }));
+    get_person($("#person_search_field").val());
 });

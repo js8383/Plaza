@@ -7,12 +7,19 @@
     <div class="col-lg-8 col-md-offset-2">
         <h1 class="display3"> 15437 Team Up
         </h1>
+        <div id="errors"></div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <a data-toggle="collapse" href="#collapse1">1. Manually enter teammates</a>
             </div>
             <div id="collapse1" class="panel-collapse collapse">
                 <div class="panel-body">
+                    <h4>Team Name: </h4>    
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" id="team_name_field">
+                        </div>
+                    </div>
                     <h4>Add teammates:</h4>
                     <div class="row">
                         <div class="col-lg-8">
@@ -24,7 +31,12 @@
                     </div>
                     <h4>Added teammates:</h4>
                     <div class="row">
-                        <div id="added">
+                        <div class="col-lg-8">
+                            <div class="container" id="added">
+                            </div>
+                            <br>
+                            <div class="btn btn-default" onclick="remove_all_people()">Clear</div>
+                            <div class="btn btn-info" onclick="submit_team()">Done</div>
                         </div>
                     </div>
                 </div>

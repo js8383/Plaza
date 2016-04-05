@@ -1,3 +1,6 @@
+import json
+
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -7,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from plaza.forms import *
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from plaza.models import *
+from django.core import serializers
 
 # Create your views here.
 
@@ -179,6 +183,29 @@ def get_notication(request):
 	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it 
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
     return
+
+# used in dynamic teammate searching/adding
+def search_student(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpResponse("Request is not valid", status=404)
+
+
+    username = request.POST.get("username","")
+
+    if username == "":
+        return HttpResponse("Username not provided", status=404)
+
+    user_acc = get_object_or_404(User, username__exact=username)
+
+    json_obj = {
+            "username": username,
+            "userid": user_acc.id
+        }
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+
 
 ####### For resource page #######
 
