@@ -21,6 +21,16 @@ function append_error(errorThrown)
             );
 }
 
+function append_success(success)
+{
+    $("#errors").append(
+            '<div class="alert alert-success">' +
+            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+            success +
+            '</div>'
+            );
+}
+
 function display_error(xhr, status, errorThrown)
 {
     console.log( "Error: " + errorThrown );
@@ -32,7 +42,8 @@ function display_error(xhr, status, errorThrown)
 function submit_team()
 {
     var team_name = $("#team_name_field").val();
-    var members = $("#added: .btn")
+    //var members = $("#added: .btn")
+    append_success("Created team " + team_name + "!");
 }
 
 function remove_all_people()
