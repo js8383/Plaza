@@ -1,5 +1,5 @@
 {% extends "nav.html" %}
-
+{% load static %}
 {% block content %}
 
 <br>
@@ -13,9 +13,19 @@
             </div>
             <div id="collapse1" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div class="form-group">
-                        <label for="usr">Add:</label>
-                        <input type="text" class="form-control" id="usr">
+                    <h4>Add teammates:</h4>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" id="person_search_field">
+                        </div>
+                        <div class="col-lg-4">
+                            <input class="btn btn-default" value="Add" id="add_person">
+                        </div>
+                    </div>
+                    <h4>Added teammates:</h4>
+                    <div class="row">
+                        <div id="added">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,4 +122,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'js/createteam.js' %}"></script>
 {% endblock %}

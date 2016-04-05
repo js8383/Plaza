@@ -133,6 +133,15 @@ class Team(models.Model):
     def __str__(self):
         return self.__unicode__()
 
+class MatchMakingPerson(models.Model):
+    person = models.OneToOneField(Person, related_name='matchmaking_person')
+    potential_teams = models.ManyToManyField('MatchMakingTeam', related_name='matchmaking_person')
+    confirmed_team = models.OneToOneField('MatchMakingTeam', related_name='confirmed_person')
+
+class MatchMakingTeam(models.Model):
+    potential_members = models.ManyToManyField(MatchMakingPerson, related_name='potential_team')
+    assignment = models.ForeignKey(Assignment, related_name='potential_team')
+
 # TODO: Create settings model object
      
 # TODO: Create Event model for logs
