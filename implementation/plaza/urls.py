@@ -46,4 +46,7 @@ urlpatterns = [
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
     url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$',
         plaza_views.confirm_registration, name='confirm'),
+
+    # AJAX urls
+    url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
 ]
