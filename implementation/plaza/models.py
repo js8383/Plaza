@@ -98,8 +98,8 @@ class Post(models.Model):
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
     course = models.OneToOneField(Course,related_name='assignments')
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='tag_assignments')

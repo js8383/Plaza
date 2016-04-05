@@ -26,15 +26,82 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="Homework">
                         <ul class="list-group">
-                          <li class="list-group-item">
-                            <b>Homework 1</b> <span class="label label-default label-pill pull-right">Due Mar. 22nd</span>
-                          </li>
-                          <li class="list-group-item">
-                           <b>Homework 2</b> <span class="label label-default label-pill pull-right">Due Mar. 29th</span>
-                          </li>
-                          <li class="list-group-item">
-                            <b>Homework 3</b> <span class="label label-default label-pill pull-right">Due Apr. 1st</span>
-                          </li>
+
+                        <li class="list-group-item">
+                        <b>Homework 1</b> <span class="label label-default label-pill pull-right">Due Mar. 22nd</span>
+                        </li>
+                        <li class="list-group-item">
+                        <b>Homework 2</b> <span class="label label-default label-pill pull-right">Due Mar. 29th</span>
+                        </li>
+                        <li class="list-group-item">
+                        <b>Homework 3</b> <span class="label label-default label-pill pull-right">Due Apr. 1st</span>
+                        </li>
+
+                        <li class="list-group-item">
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#CreateAssignment-8">
+                                            <span class="glyphicon glyphicon-plus" title="Create Assignment"></span>
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="CreateAssignment-8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Create assignment</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" role="form" method="post" action="/instructor/create_course/8/">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="number">Title</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" id="number" name="number">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="name">Writeup</label>
+                                                <div class="col-md-9">
+                                                    <input type="file">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="description">Tags</label>
+                                                <div class="col-md-9">
+                                                    <select multiple class="form-control">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="start_time">Start time</label>
+                                                <div class="col-md-9">
+                                                    <input type="datetime" class="form-control" id="start_time" name="start_time">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="end_time">End time</label>
+                                                <div class="col-md-9">
+                                                    <input type="datetime" class="form-control" id="end_time" name="end_time">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        </li>
+
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="Video">
@@ -79,6 +146,90 @@
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
+        <br>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Roster
+            </div>
+
+            <div class="panel-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#Students" data-toggle="tab">Students</a>
+                    </li>
+                    <li><a href="#TAs" data-toggle="tab">TAs</a>
+                    </li>
+                    <li><a href="#Instructors" data-toggle="tab">Instructors</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="Students">
+                        <ul class="list-group" id="ul-students">
+                            <li class="list-group-item">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#AddStudent">
+                                                <span class="glyphicon glyphicon-plus" title="Add student"></span>
+                            </button>
+                            
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="AddStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Add to your course </h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="form-horizontal" role="form" method="post" action="">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3" for="number"> Student</label>
+                                                    <div class="col-md-9">
+                                                        <input id="target1" type="text" class="form-control" placeholder="Username/Email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-3 col-md-9">
+                                                        <button class="btn btn-primary pull-right" onclick="add()">Confirm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                           function add() {
+                                              var name = document.getElementById('target1').value;
+                                              var listnode = "<li class='list-group-item'>" + name + "</li>"
+                                              $("#ul-students").prepend(listnode);
+                                              $('#AddStudent').modal('hide');
+                                            }
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="tab-pane fade in active" id="TAs">
+                    </div>
+                    <div class="tab-pane fade in active" id="Instructors">
+                    </div>
+                </div>
+            </div>
+
+<!--             <div class="panel-footer">
+                
+
+            </div> -->
+
+
+
+        </div>
     </div>
 </div>
 
