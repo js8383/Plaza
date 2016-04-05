@@ -48,4 +48,15 @@ class RegistrationForm(forms.Form):
         # We must return the cleaned data we got from the cleaned_data
         # dictionary
         return username
-        
+
+class CourseForm(forms.Form):
+    number = forms.CharField(max_length=10, required=True)
+    name = forms.CharField(max_length=128, required=True)
+    semester = forms.CharField(max_length=3, required=True) # Create choices
+    description = forms.CharField(max_length=160, required=True)
+    maxenroll = forms.IntegerField(required=False)
+    public = forms.BooleanField(initial=True, required=True)
+    # start_time = forms.DateTimeField()
+    # end_time = forms.DateTimeField()
+    # created_at = forms.DateTimeField(auto_now_add=True)
+    # updated_at = forms.DateTimeField(auto_now=True)

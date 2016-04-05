@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from plaza.forms import *
 from django.contrib.auth import login, authenticate, update_session_auth_hash
-
+from plaza.models import *
 
 # Create your views here.
 
@@ -257,7 +257,22 @@ def administration_page(request, id):
 def course_creation_page(request):
 	# Show the page to create courses
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
-	return render(request, "course_creation.html", {})
+    context = {}
+    if request.method == 'GET':
+        return render(request, "course_creation.html", {})
+    form = CourseForm(request.POST)
+    # if form.is_valid():
+    number = request.POST["number"]
+    name = request.POST["name"]
+    semester = request.POST["semester"]
+    description = request.POST["description"]
+    maxenroll = request.POST["maxenroll"]
+    print number,name,semester,description,maxenroll
+    # public = request.POST["public"]
+    course = Course(number=number, name=name, semester=semester,description=description,max_enroll=maxenroll)
+    course.save()
+    print "Course created"
+    return redirect(reverse('home'))
 
 # @login_required
 @transaction.atomic

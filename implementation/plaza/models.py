@@ -52,13 +52,16 @@ class Tag(models.Model):
         return self.__unicode__()
 
 class Course(models.Model):
+    number = models.CharField(max_length=10)
     name = models.CharField(max_length=128)
     semester = models.CharField(max_length=3) # Create choices
     description = models.TextField(blank=True, null=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    max_enroll = models.IntegerField(null=True)
+    public = models.BooleanField(default=True)
 
     # TODO: Possobly move to a permission-based model instead of rule-based (last sprint)
     students = models.ManyToManyField(User, related_name='courses_taken')
