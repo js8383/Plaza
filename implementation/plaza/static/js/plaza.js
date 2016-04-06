@@ -1,3 +1,5 @@
+var current_username = null;
+
 // from posted example
 function getCSRFToken() {
     var cookies = document.cookie.split(";");

@@ -1,5 +1,3 @@
-
-
 $("#person_search_field").keyup(function(event){
     if(event.keyCode == 13)
     {
@@ -56,9 +54,10 @@ function remove_person(username)
     $("#" + username + "_tag").remove();
 }
 
-function add_person(user)
+function add_person(teammate)
 {
-    if (user.username == user.username)
+    console.log(current_username);
+    if (teammate.username == current_username)
     {
         append_error("Can't invite yourself to a team.");
     }
@@ -66,11 +65,11 @@ function add_person(user)
     {
         $("#added").append(
                 create_tag_html(
-                    user.username,
-                    user.username + "_tag",
-                    "profile/" + user.userid,
+                    teammate.username,
+                    teammate.username + "_tag",
+                    "profile/" + teammate.userid,
                     'default',
-                    "remove_person('"+user.username+"')"));
+                    "remove_person('"+teammate.username+"')"));
     }
 }
 

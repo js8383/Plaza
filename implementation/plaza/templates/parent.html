@@ -230,7 +230,7 @@
 
     <!-- Make user accessible by js --!>
     <script type="text/javascript">
-        user = "{{request.user.username}}";
+        var current_username = "{{request.user.username}}";
     </script>
 
     {% block footer %} {% endblock %}
