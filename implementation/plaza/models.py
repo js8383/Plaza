@@ -3,39 +3,12 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
 
-# Create your models here.
-
-class Tweet(models.Model):
-    created_by  = models.ForeignKey(User, related_name="tweet_creator")
-    tweet = models.CharField(blank=False, max_length=160)
-    creation_time = models.DateTimeField()
-    creation_time_string = models.CharField(blank=False,max_length=50)
-    # This field is mainly for filter and search
-    uname = models.CharField(blank=False, max_length=160)
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, related_name="user_profile")
-    short_bio = models.CharField(max_length=430, default="No Bio Now")
-    age = models.CharField(max_length=3, default="")
-    picture = models.FileField(upload_to="pictures", blank=True)
-    following = models.ManyToManyField('self', related_name='following_user_profiles')
-
-
-class Comment(models.Model):
-    created_by  = models.ForeignKey(User, related_name="comment_creator")
-    original_post = models.ForeignKey(Tweet, related_name="post_under")
-    comment = models.CharField(default="", max_length=160)
-    creation_time = models.DateTimeField()
-    creation_time_string = models.CharField(blank=False,max_length=50)
-    # This field is mainly for updateing comment (otherwise missing username)
-    uname = models.CharField(blank=False, max_length=160)
-
 class Person(models.Model):
     # Default User fields = username, first_name, last_name, email, password, last_login, date_joined
     user = models.OneToOneField(User) # Enforce andrew_id
     nickname = models.CharField(max_length=32)
     short_bio = models.CharField(max_length=1024, null=True, blank=True)
+    date_of_birth = models.DateField()
     profile_image = models.ImageField(upload_to='profile-photos', blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
@@ -75,8 +48,9 @@ class Course(models.Model):
         return self.__unicode__()
 
 
+
 class Post(models.Model):
-    header = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     text = models.TextField()
     author = models.ForeignKey(Person,related_name='posts')
     parent_id = models.ForeignKey('Post',related_name='children',default=None)
@@ -84,16 +58,38 @@ class Post(models.Model):
     ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))
     visibility =  models.CharField(max_length=1, choices=ANONYMITY_CHOICES,  default='0')
 
-    POST_TYPES = (('0', 'post'),('1', 'student_reply'),('2', 'staff_reply'),('3', 'comments'))
-    timestamp = models.DateTimeField(auto_now=True)
+    POST_CHOICES = (('0', 'question'),('1', 'student_reply'),('2', 'staff_reply'),('3', 'comments'))
+    types = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
+
+    STATUS_CHOICE = (('0', 'resolved'),('1', 'unresolved'),('2', 'answered'),('3', 'unanswered')) 
+    status = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
+
+    assignees = models.ManyToManyField(User, related_name="assigned_posts")
+    editors = models.ManyToManyField(User, related_name="edited_posts")
+    followers = models.ManyToManyField(User, related_name="followed_posts")
+    readers = models.ManyToManyField(User, related_name="read_posts")
+
+    pinned = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.header
     def __str__(self):
         return self.__unicode__()
 
+class Objects(models.Model):
+    title = models.CharField(max_length=128)
+    post = models.ForeignKey(Post, related_name="objects")
+    owner = models.ForeignKey(Person,related_name='uploads')
+
+    CATEGORY_CHOICES = (('PDF', 'application/pdf'),('JPEG', 'image/jpeg'),('GIF', 'image/gif'),('MP4', 'video/mp4'),('EMBED','text/html'),('PNG','image/png'),('CAL','text/calendar'))
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES,  default='0')
+    
 
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
@@ -130,6 +126,8 @@ class Notification(models.Model):
     text = models.CharField(max_length=128)
     course = models.ForeignKey(Course)
     created_at = models.DateTimeField(auto_now_add=True)
+    sender = models.OneToOneField(Person, related_name='notifications_sent')
+    receivers = models.ManyToManyField(Person, related_name='notifications_received')
 
     STATUS_CHOICES = (('0', 'unseen'),('1', 'seen'))
     status =  models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
