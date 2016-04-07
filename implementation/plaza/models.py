@@ -12,7 +12,7 @@ class Tweet(models.Model):
     creation_time_string = models.CharField(blank=False,max_length=50)
     # This field is mainly for filter and search
     uname = models.CharField(blank=False, max_length=160)
-    
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name="user_profile")
@@ -125,10 +125,21 @@ class Resource(models.Model):
     def __str__(self):
         return self.__unicode__()
 
+class Notification(models.Model):
+    title = models.CharField(max_length=128)
+    text = models.CharField(max_length=128)
+    course = models.ForeignKey(Course)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    STATUS_CHOICES = (('0', 'unseen'),('1', 'seen'))
+    status =  models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
+
+    destination = models.URLField(max_length=300)
+
 
 class Team(models.Model):
     team_name = models.CharField(max_length=128)
-    assignment = models.ForeignKey(Assignment, related_name='teams') 
+    assignment = models.ForeignKey(Assignment, related_name='teams')
     members = models.ManyToManyField(Person, related_name='teams')
 
     def __unicode__(self):
@@ -146,6 +157,7 @@ class MatchMakingTeam(models.Model):
     assignment = models.ForeignKey(Assignment, related_name='potential_team')
 
 # TODO: Create settings model object
-     
+
+
 # TODO: Create Event model for logs
 
