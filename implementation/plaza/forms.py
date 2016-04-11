@@ -12,11 +12,11 @@ class RegistrationForm(forms.Form):
     username   = forms.CharField(max_length = 20)
     email      = forms.CharField(max_length = 40,
                                  validators = [validate_email])
-    password1  = forms.CharField(max_length = 200, 
-                                 label='Password', 
+    password1  = forms.CharField(max_length = 200,
+                                 label='Password',
                                  widget = forms.PasswordInput())
-    password2  = forms.CharField(max_length = 200, 
-                                 label='Confirm password',  
+    password2  = forms.CharField(max_length = 200,
+                                 label='Confirm password',
                                  widget = forms.PasswordInput())
 
 

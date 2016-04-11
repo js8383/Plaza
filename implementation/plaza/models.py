@@ -8,7 +8,7 @@ class Person(models.Model):
     user = models.OneToOneField(User) # Enforce andrew_id
     nickname = models.CharField(max_length=32)
     short_bio = models.CharField(max_length=1024, null=True, blank=True)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True)
     profile_image = models.ImageField(upload_to='profile-photos', blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
@@ -61,7 +61,7 @@ class Post(models.Model):
     POST_CHOICES = (('0', 'question'),('1', 'student_reply'),('2', 'staff_reply'),('3', 'comments'))
     types = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
 
-    STATUS_CHOICE = (('0', 'resolved'),('1', 'unresolved'),('2', 'answered'),('3', 'unanswered')) 
+    STATUS_CHOICE = (('0', 'resolved'),('1', 'unresolved'),('2', 'answered'),('3', 'unanswered'))
     status = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -89,7 +89,7 @@ class Objects(models.Model):
 
     CATEGORY_CHOICES = (('PDF', 'application/pdf'),('JPEG', 'image/jpeg'),('GIF', 'image/gif'),('MP4', 'video/mp4'),('EMBED','text/html'),('PNG','image/png'),('CAL','text/calendar'))
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES,  default='0')
-    
+
 
 class Assignment(models.Model):
     title = models.CharField(max_length=128)

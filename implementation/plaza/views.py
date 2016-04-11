@@ -32,7 +32,7 @@ def register(request):
         context['form'] = RegistrationForm()
         return render(request, 'register.html', context)
 
-    # Creates a bound form from the request POST parameters and makes the 
+    # Creates a bound form from the request POST parameters and makes the
     # form available in the request context dictionary.
     form = RegistrationForm(request.POST)
     context['form'] = form
@@ -41,18 +41,18 @@ def register(request):
     if not form.is_valid():
         return render(request, 'register.html', context)
 
-    
+
     # At this point, the form data is valid.  Register and login the user.
-    new_user = User.objects.create_user(username=form.cleaned_data['username'], 
+    new_user = User.objects.create_user(username=form.cleaned_data['username'],
                                         password=form.cleaned_data['password1'],
                                         first_name=form.cleaned_data['first_name'],
                                         last_name=form.cleaned_data['last_name'],
                                         email=form.cleaned_data['email'])
-    
+
     # Mark the user as inactive to prevent login before email confirmation.
     new_user.save()
-    new_user_profile, created = UserProfile.objects.get_or_create(user=new_user)
-    new_user_profile.save()
+    new_person, created = Person.objects.get_or_create(user=new_user)
+    new_person.save()
 
     # # Email validation
     # token = default_token_generator.make_token(new_user)
@@ -80,8 +80,8 @@ def register(request):
 
 @transaction.atomic
 def confirm_registration(request, username, token):
-	# confirm registration 
-	# TODO: have a better confirmation page than hw6 
+	# confirm registration
+	# TODO: have a better confirmation page than hw6
     return
 
 def clogin(request):
@@ -102,7 +102,7 @@ def clogin(request):
 # @login_required
 # @transaction.atomic
 def create_team(request):
- 	# Creation of a new team 
+ 	# Creation of a new team
  	# Email notification to targer students
  	# Two different ways of team formation
     return
@@ -125,13 +125,13 @@ def delete_tags(request, id):
 @login_required
 @transaction.atomic
 def delete_post(request):
-	# Delete a post, only for staff 
+	# Delete a post, only for staff
     return
 
 @login_required
 @transaction.atomic
 def delete_comment(request):
-	# Delete a post, only for staff 
+	# Delete a post, only for staff
     return
 
 ####### For home_page #######
@@ -174,13 +174,13 @@ def unfollow_tag(request):
 
 ####### For ajax  #######
 def get_post(request):
-	# With specification of what posts to get (all or just those have specific tags) and how the post is going to 
+	# With specification of what posts to get (all or just those have specific tags) and how the post is going to
 	# be sorted (by number of upvotes or date or length)
     return
 
 
 def get_notication(request):
-	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it 
+	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
     return
 
@@ -246,7 +246,7 @@ def search(request):
 	# Popup (modal in bootstrap) previous posts before someone wants to ask questions contains some similar content
 	return
 
-# More to be added 
+# More to be added
 
 ############################################## Display pages #############################################
 

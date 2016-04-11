@@ -14,7 +14,7 @@ function getCSRFToken() {
 function create_tag_html(text, id, link, type, onclick_event)
 {
     str = '<div class="btn-group" id="' + id + '">' +
-          '<button class="btn btn-' + type + '">' + text + '</button>' +
+          '<button class="btn btn-' + type + ' tag">' + text + '</button>' +
           '<button class="btn btn-default" onclick="' + onclick_event + '">' +
             '<span>&times;</span>' +
           '</button>';

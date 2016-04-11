@@ -37,10 +37,14 @@ function display_error(xhr, status, errorThrown)
     append_error(errorThrown);
 }
 
+
+// submit the team
 function submit_team()
 {
     var team_name = $("#team_name_field").val();
-    //var members = $("#added: .btn")
+    var members = $("#added").children.getElementsByTagName("btn btn-default tag");
+
+    console.log(members);
     append_success("Created team " + team_name + "!");
 }
 
@@ -84,7 +88,7 @@ function get_person(username)
         $.ajax({
 
             url: "/search_student/",
- 
+
             data: {
                 username: username,
                 csrfmiddlewaretoken: getCSRFToken()
