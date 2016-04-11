@@ -11,11 +11,25 @@ function getCSRFToken() {
     return "unknown";
 }
 
-function create_tag_html(text, id, link, type, onclick_event)
+
+function remove_tag(type, id)
 {
-    str = '<div class="btn-group" id="' + id + '">' +
-          '<button class="btn btn-' + type + ' tag">' + text + '</button>' +
-          '<button class="btn btn-default" onclick="' + onclick_event + '">' +
+    $("#" + id + "_" + type + "_tagcontainer").remove();
+}
+
+function get_all_tags_of_type(type)
+{
+    var all_text =[];
+    $('[id$="'+type+'_tag"]').each(function() { all_text.push($(this).text()) });
+
+    return all_text;
+}
+
+function create_tag_html(text, type, id, link, css_type)
+{
+    str = '<div class="btn-group" id="' + id + "_" + type + '_tagcontainer">' +
+          '<button class="btn btn-' + css_type + ' tag" id="' + id + "_" + type + '_tag">' + text + '</button>' +
+          '<button class="btn btn-default" onclick="' + "remove_tag('"+type+"','"+id+"')" + '">' +
             '<span>&times;</span>' +
           '</button>';
     return str;

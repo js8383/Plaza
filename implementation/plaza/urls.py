@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^administration/(?P<id>\d+)$', plaza_views.administration_page, name='administration'),
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
     url(r'^editcourse/(?P<id>\d+)$', plaza_views.edit_post, name='editcourse'), # Maybe also delete a course?
-    url(r'^createteam$', plaza_views.team_creation_page, name='createteam'),
+    url(r'^createteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$',
+        plaza_views.team_creation_page, name='createteam'),
     url(r'^staffteamview/(?P<id>\d+)$', plaza_views.staff_team_page, name='staffteamview'),
     url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
     url(r'^makepost$', plaza_views.make_post, name='makepost'),
@@ -49,4 +50,5 @@ urlpatterns = [
 
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
+    url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
 ]

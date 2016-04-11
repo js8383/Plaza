@@ -1,3 +1,6 @@
+var course_number = -1;
+var assignment_number = -1;
+
 $("#person_search_field").keyup(function(event){
     if(event.keyCode == 13)
     {
@@ -42,10 +45,38 @@ function display_error(xhr, status, errorThrown)
 function submit_team()
 {
     var team_name = $("#team_name_field").val();
-    var members = $("#added").children.getElementsByTagName("btn btn-default tag");
 
-    console.log(members);
-    append_success("Created team " + team_name + "!");
+    var members = get_all_tags_of_type("person");
+
+    $.ajax({
+
+            url: "/submit_team/",
+
+            async: false,
+
+            data: {
+                course_number: course_number,
+                assignment_number: assignment_number,
+                team_name: team_name,
+                team_members: JSON.stringify(members),
+                csrfmiddlewaretoken: getCSRFToken()
+            },
+
+            type: "POST",
+
+            dataType: "json",
+
+            success: function (response) {
+                console.log(response)
+                append_success("Created team " + team_name + "!");
+            },
+
+            error: function (xhr, status, errorThrown) {
+                display_error(xhr, status, errorThrown);
+            }
+        });
+
+
 }
 
 function remove_all_people()
@@ -53,14 +84,8 @@ function remove_all_people()
     $("#added").empty();
 }
 
-function remove_person(username)
-{
-    $("#" + username + "_tag").remove();
-}
-
 function add_person(teammate)
 {
-    console.log(current_username);
     if (teammate.username == current_username)
     {
         append_error("Can't invite yourself to a team.");
@@ -70,10 +95,10 @@ function add_person(teammate)
         $("#added").append(
                 create_tag_html(
                     teammate.username,
-                    teammate.username + "_tag",
+                    "person",
+                    teammate.username,
                     "profile/" + teammate.userid,
-                    'default',
-                    "remove_person('"+teammate.username+"')"));
+                    'default'));
     }
 }
 
@@ -111,4 +136,10 @@ function get_person(username)
 
 $("#add_person").click(function(event){
     get_person($("#person_search_field").val());
+});
+
+$(document).ajaxStart(function () {
+});
+
+$(document).ajaxStop(function() {
 });

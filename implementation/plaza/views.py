@@ -56,7 +56,7 @@ def register(request):
 
     # # Email validation
     # token = default_token_generator.make_token(new_user)
-    # email_body = """
+    # email_body =
     # Welcome to the Social Network.  Please click the link below to
     # verify your email address and complete the registration of your account:
 
@@ -101,12 +101,38 @@ def clogin(request):
 
 # @login_required
 # @transaction.atomic
-def create_team(request):
- 	# Creation of a new team
- 	# Email notification to targer students
- 	# Two different ways of team formation
-    return
+def submit_team(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpResponse("Request is not valid", status=404)
 
+    team_name = request.POST.get("team_name", "")
+    team_members = json.loads(request.POST.get("team_members",""))
+    assignment_number = request.POST.get("assignment_number", "")
+    course_number = request.POST.get("course_number", "")
+
+    if team_name == "":
+        return HttpResponse("No team name provided", status=400)
+    if team_members == "":
+        return HttpResponse("No team members provided", status=400)
+
+    print(assignment_number)
+    print(course_number)
+
+    # TODO: race condition in this case
+    for member in team_members:
+        person = Person.objects.get(user__username=member);
+        if person == None:
+            return HttpResponse("Team member does not exist", status=400)
+        #if person.team != None:
+        #    return HttpResponse("Person is already in a team", status=400)
+
+    json_obj = {
+            "message":"Team "+team_name+" created!"
+            }
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 ####### For administration_page #######
 
@@ -309,9 +335,9 @@ def staff_team_page(request, id):
 
 # @login_required
 @transaction.atomic
-def team_creation_page(request):
-	# Show the page to create teams
-	return render(request, "team_creation.html", {})
+def team_creation_page(request, course_number, assignment_number):
+    context = {"course_number": course_number, "assignment_number":assignment_number}
+    return render(request, "team_creation.html", context)
 
 def resource_page(request):
 	# Show the page of resources (notes, videos)

@@ -5,8 +5,9 @@
 <br>
 <div class="row">
     <div class="col-lg-8 col-md-offset-2">
-        <h1 class="display3"> 15437 Team Up
+        <h1 class="display3"> {{course_number}} Assignment {{assignment_number}} Team Up
         </h1>
+        <i id="loading" class="icon-spinner icon-spin icon-large"></i>
         <div id="errors"></div>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -14,7 +15,7 @@
             </div>
             <div id="collapse1" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <h4>Team Name: </h4>    
+                    <h4>Team Name: </h4>
                     <div class="row">
                         <div class="col-lg-8">
                             <input type="text" class="form-control" id="team_name_field">
@@ -61,7 +62,7 @@
                     </select>
                     Match me with:
                     <div class="checkbox">
-                        <label> 
+                        <label>
                             <input type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
                             teammates of similar skills
                         </label>
@@ -138,4 +139,8 @@
 
 {% block footer %}
 <script src="{% static 'js/createteam.js' %}"></script>
+<script type="text/javascript">
+    var course_number = {{course_number}};
+    var assignment_number = {{assignment_number}};
+</script>
 {% endblock %}
