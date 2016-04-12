@@ -107,26 +107,39 @@ def submit_team(request):
             # respond with error
             return HttpResponse("Request is not valid", status=404)
 
+    # TODO: fix error messages
     team_name = request.POST.get("team_name", "")
     team_members = json.loads(request.POST.get("team_members",""))
     assignment_number = request.POST.get("assignment_number", "")
     course_number = request.POST.get("course_number", "")
 
-    if team_name == "":
+    if (team_name == "" or team_members == "" or
+        course_number == "" or assignment_number == ""):
         return HttpResponse("No team name provided", status=400)
-    if team_members == "":
-        return HttpResponse("No team members provided", status=400)
-
-    print(assignment_number)
-    print(course_number)
 
     # TODO: race condition in this case
     for member in team_members:
         person = Person.objects.get(user__username=member);
         if person == None:
             return HttpResponse("Team member does not exist", status=400)
-        #if person.team != None:
-        #    return HttpResponse("Person is already in a team", status=400)
+        teams = person.teams
+        if teams != None:
+            if teams.filter(assignment__number=assignment_number).count() != 0:
+                return HttpResponse("Person is already in a team", status=400)
+
+    course = get_object_or_404(Course,id=course_number)
+    course_assignments = course.assignments
+    assignment = course_assignments.get(number=assignment_number)
+
+    if assignment == None:
+        return HttpResponse("Assignment does not exist", status=400)
+
+    team = Team(team_name=team_name, assignment=assignment, members=team_members)
+    team.save()
+
+
+    # TODO: send notifications
+    send_notifications(message, '/myteam/'+course_number+'/'+assignment_number+'/', team_members)
 
     json_obj = {
             "message":"Team "+team_name+" created!"
@@ -248,6 +261,12 @@ def get_notification(request, id):
 	# Edit content
 	# Change visibility
 	# Assign to students
+    return
+
+# Used to send notifications to a list of people
+@login_required
+def send_notifications(message, redirect_url, receivers):
+    # TODO: implement soon
     return
 
 

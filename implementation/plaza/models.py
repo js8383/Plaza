@@ -93,7 +93,8 @@ class Objects(models.Model):
 
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
-    course = models.OneToOneField(Course,related_name='assignments')
+    number = models.IntegerField(default=0)
+    course = models.ForeignKey(Course, related_name='assignments')
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
