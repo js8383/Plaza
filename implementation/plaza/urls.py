@@ -32,8 +32,10 @@ urlpatterns = [
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
     url(r'^editprofile$', plaza_views.edit_profile_page, name='editprofile'),
 
+    url(r'^viewcourse/(?P<number>\d+)$', plaza_views.view_course_page, name='viewcourse'),
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
     url(r'^editcourse/(?P<id>\d+)$', plaza_views.edit_post, name='editcourse'), # Maybe also delete a course?
+    url(r'^managecourses$', plaza_views.manage_courses, name='managecourses'), # Maybe also delete a course?
 
     url(r'^createteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$', plaza_views.team_creation_page, name='createteam'),
     url(r'^staffteamview/(?P<id>\d+)$', plaza_views.staff_team_page, name='staffteamview'),

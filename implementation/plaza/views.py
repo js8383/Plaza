@@ -100,8 +100,8 @@ def clogin(request):
 
 ####### For team_create_page #######
 
-# @login_required
-# @transaction.atomic
+@login_required
+@transaction.atomic
 def submit_team(request):
     if not request.is_ajax():
         if request.method != 'POST':
@@ -225,7 +225,7 @@ def get_notication(request):
 
 # Mrigesh's part ends here
 
-# used in dynamic teammate searching/adding
+@login_required
 def search_student(request):
     if not request.is_ajax():
         if request.method != 'POST':
@@ -301,8 +301,19 @@ def search(request):
 @login_required
 def home_page(request):
     # With different users, display either home/staff home page
-    return render(request, "home.html",{})
+    return render(request, "home.html", {})
 
+@login_required
+def manage_courses(request):
+    return render(request, "managecourses.html", {})
+
+@login_required
+def view_course_page(request, number):
+    try:
+        course = Course.objects.get(__number=number)
+    except ObjectDoestNotExist:
+        HttpResponse("Course not found", status=400);
+    return render(request, "course.html",{"course": course})
 
 # @login_required
 def staffhome_page(request, id):

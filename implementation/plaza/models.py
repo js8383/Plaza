@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Person(models.Model):
     # Default User fields = username, first_name, last_name, email, password, last_login, date_joined
-    user = models.OneToOneField(User) # Enforce andrew_id
+    user = models.OneToOneField(User,related_name='person') # Enforce andrew_id
     nickname = models.CharField(max_length=32)
     short_bio = models.CharField(max_length=1024, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
