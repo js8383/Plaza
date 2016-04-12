@@ -149,6 +149,27 @@ def submit_team(request):
 
 ####### For administration_page #######
 
+# Mrigesh's part starts here
+
+@login_required
+def forum(request, id):
+    # View all posts (unfiltered)
+    # id refers to the course ID
+    return
+
+
+@login_required
+@transaction.atomic
+def post(request):
+    # Create new post
+
+
+@login_required
+@transaction.atomic
+def delete_post(request, id):
+    # Delete a post
+    return
+
 @login_required
 @transaction.atomic
 def create_tags(request):
@@ -159,32 +180,6 @@ def create_tags(request):
 @transaction.atomic
 def delete_tags(request, id):
 	# Delete a tag
-    return
-
-@login_required
-@transaction.atomic
-def delete_post(request):
-	# Delete a post, only for staff
-    return
-
-@login_required
-@transaction.atomic
-def delete_comment(request):
-	# Delete a post, only for staff
-    return
-
-####### For home_page #######
-
-@login_required
-@transaction.atomic
-def make_post(request):
-	# Publish a new post
-    return
-
-@login_required
-@transaction.atomic
-def make_comment(request):
-	# Publish a new comment
     return
 
 @login_required
@@ -222,6 +217,8 @@ def get_notication(request):
 	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
     return
+
+# Mrigesh's part ends here
 
 # used in dynamic teammate searching/adding
 def search_student(request):
