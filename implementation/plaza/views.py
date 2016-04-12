@@ -162,7 +162,7 @@ def forum(request, id):
 @transaction.atomic
 def post(request):
     # Create new post
-
+    return
 
 @login_required
 @transaction.atomic
