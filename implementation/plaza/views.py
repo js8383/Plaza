@@ -1,5 +1,6 @@
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -127,11 +128,15 @@ def submit_team(request):
             if teams.filter(assignment__number=assignment_number).count() != 0:
                 return HttpResponse("Person is already in a team", status=400)
 
-    course = get_object_or_404(Course,id=course_number)
-    course_assignments = course.assignments
-    assignment = course_assignments.get(number=assignment_number)
+    try:
+        course = Course.objects.get(number=course_number)
+    except ObjectDoesNotExist:
+        return HttpResponse("Course does not exist", status=400);
 
-    if assignment == None:
+    course_assignments = course.assignments
+    try:
+        assignment = course_assignments.get(number=assignment_number)
+    except ObjectDoesNotExist:
         return HttpResponse("Assignment does not exist", status=400)
 
     team = Team(team_name=team_name, assignment=assignment, members=team_members)
@@ -328,19 +333,21 @@ def course_creation_page(request):
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
     context = {}
     if request.method == 'GET':
-        return render(request, "course_creation.html", {})
+        return render(request, 'course_creation.html')
     form = CourseForm(request.POST)
-    # if form.is_valid():
-    number = request.POST["number"]
-    name = request.POST["name"]
-    semester = request.POST["semester"]
-    description = request.POST["description"]
-    maxenroll = request.POST["maxenroll"]
-    print number,name,semester,description,maxenroll
-    # public = request.POST["public"]
-    course = Course(number=number, name=name, semester=semester,description=description,max_enroll=maxenroll)
+
+    if not form.is_valid():
+        return render(request, 'course_creation.html', {'form': form})
+
+    course = Course(number=form.cleaned_data['number'],
+                    name=form.cleaned_data['name'],
+                    semester=form.cleaned_data['semester'],
+                    description=form.cleaned_data['description'],
+                    max_enroll=form.cleaned_data['maxenroll'],
+                    public=form.cleaned_data['public'])
+
     course.save()
-    print "Course created"
+
     return redirect(reverse('home'))
 
 # @login_required

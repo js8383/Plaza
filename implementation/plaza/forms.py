@@ -55,8 +55,11 @@ class CourseForm(forms.Form):
     semester = forms.CharField(max_length=3, required=True) # Create choices
     description = forms.CharField(max_length=160, required=True)
     maxenroll = forms.IntegerField(required=False)
-    public = forms.BooleanField(initial=True, required=True)
-    # start_time = forms.DateTimeField()
-    # end_time = forms.DateTimeField()
-    # created_at = forms.DateTimeField(auto_now_add=True)
-    # updated_at = forms.DateTimeField(auto_now=True)
+    public = forms.BooleanField(initial=True, required=False)
+
+    def clean(self):
+        cleaned_data = super(CourseForm, self).clean()
+        course_num = cleaned_data['number']
+        if Course.objects.filter(number=course_num).count() != 0:
+            raise forms.ValidationError("Course already exists")
+

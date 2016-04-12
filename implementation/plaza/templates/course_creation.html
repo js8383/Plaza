@@ -5,7 +5,21 @@
 <div class="row">
     <br>
 
-	<div class="col-lg-6 col-lg-offset-3">
+    <div class="col-lg-6 col-lg-offset-3">
+    {% for e in form.non_field_errors %}
+    <div class="alert alert-danger">
+    {{e}}
+    </div>
+    {% endfor %}
+
+    {% for field in form %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{field.label}}: {{error}}
+    </div>
+    {% endfor %}
+    {% endfor %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 Create your course
@@ -44,7 +58,7 @@
                     </div>
 
 
-            
+
 
                 </div>
 
@@ -106,7 +120,7 @@
 
             {% csrf_token %}
             </form>
-                
+
             </div>
             <!-- /.panel-body -->
         </div>
