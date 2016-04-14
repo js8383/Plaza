@@ -152,6 +152,30 @@ def submit_team(request):
 
     return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
+@login_required
+def my_team_page(request, course_number, assignment_number):
+    context={}
+
+    course = get_object_or_404(Course, number=course_number)
+    try:
+        assignment = course.assignments.get(number=assignment_number)
+    except ObjectDoesNotExist:
+        return HttpResponse("Invalid assignment", status=400)
+
+    person = request.user.person
+    try:
+        team = person.teams.get(assignment_id=assignment.id)
+    except ObjectDoesNotExist:
+        return HttpResponse("Team does not exist", status=400)
+
+
+    context['course'] = course
+    context['assignment'] = assignment
+    context['team_members'] = team.members
+    context['team_name'] = team.name
+
+    return render(request, "my_team_page.html", context)
+
 ####### For administration_page #######
 
 # Mrigesh's part starts here

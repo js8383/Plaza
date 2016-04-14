@@ -137,7 +137,7 @@ class Notification(models.Model):
 
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128)
     assignment = models.ForeignKey(Assignment, related_name='teams')
     members = models.ManyToManyField(Person, related_name='teams')
 
