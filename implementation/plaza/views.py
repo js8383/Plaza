@@ -156,11 +156,11 @@ def submit_team(request):
 
 # Mrigesh's part starts here
 
-@login_required
+#@login_required
 def forum(request, id):
     # View all posts (unfiltered)
     # id refers to the course ID
-    return
+    return render(request, 'forum.html')
 
 
 @login_required

@@ -36,7 +36,7 @@ class Course(models.Model):
     max_enroll = models.IntegerField(null=True)
     public = models.BooleanField(default=True)
 
-    # TODO: Possobly move to a permission-based model instead of rule-based (last sprint)
+    # TODO: Possibly move to a permission-based model instead of rule-based (last sprint)
     students = models.ManyToManyField(User, related_name='courses_taken')
     staff = models.ManyToManyField(User, related_name='courses_assisted')
     instructors = models.ManyToManyField(User, related_name='courses_managed')
@@ -77,6 +77,8 @@ class Post(models.Model):
 
     pinned = models.BooleanField(default=False)
 
+    tags = models.ManyToManyField(Tag, related_name='tag_posts')
+
     def __unicode__(self):
         return self.header
     def __str__(self):
@@ -89,6 +91,12 @@ class Objects(models.Model):
 
     CATEGORY_CHOICES = (('PDF', 'application/pdf'),('JPEG', 'image/jpeg'),('GIF', 'image/gif'),('MP4', 'video/mp4'),('EMBED','text/html'),('PNG','image/png'),('CAL','text/calendar'))
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES,  default='0')
+
+    def __unicode__(self):
+        return self.title
+    def __str__(self):
+        return self.__unicode__()
+
 
 
 class Assignment(models.Model):
@@ -134,6 +142,11 @@ class Notification(models.Model):
     status =  models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
 
     destination = models.URLField(max_length=300)
+
+    def __unicode__(self):
+        return self.title
+    def __str__(self):
+        return self.__unicode__()
 
 
 class Team(models.Model):
