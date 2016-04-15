@@ -333,24 +333,26 @@ def manage_courses(request):
 
 @login_required
 def view_course_page(request, number):
+    context={}
+
     try:
         course = Course.objects.get(number=number)
     except ObjectDoesNotExist:
         HttpResponse("Course not found", status=400);
 
-    if course.instructors.filter(request.user.username).count() > 0:
+    if course.instructors.filter(username=request.user.username).count() > 0:
         role = "instructor"
-    elif course.staff.filter(request.user.username).count() > 0:
+    elif course.staff.filter(username=request.user.username).count() > 0:
         role = "staff"
-    elif course.students.filter(request.user.username).count() > 0:
+    elif course.students.filter(username=request.user.username).count() > 0:
         role = "student"
 
     context['role'] = role
 
-    if course.is_public:
+    if course.public:
         return render(request, "course_view.html",{"course": course})
     else:
-        return render(request, "home.html", {"errors": ["Course is not public."])
+        return render(request, "home.html", {"errors": ["Course is not public."]})
 
 @login_required
 def staffhome_page(request, id):
