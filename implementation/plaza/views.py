@@ -340,6 +340,8 @@ def view_course_page(request, number):
     except ObjectDoesNotExist:
         HttpResponse("Course not found", status=400);
 
+    role = ''
+
     if course.instructors.filter(username=request.user.username).count() > 0:
         role = "instructor"
     elif course.staff.filter(username=request.user.username).count() > 0:
@@ -349,7 +351,7 @@ def view_course_page(request, number):
 
     context['role'] = role
 
-    if course.public:
+    if role != '' or course.public:
         return render(request, "course_view.html",{"course": course})
     else:
         return render(request, "home.html", {"errors": ["Course is not public."]})
