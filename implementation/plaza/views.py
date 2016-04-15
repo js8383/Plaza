@@ -349,7 +349,7 @@ def view_course_page(request, number):
 
     if course.is_public:
         return render(request, "course_view.html",{"course": course})
-    else
+    else:
         return render(request, "home.html", {"errors": ["Course is not public."])
 
 @login_required
