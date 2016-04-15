@@ -334,12 +334,25 @@ def manage_courses(request):
 @login_required
 def view_course_page(request, number):
     try:
-        course = Course.objects.get(__number=number)
-    except ObjectDoestNotExist:
+        course = Course.objects.get(number=number)
+    except ObjectDoesNotExist:
         HttpResponse("Course not found", status=400);
-    return render(request, "course.html",{"course": course})
 
-# @login_required
+    if course.instructors.filter(request.user.username).count() > 0:
+        role = "instructor"
+    elif course.staff.filter(request.user.username).count() > 0:
+        role = "staff"
+    elif course.students.filter(request.user.username).count() > 0:
+        role = "student"
+
+    context['role'] = role
+
+    if course.is_public:
+        return render(request, "course_view.html",{"course": course})
+    else
+        return render(request, "home.html", {"errors": ["Course is not public."])
+
+@login_required
 def staffhome_page(request, id):
     # With different users, display either home/staff home page
     return render(request, "staff_home.html",{})
@@ -382,6 +395,10 @@ def course_creation_page(request):
                     public=form.cleaned_data['public'])
 
     course.save()
+
+    # add ourselves as the manager of this course
+    request.user.courses_managed.add(course)
+    course.instructors.add(request.user)
 
     return redirect(reverse('home'))
 

@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Plaza V0.01</a>
+                <a class="navbar-brand" href="index.html">Plaza</a>
             </div>
             <!-- /.navbar-header -->
             <ul class="nav navbar-nav">
@@ -41,17 +41,29 @@
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose course<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    {% for course in user.person.courses_taken %}
-                    <li><a href="{% url 'viewcourse' %}/{{course.number}}">{{course}}</a></li>
+                    {% if user.courses_taken.count %}
+                    {% for course in user.courses_taken.all %}
+                    <li><a href="{% url 'viewcourse' number=course.number %}">{{course}}</a></li>
                     {% endfor %}
+                    {% else %}
+                    <li><a href="#">No Courses Taken</a></li>
+                    {% endif %}
                     <li class="divider"></li>
-                    {% for course in user.person.courses_assisted %}
-                    <li><a href="{% url 'viewcourse' %}/{{course.number}}">{{course}}</a></li>
+                    {% if user.courses_assisted.count %}
+                    {% for course in user.courses_assisted.all %}
+                    <li><a href="{% url 'viewcourse' number=course.number %}">{{course}}</a></li>
                     {% endfor %}
+                    {% else %}
+                    <li><a href="#">No Courses Assisted</a></li>
+                    {% endif %}
                     <li class="divider"></li>
-                    {% for course in user.person.courses_assisted %}
-                    <li><a href="{% url 'viewcourse' %}/{{course.number}}">{{course}}</a></li>
+                    {% if user.courses_managed.count %}
+                    {% for course in user.courses_managed.all %}
+                    <li><a href="{% url 'viewcourse' number=course.number %}">{{course}}</a></li>
                     {% endfor %}
+                    {% else %}
+                    <li><a href="#">No Courses Managed</a></li>
+                    {% endif %}
                     <li class="divider"></li>
                     <li><a href="{% url 'createcourse' %}">Create course</a></li>
                     <li class="divider"></li>
@@ -233,7 +245,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="{% static 'js/sb-admin-2.js' %}"></script>
 
-    <!-- Create Team Page Javascript --!>
+    <!-- Generic Javascript --!>
     <script src="{% static 'js/plaza.js' %}"></script>
 
     <!-- Make user accessible by js --!>
