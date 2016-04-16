@@ -1,3 +1,4 @@
+
 {% extends "parent.html" %}
 {% load staticfiles %}
 {% block content %}
@@ -7,52 +8,73 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="progress">
-						<div class="progress-bar progress-success">
+						<div class="progress-bar progress-success" value=" TODO : BASE PROGRESS ON SOMETHING" >
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-3">
-					<ul class="nav nav-pills">
-						<li class="active">
-							 <a href="#"> <span class="badge pull-right">42</span> Home</a>
-						</li>
-						<li>
-							 <a href="#"> <span class="badge pull-right">16</span> More</a>
-						</li>
-					</ul>
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<a href="#">
+								<span class="badge pull-right">42</span>All</a>
+							<span class="caret"/>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li>
+								<a href="#">
+									<span class="badge pull-right">16</span>Unread</a>
+							</li>
+							<li>
+								<a href="#">
+									<span class="badge pull-right">16</span>Updated</a>
+							</li>
+							<li>
+								<a href="#">
+									<span class="badge pull-right">16</span>Following</a>
+							</li>
+							<li>
+								<a href="#">
+									<span class="badge pull-right">16</span>Stalking</a>
+							</li>
+						</ul>
+					</div>
 					<div class="list-group">
-						 <a href="#" class="list-group-item active">Home</a>
 						<div class="list-group-item">
-							List header
+							<a href="#" class="list-group-item active">Pinned</a>
+							<div class="list-group">
+								<div class="list-group-item">
+                                                        List header
+								</div>
+								<div class="list-group-item">
+                                                        List header
+								</div>
+							</div>
+							<a href="#" class="list-group-item active">Today</a>
+							<div class="list-group">
+								<div class="list-group-item">
+                                                        List header
+								</div>
+							</div>
+							<a href="#" class="list-group-item active">Yesterday</a>
+							<div class="list-group">
+								<div class="list-group-item">
+                                                        List header
+								</div>
+							</div>
+							<a href="#" class="list-group-item active">Today</a>
+							<div class="list-group">
+								<div class="list-group-item">
+                                                        List header
+								</div>
+							</div>
 						</div>
-						<div class="list-group-item">
-							<h4 class="list-group-item-heading">
-								List group item heading
-							</h4>
-							<p class="list-group-item-text">
-								...
-							</p>
-						</div>
-						<div class="list-group-item">
-							<span class="badge">14</span>Help
-						</div> <a class="list-group-item active"><span class="badge">14</span>Help</a>
 					</div>
 				</div>
 				<div class="col-md-9">
 					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">
-								Panel title
-							</h3>
-						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
-						<div class="panel-footer">
-							Panel footer
-						</div>
+                                                {% include "post.html" %}
 					</div>
 				</div>
 			</div>
@@ -60,3 +82,4 @@
 	</div>
 </div>
 {% endblock %}
+

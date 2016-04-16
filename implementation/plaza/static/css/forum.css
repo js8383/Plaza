@@ -1,0 +1,12 @@
+.wrapper 
+{
+	white-space: nowrap;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+.internal 
+{
+	display: inline;
+}
