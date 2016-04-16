@@ -8,13 +8,13 @@ $("#person_search_field").keyup(function(event){
     }
     else
     {
-        // TODO: search people and display suggestions
     }
 });
 
 function append_error(errorThrown)
 {
-    $("#errors").append(
+        $("#errors").children().remove()
+        $("#errors").append(
             '<div class="alert alert-danger">' +
             '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
             errorThrown +
@@ -90,6 +90,11 @@ function add_person(teammate)
     {
         append_error("Can't invite yourself to a team.");
     }
+    else if ($.inArray(teammate.username, get_all_tags_of_type("person")) != -1)
+    {
+        console.log(get_all_tags_of_type("person"));
+        append_error(teammate.username + " already added.");
+    }
     else
     {
         $("#added").append(
@@ -136,6 +141,7 @@ function get_person(username)
 
 $("#add_person").click(function(event){
     get_person($("#person_search_field").val());
+    $("#person_search_field").val('');
 });
 
 $(document).ajaxStart(function () {

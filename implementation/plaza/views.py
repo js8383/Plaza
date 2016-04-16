@@ -100,13 +100,15 @@ def clogin(request):
 
 ####### For team_create_page #######
 
+## Kaan's part starts here
+
 @login_required
 @transaction.atomic
 def submit_team(request):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid", status=404)
+            return HttpResponse("Request is not valid", content_type="application/json", status=404)
 
     # TODO: fix error messages
     team_name = request.POST.get("team_name", "")
@@ -116,28 +118,28 @@ def submit_team(request):
 
     if (team_name == "" or team_members == "" or
         course_number == "" or assignment_number == ""):
-        return HttpResponse("No team name provided", status=400)
+        return HttpResponse("No team name provided", content_type="application/json", status=400)
 
     # TODO: race condition in this case
     for member in team_members:
         person = Person.objects.get(user__username=member);
         if person == None:
-            return HttpResponse("Team member does not exist", status=400)
+            return HttpResponse("Team member does not exist", content_type="application/json", status=400)
         teams = person.teams
         if teams != None:
             if teams.filter(assignment__number=assignment_number).count() != 0:
-                return HttpResponse("Person is already in a team", status=400)
+                return HttpResponse("Person is already in a team", content_type="application/json", status=400)
 
     try:
         course = Course.objects.get(number=course_number)
     except ObjectDoesNotExist:
-        return HttpResponse("Course does not exist", status=400);
+        return HttpResponse("Course does not exist", content_type="application/json", status=400);
 
     course_assignments = course.assignments
     try:
         assignment = course_assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
-        return HttpResponse("Assignment does not exist", status=400)
+        return HttpResponse("Assignment does not exist", content_type="application/json", status=400)
 
     team = Team(team_name=team_name, assignment=assignment, members=team_members)
     team.save()
@@ -175,6 +177,8 @@ def my_team_page(request, course_number, assignment_number):
     context['team_name'] = team.name
 
     return render(request, "my_team_page.html", context)
+
+## Kaan's part ends here
 
 ####### For administration_page #######
 
