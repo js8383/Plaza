@@ -152,6 +152,30 @@ def submit_team(request):
 
     return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
+@login_required
+def my_team_page(request, course_number, assignment_number):
+    context={}
+
+    course = get_object_or_404(Course, number=course_number)
+    try:
+        assignment = course.assignments.get(number=assignment_number)
+    except ObjectDoesNotExist:
+        return HttpResponse("Invalid assignment", status=400)
+
+    person = request.user.person
+    try:
+        team = person.teams.get(assignment_id=assignment.id)
+    except ObjectDoesNotExist:
+        return HttpResponse("Team does not exist", status=400)
+
+
+    context['course'] = course
+    context['assignment'] = assignment
+    context['team_members'] = team.members
+    context['team_name'] = team.name
+
+    return render(request, "my_team_page.html", context)
+
 ####### For administration_page #######
 
 # Mrigesh's part starts here
@@ -309,13 +333,30 @@ def manage_courses(request):
 
 @login_required
 def view_course_page(request, number):
-    try:
-        course = Course.objects.get(__number=number)
-    except ObjectDoestNotExist:
-        HttpResponse("Course not found", status=400);
-    return render(request, "course.html",{"course": course})
+    context={}
 
-# @login_required
+    try:
+        course = Course.objects.get(number=number)
+    except ObjectDoesNotExist:
+        HttpResponse("Course not found", status=400);
+
+    role = ''
+
+    if course.instructors.filter(username=request.user.username).count() > 0:
+        role = "instructor"
+    elif course.staff.filter(username=request.user.username).count() > 0:
+        role = "staff"
+    elif course.students.filter(username=request.user.username).count() > 0:
+        role = "student"
+
+    context['role'] = role
+
+    if role != '' or course.public:
+        return render(request, "course_view.html",{"course": course})
+    else:
+        return render(request, "home.html", {"errors": ["Course is not public."]})
+
+@login_required
 def staffhome_page(request, id):
     # With different users, display either home/staff home page
     return render(request, "staff_home.html",{})
@@ -358,6 +399,10 @@ def course_creation_page(request):
                     public=form.cleaned_data['public'])
 
     course.save()
+
+    # add ourselves as the manager of this course
+    request.user.courses_managed.add(course)
+    course.instructors.add(request.user)
 
     return redirect(reverse('home'))
 

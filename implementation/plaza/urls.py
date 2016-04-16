@@ -37,8 +37,13 @@ urlpatterns = [
     url(r'^editcourse/(?P<id>\d+)$', plaza_views.edit_post, name='editcourse'), # Maybe also delete a course?
     url(r'^managecourses$', plaza_views.manage_courses, name='managecourses'), # Maybe also delete a course?
 
-    url(r'^createteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$', plaza_views.team_creation_page, name='createteam'),
+    ## Team urls ##
+    url(r'^createteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$',
+        plaza_views.team_creation_page, name='createteam'),
     url(r'^staffteamview/(?P<id>\d+)$', plaza_views.staff_team_page, name='staffteamview'),
+    url(r'^myteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$', plaza_views.my_team_page, name='myteamview'),
+
+    ## Resource urls ##
     url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
     url(r'^resource$', plaza_views.resource_page, name='resource'),
     url(r'^uploadr$', plaza_views.upload_resource, name='uploadr'),

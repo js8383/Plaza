@@ -54,6 +54,7 @@ class Post(models.Model):
     text = models.TextField()
     author = models.ForeignKey(Person,related_name='posts')
     parent_id = models.ForeignKey('Post',related_name='children',default=None)
+    course = models.ForeignKey(Course, related_name='posts')
 
     ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))
     visibility =  models.CharField(max_length=1, choices=ANONYMITY_CHOICES,  default='0')
@@ -150,7 +151,7 @@ class Notification(models.Model):
 
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128)
     assignment = models.ForeignKey(Assignment, related_name='teams')
     members = models.ManyToManyField(Person, related_name='teams')
 
