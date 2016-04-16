@@ -35,7 +35,12 @@
 				<hr>
 				<b>100</b> Followers &nbsp; - &nbsp; <b>100</b> Followings &nbsp; - &nbsp; <b>100</b> Upvotes 
 				<span class="pull-right">
-				<button type="button" class="btn btn-outline btn-primary btn-xs">Follow</button>
+
+                <form id="followform" method="post" action="{% url 'followuser' 1 %}">
+                    {% csrf_token %}
+                </form>
+				<button type="submit" form="followform" class="btn btn-outline btn-primary btn-xs">Follow</button>
+
 				<button type="button" class="btn btn-outline btn-primary btn-xs">InMail</button>
 				</span>
 				</div>

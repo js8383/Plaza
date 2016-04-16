@@ -319,6 +319,29 @@ def search(request):
 
 # More to be added
 
+# Jason's part, all notifications stuff and resources and etc.
+
+# General notification API
+def save_and_notify(nfilter, sender, receiver, action, target):
+    if nfilter == "People":
+        if action == "FOLLOW":
+            notification = Notification(sender=sender, receiver=receiver, action=action, target_text="you")
+            notification.save()
+            # notify the leancloud api
+    return 
+
+# @login_required
+@transaction.atomic
+def follow_user(request, id):
+    user = request.user
+    save_and_notify("People", user, user, "FOLLOW", "")
+    return
+
+# @login_required
+@transaction.atomic
+def unfollow_user(request,id):
+    return
+
 ############################################## Display pages #############################################
 
 
@@ -427,3 +450,5 @@ def resource_slide_page(request):
 	# Students could post comments to each slide / video
 	return
 
+def notification_page(request):
+    return render(request, "notification.html", {})

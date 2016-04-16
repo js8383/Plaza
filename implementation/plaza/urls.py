@@ -58,6 +58,11 @@ urlpatterns = [
     url(r'^followtag/(?P<id>\d+)$', plaza_views.follow_tag, name='followtag'),
     url(r'^unfollowtag/(?P<id>\d+)$', plaza_views.unfollow_tag, name='unfollowtag'),
 
+    url(r'^followuser/(?P<id>\d+)$', plaza_views.follow_user, name='followuser'),
+    url(r'^unfollowuser/(?P<id>\d+)$', plaza_views.unfollow_user, name='unfollowuser'),
+
+    ## Notification URL ##
+    url(r'^notification$', plaza_views.notification_page, name='notification'),
     url(r'^getnotification$', plaza_views.get_notification, name='getnotification'),
 
     # AJAX urls

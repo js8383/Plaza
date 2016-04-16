@@ -1,0 +1,86 @@
+{% extends "parent.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<br>
+<div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Notifications
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#All" data-toggle="tab">All</a>
+                    </li>
+<!--                     <li><a href="#questions" data-toggle="tab">Questions</a>
+                    </li>
+                    <li><a href="#answers" data-toggle="tab">Tags</a>
+                    </li>
+                    <li><a href="#courses" data-toggle="tab">People</a>
+                    </li>
+ -->
+                    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      Questions <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#Question-answer" data-toggle="tab">Answer</a></li>
+				    	<li><a href="#Question-follow" data-toggle="tab">Follow</a></li>
+				    	<li><a href="#Question-assignment" data-toggle="tab">Assignment</a></li>
+				    </ul>
+				    </li>
+
+
+				    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      Answers <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#Answers-upvote" data-toggle="tab">Upvote</a></li>
+				    	<li><a href="#Answers-comment" data-toggle="tab">Comment</a></li>
+				    </ul>
+				    </li>
+
+
+				    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      Comments <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#Comments-reply" data-toggle="tab">Reply</a></li>
+				    </ul>
+				    </li>
+
+				    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      Tags <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#Tags-questions" data-toggle="tab">New Questions</a></li>
+				    </ul>
+				    </li>
+
+				    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      People <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#People-follow" data-toggle="tab">Follow</a></li>
+				    	<li><a href="#People-inmail" data-toggle="tab">InMail</a></li>
+				    </ul>
+				    </li>
+
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+{% endblock %}

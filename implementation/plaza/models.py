@@ -122,13 +122,20 @@ class Resource(models.Model):
     def __str__(self):
         return self.__unicode__()
 
+# Modified by Jason
 class Notification(models.Model):
-    title = models.CharField(max_length=128)
-    text = models.CharField(max_length=128)
+    # title = models.CharField(max_length=128)
+    # text = models.CharField(max_length=128)
     course = models.ForeignKey(Course)
     created_at = models.DateTimeField(auto_now_add=True)
     sender = models.OneToOneField(Person, related_name='notifications_sent')
-    receivers = models.ManyToManyField(Person, related_name='notifications_received')
+    receiver = models.OneToOneField(Person, related_name='notifications_received')
+    
+    ACTION_CHOICES = (('ANSWER', "answered"), ('FOLLOW', "followed"), ('ASSIGN', "invited "))
+    action = models.CharField(max_length=10, choices=ACTION_CHOICES)
+
+    target_text = models.CharField(max_length=128)
+    target_link = models.URLField(max_length=300)
 
     STATUS_CHOICES = (('0', 'unseen'),('1', 'seen'))
     status =  models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
