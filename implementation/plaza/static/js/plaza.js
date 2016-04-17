@@ -38,6 +38,8 @@ function create_tag_html(text, type, id, link, css_type)
 
 $('#dpicker').datepicker({});
 
+// $("#my-checkbox").bootstrapSwitch();
+
 // $("#input-repl-1a").fileinput({
 //     // uploadUrl: "#",
 //     autoReplace: true,
@@ -57,3 +59,4 @@ $('#dpicker').datepicker({});
 $('#input-repl-1a').on('filecleared', function(event) {
     $('#input-repl-1a').fileinput('reset');
 });
+

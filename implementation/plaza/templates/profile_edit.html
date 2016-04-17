@@ -8,6 +8,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
                  Edit your profile
+                 <span class="pull-right"> <a class="btn btn-default btn-xs" href="{% url 'profile' person.user.id %}" role="button">Public View</a> </span> 
             </div>
             <div class="panel-body">
                 
@@ -75,7 +76,7 @@
                                 <div class="form-group">
                                     <label>Gender</label>
                                     <select id="genderselect" name="gender" class="form-control">
-                                        <option></option>
+                                        <option value="N"></option>
                                         <option value="M">Male</option> <label>Male</label>
                                         <option value="F">Female</option>
                                     </select>

@@ -401,7 +401,8 @@ def staffhome_page(request, id):
 # @login_required
 def profile_page(request, id):
     context = {}
-    context["User"] = request.user
+    context["person"] = request.user.person
+    context["target_id"] = id
     return render(request, "profile.html", context)
 
 # @login_required

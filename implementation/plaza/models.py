@@ -15,7 +15,7 @@ class Person(models.Model):
     nickname = models.CharField(max_length=32)
     short_bio = models.CharField(max_length=1024, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
-    GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'))
+    GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('N', 'N/A'))
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
     field = models.CharField(max_length=32)
     institution = models.CharField(max_length=32) 
