@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import include,url
 from django.contrib.auth import views as auth_views
 from plaza import views as plaza_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     url(r'^register$', plaza_views.register, name='register'),
@@ -31,6 +33,7 @@ urlpatterns = [
 
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
     url(r'^editprofile$', plaza_views.edit_profile_page, name='editprofile'),
+    url(r'^profilepicture/(?P<id>\d+)$', plaza_views.get_profile_picture, name='profilepicture'),
 
     url(r'^viewcourse/(?P<number>\d+)$', plaza_views.view_course_page, name='viewcourse'),
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
@@ -68,4 +71,5 @@ urlpatterns = [
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
     url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

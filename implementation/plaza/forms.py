@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from models import *
+from datetime import datetime
 
 MAX_UPLOAD_SIZE = 2500000
 
@@ -63,12 +64,16 @@ class CourseForm(forms.Form):
         if Course.objects.filter(number=course_num).count() != 0:
             raise forms.ValidationError("Course already exists")
 
+# TODO: add more validation
 class PersonForm(forms.Form):
     first_name = forms.CharField(max_length=20, label='First Name', required=True)
     last_name = forms.CharField(max_length=20, label='Last Name', required=True)
-    nickname = forms.CharField(max_length=32, label='Nick Name', required=True)
+    nickname = forms.CharField(max_length=32, label='Nick Name', required=False)
+    email = forms.CharField(max_length = 40, validators = [validate_email])
     date_of_birth = forms.DateField(label="Date of Birth", required=False)
     gender = forms.CharField(max_length=6, label='Gender', required=False)
+    field = forms.CharField(max_length=32, label='Field',required=False)
+    institution = forms.CharField(max_length=32, label='Institution',required=False)
     short_bio = forms.CharField(max_length=1024, label="Short Bio", required=False)
     profile_image = forms.ImageField(label='Profile Image', required=False)
 
@@ -86,14 +91,16 @@ class PersonForm(forms.Form):
     def save(self, user, person):
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
+        user.email = self.cleaned_data.get('email')
 
-        person.first_name = self.cleaned_data.get('first_name')
-        person.last_name = self.cleaned_data.get('last_name')
         person.nickname = self.cleaned_data.get('nickname')
-        person.short_bio = self.cleaned_data.get('short_bio')
         person.date_of_birth = self.cleaned_data.get('date_of_birth')
-        person.profile_image = self.cleaned_data.get('profile_image')
-        
+        person.gender = self.cleaned_data.get('gender')
+        person.field = self.cleaned_data.get('field')
+        person.institution = self.cleaned_data.get('institution')
+        person.short_bio = self.cleaned_data.get('short_bio')
+        if not self.cleaned_data.get('profile_image') == None:
+            person.profile_image = self.cleaned_data.get('profile_image')
         user.save()
         person.save()
         return user

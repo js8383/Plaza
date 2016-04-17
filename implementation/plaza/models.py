@@ -2,6 +2,12 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
+from time import time
+
+
+def profile_image_rename(instance, filename):
+    st = datetime.fromtimestamp(time()).strftime('%Y_%m_%d_%H_%M_%S')
+    return 'profile-photos/'+'user_{0}_{1}.'.format(instance.user.id, st)  + filename.split('.')[-1]
 
 class Person(models.Model):
     # Default User fields = username, first_name, last_name, email, password, last_login, date_joined
@@ -13,7 +19,7 @@ class Person(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
     field = models.CharField(max_length=32)
     institution = models.CharField(max_length=32) 
-    profile_image = models.ImageField(upload_to='profile-photos', blank = True, default = 'profile-photos/user_ico.png')
+    profile_image = models.ImageField(upload_to=profile_image_rename, blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
     def __unicode__(self):
