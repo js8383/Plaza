@@ -13,24 +13,26 @@ class Person(models.Model):
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
     def __unicode__(self):
-        return self.text
+        return self.user.username
     def __str__(self):
         return self.__unicode__()
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=16)
     def __unicode__(self):
-        return self.text
+        return self.name
     def __str__(self):
         return self.__unicode__()
+
 
 class Course(models.Model):
     number = models.CharField(max_length=10)
     name = models.CharField(max_length=128)
-    semester = models.CharField(max_length=3) # Create choices
+    semester = models.CharField(max_length=3) # TODO : Create choices of terms and intfield for year
     description = models.TextField(blank=True, null=True)
-    start_time = models.DateTimeField(null=True)
-    end_time = models.DateTimeField(null=True)
+    start_time = models.DateTimeField(null=True) # TODO : validate based on semester/year
+    end_time = models.DateTimeField(null=True) # TODO : validate based on semester/year
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     max_enroll = models.IntegerField(null=True)
@@ -43,17 +45,16 @@ class Course(models.Model):
     tags = models.ManyToManyField(Tag, related_name='tag_courses')
 
     def __unicode__(self):
-        return self.name
+        return self.semester+'. '+self.name
     def __str__(self):
         return self.__unicode__()
-
 
 
 class Post(models.Model):
     title = models.CharField(max_length=128)
     text = models.TextField()
     author = models.ForeignKey(Person,related_name='posts')
-    parent_id = models.ForeignKey('Post',related_name='children',default=None)
+    parent_id = models.ForeignKey('Post',related_name='children',default=None, null=True)
     course = models.ForeignKey(Course, related_name='posts')
 
     ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))
@@ -81,13 +82,13 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, related_name='tag_posts')
 
     def __unicode__(self):
-        return self.header
+        return self.title
     def __str__(self):
         return self.__unicode__()
 
-class Objects(models.Model):
+class Item(models.Model):
     title = models.CharField(max_length=128)
-    post = models.ForeignKey(Post, related_name="objects")
+    post = models.ForeignKey(Post, related_name="item")
     owner = models.ForeignKey(Person,related_name='uploads')
 
     CATEGORY_CHOICES = (('PDF', 'application/pdf'),('JPEG', 'image/jpeg'),('GIF', 'image/gif'),('MP4', 'video/mp4'),('EMBED','text/html'),('PNG','image/png'),('CAL','text/calendar'))

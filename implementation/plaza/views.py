@@ -178,13 +178,24 @@ def my_team_page(request, course_number, assignment_number):
 
 ####### For administration_page #######
 
+
 # Mrigesh's part starts here
 
 #@login_required
-def forum(request, id):
-    # View all posts (unfiltered)
-    # id refers to the course ID
-    return render(request, 'forum.html')
+def forum(request, semester_id, course_id):
+    # View all posts (within a single course 'c')
+    c = Course.objects.filter(semester=semester_id,number=course_id)
+
+    context = {}
+    posts = Post.objects.filter(course=c).order_by('-updated_at')
+    # TODO : Add filtering based on user visibility of that post
+    context = {'posts' : posts }
+    filters = [ ('All',24),('Unread',18) ]
+    context['filters'] = filters 
+    context['selected'] = None 
+    context['following'] = []
+    
+    return render(request, 'forum.html',context)
 
 
 @login_required
@@ -202,26 +213,28 @@ def delete_post(request, id):
 @login_required
 @transaction.atomic
 def create_tags(request):
-	# Create a tag for students to follow
+    # Create a tag for students to follow
     return
 
 @login_required
 @transaction.atomic
 def delete_tags(request, id):
-	# Delete a tag
+    # Delete a tag
     return
 
 @login_required
 @transaction.atomic
 def upvote(request):
-	# Upvote a post
+    # Upvote a post
     return
 
 @login_required
 @transaction.atomic
 def downvote(request):
-	# Downvote a post
+    # Downvote a post
     return
+
+# Mrigesh's part ends here
 
 @login_required
 @transaction.atomic
@@ -232,7 +245,7 @@ def follow_tag(request):
 @login_required
 @transaction.atomic
 def unfollow_tag(request):
-	# unfollow a specific tag
+    # unfollow a specific tag
     return
 
 ####### For ajax  #######
@@ -247,7 +260,6 @@ def get_notication(request):
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
     return
 
-# Mrigesh's part ends here
 
 @login_required
 def search_student(request):

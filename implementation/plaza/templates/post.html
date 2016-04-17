@@ -2,49 +2,15 @@
 {% for post in posts %}
  <li class="list-group-item post" id="post_id_{{ post.id  }}">
 {% if post.author.username != request.user.get_username %}
-{% if post.author.username in following %}
-<a class="btn-xs pull-right btn-warning" href="{% url 'unfollow' post.author.username %}">—</a>
-{% else %}
-<a class="btn-xs pull-right btn-success" href="{% url 'follow' post.author.username %}">+</a>
-{% endif %}
 {% else %}
 <a class="btn-xs pull-right btn-danger" href="{% url 'delete_post' post.id %}">X</a>
 
 {% endif %}
 
 <p>
-<img src ="{{ post.author.profiles.profile_image }}" width=48 height=48 class="profile-photo"/>
-On {{ post.timestamp }}, <a href = "{% url 'profile' %}?username={{ post.author.username }}">{{ post.author.username }}</a> said:</p>
+<img src ="" width=48 height=48 class="profile-photo"/>
+On {{ post.updated_at }}, <a href = "{% url 'home' %}?username={{ post.author.username }}">{{ post.author.username }}</a> said:</p>
 <div class="post" data-toggle="collapse" href="#collapse_{{ post.id }}">{{post}}</div>
-
-<ul id="collapse_{{ post.id }}" class="list-group comments collapse">
-{% for comment in post.comments.all %}
-  <li class="list-group-item comment" id="comment_{{ comment.id }}">
-<img src ="{{ comment.commenter.profiles.profile_image }}" width=32 height=32 class="profile-photo"/>
-On {{ comment.timestamp }}, <a href = "{% url 'profile' %}?username={{ comment.commenter.username }}"> {{ comment.commenter }}</a> said:
-{% if comment.commenter.username != request.user.get_username %}
-{% if comment.commenter.username in following %}
-<a class="btn-xs pull-right btn-warning" href="{% url 'unfollow' comment.commenter.username %}">—</a>
-{% else %}
-<a class="btn-xs pull-right btn-success" href="{% url 'follow' comment.commenter.username %}">+</a>
-{% endif %}
-{% else %}
-<a class="btn-xs pull-right btn-danger" href="{% url 'delete_comment' comment.id %}">X</a>
-
-{% endif %}
-
-<div class="comment">{{ comment.text }}</div>
-</li>
-{% endfor %}
-  <li class="list-group-item post" id="create_new_comment_{{ post.id }}">
-    Any comments?
-    <textarea name="comment" rows="5" class="form-control" id="new_comment_{{ post.id }}"></textarea>
-    <button onclick="addComment({{ post.id }})" class="btn">Submit</button>
-    {% csrf_token %}
-  </li>
-</ul>
-</li>
-
 {% endfor %}
 </ul>
 
