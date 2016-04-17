@@ -32,7 +32,7 @@
                     <h4>Added teammates:</h4>
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="container" id="added">
+                            <div id="added">
                             </div>
                             <br>
                             <div class="btn btn-default" onclick="remove_all_people()">Clear</div>
@@ -78,7 +78,7 @@
                             some other preference
                         </label>
                     </div>
-                    <a class="btn btn-default" href="#" role="button">Match me!</a>
+                    <div class="btn btn-info" onclick="enter_matchmaking()">Match Me!</div>
                 </div>
             </div>
         </div>
@@ -140,6 +140,6 @@
 <script src="{% static 'js/createteam.js' %}"></script>
 <script type="text/javascript">
     var course_number = {{course_number}};
-    var assignment_number = {{assignment_number}};
+var assignment_number = {{assignment_number}};
 </script>
 {% endblock %}

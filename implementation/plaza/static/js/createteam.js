@@ -8,38 +8,8 @@ $("#person_search_field").keyup(function(event){
     }
     else
     {
-        // TODO: search people and display suggestions
     }
 });
-
-function append_error(errorThrown)
-{
-    $("#errors").append(
-            '<div class="alert alert-danger">' +
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-            errorThrown +
-            '</div>'
-            );
-}
-
-function append_success(success)
-{
-    $("#errors").append(
-            '<div class="alert alert-success">' +
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-            success +
-            '</div>'
-            );
-}
-
-function display_error(xhr, status, errorThrown)
-{
-    console.log( "Error: " + errorThrown );
-    console.log( "Status: " + status );
-    console.dir( xhr );
-    append_error(errorThrown);
-}
-
 
 // submit the team
 function submit_team()
@@ -90,6 +60,11 @@ function add_person(teammate)
     {
         append_error("Can't invite yourself to a team.");
     }
+    else if ($.inArray(teammate.username, get_all_tags_of_type("person")) != -1)
+    {
+        console.log(get_all_tags_of_type("person"));
+        append_error(teammate.username + " already added.");
+    }
     else
     {
         $("#added").append(
@@ -136,6 +111,7 @@ function get_person(username)
 
 $("#add_person").click(function(event){
     get_person($("#person_search_field").val());
+    $("#person_search_field").val('');
 });
 
 $(document).ajaxStart(function () {
