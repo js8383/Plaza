@@ -384,13 +384,15 @@ def staffhome_page(request, id):
 
 # @login_required
 def profile_page(request, id):
-	# Show profile page of "id"
-	return render(request, "profile.html", {})
+    context = {}
+    context["User"] = request.user
+    return render(request, "profile.html", context)
 
 @login_required
-def edit_profile_page(request, id):
-	# Show the page of editing self profile
-	return
+def edit_profile_page(request):
+    context = {}
+    context['person'] = request.user.person
+    return render(request, "profile_edit.html", context)
 
 @login_required
 def administration_page(request, id):

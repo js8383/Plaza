@@ -63,3 +63,37 @@ class CourseForm(forms.Form):
         if Course.objects.filter(number=course_num).count() != 0:
             raise forms.ValidationError("Course already exists")
 
+class PersonForm(forms.Form):
+    first_name = forms.CharField(max_length=20, label='First Name', required=True)
+    last_name = forms.CharField(max_length=20, label='Last Name', required=True)
+    nickname = forms.CharField(max_length=32, label='Nick Name', required=True)
+    date_of_birth = forms.DateField(label="Date of Birth", required=False)
+    gender = forms.CharField(max_length=6, label='Gender', required=False)
+    short_bio = forms.CharField(max_length=1024, label="Short Bio", required=False)
+    profile_image = forms.ImageField(label='Profile Image', required=False)
+
+    def clean_profile_image(self):
+        image = self.cleaned_data['profile_image']
+        if not image:
+            print "Not a image"
+            return None
+        if not image.content_type or not image.content_type.startswith('image'):
+            raise forms.ValidationError('File type is not image')
+        if image.size > MAX_UPLOAD_SIZE:
+            raise forms.ValidationError('File too big (max size is {0} bytes)'.format(MAX_UPLOAD_SIZE))
+        return image
+
+    def save(self, user, person):
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+
+        person.first_name = self.cleaned_data.get('first_name')
+        person.last_name = self.cleaned_data.get('last_name')
+        person.nickname = self.cleaned_data.get('nickname')
+        person.short_bio = self.cleaned_data.get('short_bio')
+        person.date_of_birth = self.cleaned_data.get('date_of_birth')
+        person.profile_image = self.cleaned_data.get('profile_image')
+        
+        user.save()
+        person.save()
+        return user

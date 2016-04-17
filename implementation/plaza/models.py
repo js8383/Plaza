@@ -9,11 +9,15 @@ class Person(models.Model):
     nickname = models.CharField(max_length=32)
     short_bio = models.CharField(max_length=1024, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
+    GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'))
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
+    field = models.CharField(max_length=32)
+    institution = models.CharField(max_length=32) 
     profile_image = models.ImageField(upload_to='profile-photos', blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
     def __unicode__(self):
-        return self.text
+        return self.user.username
     def __str__(self):
         return self.__unicode__()
 

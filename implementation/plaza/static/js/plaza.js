@@ -34,3 +34,6 @@ function create_tag_html(text, type, id, link, css_type)
           '</button>';
     return str;
 }
+
+
+$('#dpicker').datepicker({});
