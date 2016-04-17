@@ -1,17 +1,3 @@
-<ul class="list-group" id="posts-list">
-{% for post in posts %}
- <li class="list-group-item post" id="post_id_{{ post.id  }}">
-{% if post.author.username != request.user.get_username %}
-{% else %}
-<a class="btn-xs pull-right btn-danger" href="{% url 'delete_post' post.id %}">X</a>
-
-{% endif %}
-
-<p>
-<img src ="" width=48 height=48 class="profile-photo"/>
-On {{ post.updated_at }}, <a href = "{% url 'home' %}?username={{ post.author.username }}">{{ post.author.username }}</a> said:</p>
-<div class="post" data-toggle="collapse" href="#collapse_{{ post.id }}">{{post}}</div>
-{% endfor %}
-</ul>
-
-
+<div class="container-fluid">
+{{ form }}
+</div>

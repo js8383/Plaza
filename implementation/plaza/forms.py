@@ -2,6 +2,7 @@ from django import forms
 
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from django.forms import ModelForm
 from models import *
 
 MAX_UPLOAD_SIZE = 2500000
@@ -63,3 +64,7 @@ class CourseForm(forms.Form):
         if Course.objects.filter(number=course_num).count() != 0:
             raise forms.ValidationError("Course already exists")
 
+class PostForm(ModelForm):
+    class Meta:
+      model = Post
+      exclude = ['assignees', 'readers', 'followers', 'editors', 'pinned', 'status', 'course','author','upvotes','downvotes','parent_id']

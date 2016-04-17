@@ -48,8 +48,9 @@ urlpatterns = [
     url(r'^resource$', plaza_views.resource_page, name='resource'),
     url(r'^uploadr$', plaza_views.upload_resource, name='uploadr'),
 
-    url(r'^forum/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum, name='forum'), # TODO: Add friendly URLparts (not numeric IDs) for refering to a course
-    url(r'^post$', plaza_views.post, name='post'),
+    url(r'^forum/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum, name='forum'),
+    url(r'^view_posts/(?P<post_id>\d+)$', plaza_views.view_posts, name='view_posts'),
+    url(r'^post/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<parent_id>\d+)$', plaza_views.post, name='post'),
     url(r'^delete_post/(?P<id>\d+)$', plaza_views.delete_post, name='delete_post'),
 
     url(r'^upvote/(?P<id>\d+)$', plaza_views.upvote, name='upvote'),

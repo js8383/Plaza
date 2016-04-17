@@ -247,7 +247,7 @@ def my_team_page(request, course_number, assignment_number):
 
 # Mrigesh's part starts here
 
-#@login_required
+@login_required
 def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
     c = Course.objects.filter(semester=semester_id,number=course_id)
@@ -260,15 +260,25 @@ def forum(request, semester_id, course_id):
     context['filters'] = filters 
     context['selected'] = None 
     context['following'] = []
+    context['course_id'] = course_id
+    context['semester_id'] = semester_id
     
     return render(request, 'forum.html',context)
 
 
 @login_required
+def view_posts(request, post_id):
+    posts = Post.objects.order_by('-updated_at')
+    context = {'posts' : posts }
+    return render(request, 'view_posts.html',context)
+
+@login_required
 @transaction.atomic
-def post(request):
+def post(request,semester_id,course_id,parent_id):
+    form = PostForm()
+    context = {'form':form}
     # Create new post
-    return
+    return render(request, 'post.html',context)
 
 @login_required
 @transaction.atomic
@@ -298,6 +308,14 @@ def upvote(request):
 @transaction.atomic
 def downvote(request):
     # Downvote a post
+    return
+
+@login_required
+@transaction.atomic
+def edit_post(request, id):
+	# Edit content
+	# Change visibility
+	# Assign to students
     return
 
 # Mrigesh's part ends here
@@ -375,13 +393,6 @@ def send_notifications(message, redirect_url, receivers):
 
 
 
-@login_required
-@transaction.atomic
-def edit_post(request, id):
-	# Edit content
-	# Change visibility
-	# Assign to students
-    return
 
 @login_required
 @transaction.atomic
