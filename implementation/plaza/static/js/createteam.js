@@ -11,36 +11,6 @@ $("#person_search_field").keyup(function(event){
     }
 });
 
-function append_error(errorThrown)
-{
-        $("#errors").children().remove()
-        $("#errors").append(
-            '<div class="alert alert-danger">' +
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-            errorThrown +
-            '</div>'
-            );
-}
-
-function append_success(success)
-{
-    $("#errors").append(
-            '<div class="alert alert-success">' +
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-            success +
-            '</div>'
-            );
-}
-
-function display_error(xhr, status, errorThrown)
-{
-    console.log( "Error: " + errorThrown );
-    console.log( "Status: " + status );
-    console.dir( xhr );
-    append_error(errorThrown);
-}
-
-
 // submit the team
 function submit_team()
 {

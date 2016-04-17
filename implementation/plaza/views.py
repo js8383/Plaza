@@ -98,6 +98,68 @@ def clogin(request):
 # def create_course(request):
 # 	# Creation of a new course
 
+###### For course_edit page #######
+
+@login_required
+@transaction.atomic
+def add_person_to_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpResponse("Request is not valid", content_type="application/json", status=404)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    username = request.POST.get("username", "")
+    role = request.POST.get("role", "")
+
+    if (course_number == "" or course_semester == "" or
+        username == "" or role == ""):
+        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    if role == 'instructor':
+        group = course.instructors
+    elif role == 'staff':
+        group = course.staff
+    elif role == 'student':
+        group = course.students
+    else:
+        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+
+    if group.filter(username__exact=username).count() != 0:
+        return HttpResponse("Already a member", content_type="application/json", status=400)
+
+    user = get_object_or_404(User, username__exact=username)
+
+    # remove from any other groups the user
+    # may have been for the course
+
+    if course.instructors.filter(username__exact=username).count() != 0:
+        course.instructors.remove(user)
+    if course.staff.filter(username__exact=username).count() != 0:
+        course.staff.remove(user)
+    if course.students.filter(username__exact=username).count() != 0:
+        course.students.remove(user)
+
+    # add the user to their new role
+    group.add(user)
+
+    message = ("You have been added to " + course_number + " " + course_semester +
+               " as a " + role + ".")
+
+    # TODO: send notifications to user
+
+    json_obj = {
+            "first_name":user.first_name,
+            "last_name":user.last_name
+            }
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+
+
+
 ####### For team_create_page #######
 
 ## Kaan's part starts here
@@ -355,8 +417,9 @@ def view_course_page(request, number):
 
     context['role'] = role
 
+    # TODO: change this to the forum page
     if role != '' or course.public:
-        return render(request, "course_view.html",{"course": course})
+        return render(request, "edit_course.html",{"course": course})
     else:
         return render(request, "home.html", {"errors": ["Course is not public."]})
 
