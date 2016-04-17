@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+from tinymce.models import HTMLField
+
 from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
@@ -52,7 +54,7 @@ class Course(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=128)
-    text = models.TextField()
+    text = HTMLField()
     author = models.ForeignKey(Person,related_name='posts')
     parent_id = models.ForeignKey('Post',related_name='children',default=None, null=True)
     course = models.ForeignKey(Course, related_name='posts')

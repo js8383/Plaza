@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'plaza'
+    'plaza',
+    'tinymce',
 ]
 
 MIDDLEWARE_CLASSES = [

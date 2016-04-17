@@ -16,10 +16,34 @@
     <link href="{% static 'css/sb-admin-2-modified.css' %}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
+    
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+                    {% block head %}
+                    {% endblock %}
+   
   </head>
   <body>
                     {% block content %}
                     {% endblock %}
   </body>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'js/metisMenu.min.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/sb-admin-2.js' %}"></script>
+
+    <!-- Generic Javascript --!>
+    <script src="{% static 'js/plaza.js' %}"></script>
+
+    <!-- Make user accessible by js --!>
+    <script type="text/javascript">
+        var current_username = "{{request.user.username}}";
+    </script>
+
+    {% block footer %} {% endblock %}
 </html>

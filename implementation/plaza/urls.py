@@ -65,4 +65,6 @@ urlpatterns = [
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
     url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
     url(r'^add_person_to_course/$', plaza_views.add_person_to_course, name='addpersontocourse'),
+
+     url(r'^tinymce/', include('tinymce.urls')),
 ]
