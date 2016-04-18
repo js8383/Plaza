@@ -95,3 +95,29 @@ function display_error(xhr, status, errorThrown)
     $("#errors").children().remove()
     append_error(errorThrown);
 }
+
+
+$('#dpicker').datepicker({});
+
+// $("#my-checkbox").bootstrapSwitch();
+
+// $("#input-repl-1a").fileinput({
+//     // uploadUrl: "#",
+//     autoReplace: true,
+//     overwriteInitial: true,
+//     maxFileCount: 1,
+//     initialPreview: [
+//         "<img src='/profilepicture/4' alt='Profile Picture' class='img-rounded' height='100%' width='100%' />",
+//     ],
+//     initialPreviewShowDelete: false,
+//     showDelete: true,
+//     showCaption: false,
+//     showClose: false,
+//     showUpload: false,
+//     allowedFileTypes: ["image"]
+// });
+
+$('#input-repl-1a').on('filecleared', function(event) {
+    $('#input-repl-1a').fileinput('reset');
+});
+

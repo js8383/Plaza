@@ -12,6 +12,10 @@ from plaza.forms import *
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from plaza.models import *
 from django.core import serializers
+from mimetypes import guess_type
+
+from django.conf import settings
+
 
 # Create your views here.
 
@@ -66,6 +70,10 @@ def register(request):
     new_user.save()
     new_person, created = Person.objects.get_or_create(user=new_user)
     new_person.save()
+
+    # Create a default user profile image
+    # profile_image_url = settings.MEDIA_ROOT + "profile-photos/user_ico_" + str(new_user.id)
+
 
     # # Email validation
     # token = default_token_generator.make_token(new_user)
@@ -577,6 +585,37 @@ def search(request):
 
 # More to be added
 
+# All notifications stuff and resources and etc.
+
+# General notification API
+def save_and_notify(nfilter, sender, receiver, action, target):
+    if nfilter == "People":
+        if action == "FOLLOW":
+            notification = Notification(sender=sender, receiver=receiver, action=action, target_text="you")
+            notification.save()
+            # notify the leancloud api
+    return 
+
+# @login_required
+@transaction.atomic
+def follow_user(request, id):
+    user = request.user
+    save_and_notify("People", user, user, "FOLLOW", "")
+    return
+
+# @login_required
+@transaction.atomic
+def unfollow_user(request,id):
+    return
+
+# @login_required
+def get_profile_picture(request, id):
+    person = get_object_or_404(Person,user_id=id)
+    if not person.profile_image:
+        raise Http404
+    content_type = guess_type(person.profile_image.name)
+    return HttpResponse(person.profile_image, content_type=content_type)
+
 ############################################## Display pages #############################################
 
 
@@ -624,14 +663,30 @@ def staffhome_page(request, id):
 
 # @login_required
 def profile_page(request, id):
-	# Show profile page of "id"
-	return render(request, "profile.html", {})
+    context = {}
+    context["person"] = request.user.person
+    context["target_id"] = id
+    return render(request, "profile.html", context)
 
-@login_required
-def edit_profile_page(request, id):
-	# Show the page of editing self profile
-	return
+# @login_required
+def edit_profile_page(request):
+    user = request.user
+    context = {}
+    context['person'] = user.person
+    if request.method == 'GET':
+        return render(request, "profile_edit.html", context)
+    form = PersonForm(request.POST, request.FILES)
+    # print request.POST["date_of_birth"]
+     
+    form.is_valid()
+        # return render(request, "profile_edit.html", context)
+    form.save(user=user, person=user.person)
+    context['form'] = form   
+    update_session_auth_hash(request, user)
+    return render(request, "profile_edit.html", context)
 
+
+    
 @login_required
 def administration_page(request, id):
 	# Show the page of administration (link to course_creation)
@@ -691,3 +746,5 @@ def resource_slide_page(request):
 	# Students could post comments to each slide / video
 	return
 
+def notification_page(request):
+    return render(request, "notification.html", {})

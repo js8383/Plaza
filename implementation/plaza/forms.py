@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.forms import ModelForm
 from models import *
+from datetime import datetime
 
 MAX_UPLOAD_SIZE = 2500000
 
@@ -68,3 +69,44 @@ class PostForm(ModelForm):
       model = Post
       widgets = {'tags':forms.CheckboxSelectMultiple(attrs={'class':'btn-group','data-toggle':'buttons'})}
       exclude = ['assignees', 'readers', 'followers', 'editors', 'pinned', 'status', 'course','author','upvotes','downvotes','parent_id']
+
+# TODO: add more validation
+class PersonForm(forms.Form):
+    first_name = forms.CharField(max_length=20, label='First Name', required=True)
+    last_name = forms.CharField(max_length=20, label='Last Name', required=True)
+    nickname = forms.CharField(max_length=32, label='Nick Name', required=False)
+    email = forms.CharField(max_length = 40, validators = [validate_email])
+    date_of_birth = forms.DateField(label="Date of Birth", required=False)
+    gender = forms.CharField(max_length=6, label='Gender', required=False)
+    field = forms.CharField(max_length=32, label='Field',required=False)
+    institution = forms.CharField(max_length=32, label='Institution',required=False)
+    short_bio = forms.CharField(max_length=1024, label="Short Bio", required=False)
+    profile_image = forms.ImageField(label='Profile Image', required=False)
+
+    def clean_profile_image(self):
+        image = self.cleaned_data['profile_image']
+        if not image:
+            print "Not a image"
+            return None
+        if not image.content_type or not image.content_type.startswith('image'):
+            raise forms.ValidationError('File type is not image')
+        if image.size > MAX_UPLOAD_SIZE:
+            raise forms.ValidationError('File too big (max size is {0} bytes)'.format(MAX_UPLOAD_SIZE))
+        return image
+
+    def save(self, user, person):
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.email = self.cleaned_data.get('email')
+
+        person.nickname = self.cleaned_data.get('nickname')
+        person.date_of_birth = self.cleaned_data.get('date_of_birth')
+        person.gender = self.cleaned_data.get('gender')
+        person.field = self.cleaned_data.get('field')
+        person.institution = self.cleaned_data.get('institution')
+        person.short_bio = self.cleaned_data.get('short_bio')
+        if not self.cleaned_data.get('profile_image') == None:
+            person.profile_image = self.cleaned_data.get('profile_image')
+        user.save()
+        person.save()
+        return user

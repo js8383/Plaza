@@ -8,26 +8,30 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
                  Profile
+                 {% if "target_id==person.user.id" %}
+                 <span class="pull-right"> <a class="btn btn-default btn-xs" href="{% url 'editprofile' %}" role="button">Edit</a> </span> 
+                 {% endif %}
             </div>
             <div class="panel-body">
-                <div class="col-lg-4">
+                <div class="col-lg-3 col-lg-offset-1">
                     <br>
 	            	<span class="pull-left">
-	                    <img src="{% static 'img/profile1.jpg' %}" alt="Profile Picture" class="img-rounded" height="190" width="200" />
+	                    <img src="{% url 'profilepicture' person.user.id %}" alt="Profile Picture" class="img-rounded" height="190" width="200" />
 	                </span>
                 </div>
                 <div class="col-lg-7 col-md-offset-1">
 	                <ul class="list-unstyled">
-					  <li><h3>Jason Song</h3> </li>
+					  <li><h3>{{person.user.first_name}} {{person.user.last_name}} </h3> </li>
 					  <hr>
-					  <li><span><i class="fa fa-user fa-fw"></i> js8383 </span>  &nbsp; - &nbsp; <span><i class="fa fa-calendar fa-fw"></i> 100 years old </span>
-					   &nbsp; - &nbsp; <span><i class="fa fa-calendar fa-male"></i> Male </span> </li> 
+					  <li><span><i class="fa fa-user fa-fw"></i> {{person.user.username}} </span>  &nbsp; - &nbsp; <span><i class="fa fa-calendar fa-fw"></i> 
+                      {% if person.date_of_birth %} {{person.date_of_birth}} {% else %} N/A {% endif %} </span>
+					   &nbsp; - &nbsp; <span><i class="fa fa-calendar fa-male"></i> {{person.get_gender_display}} </span> </li> 
 					   <br>
-					  <li> <span><i class="fa fa-envelope-o fa-fw"></i> jiachens@andrew.cmu.edu </span></li>
+					  <li> <span><i class="fa fa-envelope-o fa-fw"></i> {{person.user.email}} </span></li>
 					  <br>
-					  <li><span> <i class="fa fa-graduation-cap fa-fw"></i> CS undergrad at Carnegie Mellon</span></li>
-					  <hr>
-					  <li>Personal bio...</li>
+					  <li><span> <i class="fa fa-graduation-cap fa-fw"></i> Major {% if person.field %} {{person.field}} {% else %} N/A {% endif %} at {% if person.institution %} {{person.institution}} {% else %} N/A {% endif %} </span></li>
+					  <hr> 
+					  <li>{{person.short_bio}}</li>
 					</ul>
 
 				</div>
@@ -35,7 +39,12 @@
 				<hr>
 				<b>100</b> Followers &nbsp; - &nbsp; <b>100</b> Followings &nbsp; - &nbsp; <b>100</b> Upvotes 
 				<span class="pull-right">
-				<button type="button" class="btn btn-outline btn-primary btn-xs">Follow</button>
+
+                <form id="followform" method="post" action="{% url 'followuser' 1 %}">
+                    {% csrf_token %}
+                </form>
+				<button type="submit" form="followform" class="btn btn-outline btn-primary btn-xs">Follow</button>
+
 				<button type="button" class="btn btn-outline btn-primary btn-xs">InMail</button>
 				</span>
 				</div>
