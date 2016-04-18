@@ -68,6 +68,7 @@ urlpatterns = [
         plaza_views.save_course_pref, name='savecoursepref'),
     url(r'^add_person_to_course/$', plaza_views.add_person_to_course, name='addpersontocourse'),
     url(r'^remove_person_from_course/$', plaza_views.remove_person_from_course, name='removepersonfromcourse'),
+
+    url(r'^tinymce/', include('tinymce.urls')),
 ]
 
-     url(r'^tinymce/', include('tinymce.urls')),
