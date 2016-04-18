@@ -57,6 +57,7 @@ class Post(models.Model):
     text = HTMLField()
     author = models.ForeignKey(Person,related_name='posts')
     parent_id = models.ForeignKey('Post',related_name='children',default=None, null=True)
+    root_id = models.ForeignKey('Post',related_name='entire_thread',default=None, null=True)
     course = models.ForeignKey(Course, related_name='posts')
 
     ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))
@@ -174,6 +175,7 @@ class MatchMakingTeam(models.Model):
 
 # TODO: Create settings model object
 
+# TODO: Track views per user per course
 
 # TODO: Create Event model for logs
 

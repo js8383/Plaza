@@ -6,5 +6,5 @@ function post(semester_id,course_id,parent_id)
 
 $('.clickable').click( function () {
   this.id
-  document.getElementById('frame').src="/view_posts/"+this.id.replace('post_','');
+  document.getElementById('frame').src="/view_post/"+this.id.replace('post_','');
 });

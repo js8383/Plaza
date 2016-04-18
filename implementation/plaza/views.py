@@ -268,10 +268,10 @@ def forum(request, semester_id, course_id):
 
 
 @login_required
-def view_posts(request, post_id):
-    posts = Post.objects.order_by('-updated_at')
+def view_post(request, post_id):
+    posts = [Post.objects.get(id=post_id)]
     context = {'posts' : posts }
-    return render(request, 'view_posts.html',context)
+    return render(request, 'view_post.html',context)
 
 @login_required
 @transaction.atomic
