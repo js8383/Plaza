@@ -67,7 +67,12 @@ urlpatterns = [
     url(r'^save_course_pref/(?P<course_number>\d+)/(?P<course_semester>\w+)/$',
         plaza_views.save_course_pref, name='savecoursepref'),
     url(r'^add_person_to_course/$', plaza_views.add_person_to_course, name='addpersontocourse'),
-    url(r'^remove_person_from_course/$', plaza_views.remove_person_from_course, name='removepersonfromcourse'),
+    url(r'^add_assignment_to_course/$', plaza_views.add_assignment_to_course,
+            name='addassignmenttocourse'),
+    url(r'^remove_assignment_from_course/$', plaza_views.remove_assignment_from_course,
+            name='removeassignmentfromcourse'),
+    url(r'^remove_person_from_course/$', plaza_views.remove_person_from_course,
+            name='removepersonfromcourse'),
 
     url(r'^tinymce/', include('tinymce.urls')),
 ]

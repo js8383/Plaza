@@ -157,7 +157,7 @@
                                 <div class="form-group">
                                     <label>Access Code</label>
                                     <input name="access_code" class="form-control"
-                                           value="{{course.access_code}}">
+                                    value="{{course.access_code}}">
                                 </div>
                             </div>
 
@@ -184,51 +184,79 @@
                 </div>
 
             </div>
-        </div>
-    </div>
-</div>
-<div class = "col-md-8">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="display1"> Assignments </div>
-        </div>
-    </div>
-    <div class="panel-body">
-        <div class="form-group">
-        </div>
-    </div>
-</div>
-
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="alert_self" tabindex="-1" role="dialog" aria-labelledby="alertlabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="alertlabel">
-                        Are you sure you wan't to remove yourself form this course?
-                    </h4>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="display1"> Assignments </div>
                 </div>
+                <table class="table table-striped table-hover" id="assignment_table">
+                    {% for assignment in course.assignments.all %}
+                    <tr id="{{assignment.title}}_row">
+                        <td>
+                            {{assignment.title}}
+                        </td>
+                        <td>
+                            {{assignment.number}}
+                        </td>
+                        <td>
+                            <button class="btn btn-default"
+                                onclick="remove_assignment('{{assignment.title}}')">
+                                <span class="glyphicon glyphicon-remove"></span></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="assignment_title_field">
+                            </input>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control"
+                                   id="assignment_number_field">
+                            </input>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" id="add_assignment">
+                                Add
+                            </button>
+                        </td>
+                    </tr>
 
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="">
-                            <button class="btn btn-primary" id="alert_confirm">
-                                Confirm
-                            </button>
-                            <button class="btn btn-primary" id="alert_cancel">
-                                Cancel
-                            </button>
-                        </div>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="alert_self" tabindex="-1" role="dialog" aria-labelledby="alertlabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="alertlabel">
+                    Are you sure you wan't to remove yourself form this course?
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="">
+                        <button class="btn btn-primary" id="alert_confirm">
+                            Confirm
+                        </button>
+                        <button class="btn btn-primary" id="alert_cancel">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 </div> <!-- /container -->

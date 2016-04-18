@@ -2,10 +2,50 @@ var my_username = ""
 var course_number = -1
 var course_semester = ''
 
-function submit_course_pref()
+function add_assignment(title, number)
 {
-    return;
+    $.ajax({
+
+        url: "/add_assignment_to_course/",
+
+        data: {
+            assignment_title: title,
+            assignment_number: number,
+            course_number: course_number,
+            course_semester: course_semester,
+            csrfmiddlewaretoken: getCSRFToken()
+        },
+
+        type: "POST",
+
+        dataType: "json",
+
+        success: function (message) {
+            display_success(message.message);
+            // add the user to the new roles table
+            $("#assignment_table").prepend(
+                '<tr id="'+title+'_row">'+
+                    '<td>'+
+                        title+
+                    '</td>'+
+                    '<td>'+
+                        number+
+                    '</td>'+
+                    '<td>'+
+                        '<button class="btn btn-default"'+
+                            'onclick=remove_assignment("'+title+'")>'+
+                            '<span class="glyphicon glyphicon-remove"></span></button>'+
+                    '</td>'+
+                '</tr>'
+            );
+        },
+
+        error: function (xhr, status, errorThrown) {
+            display_error(xhr, status, errorThrown);
+        }
+    });
 }
+
 
 function add_person(username, role)
 {
@@ -107,6 +147,36 @@ function remove_person(username, role)
 }
 
 
+function remove_assignment(title)
+{
+    $.ajax({
+
+        url: "/remove_assignment_from_course/",
+
+    data: {
+        assignment_title: title,
+        course_number: course_number,
+        course_semester: course_semester,
+        csrfmiddlewaretoken: getCSRFToken()
+    },
+
+    type: "POST",
+
+    dataType: "json",
+
+    success: function (obj) {
+        display_success(obj.message);
+        $("#"+title+"_row").remove();
+    },
+
+    error: function (xhr, status, errorThrown) {
+               display_error(xhr, status, errorThrown);
+           }
+    });
+
+}
+
+
 /* Event handlers */
 
 $("#instructor_search_field").keyup(function(event){
@@ -139,6 +209,16 @@ $("#student_search_field").keyup(function(event){
     }
 });
 
+$("#assignment_add_field").keyup(function(event){
+    if(event.keyCode == 13)
+    {
+        $("#add_assignment").click();
+    }
+    else
+    {
+    }
+});
+
 $("#add_instructor").click(function(event){
     add_person($("#instructor_search_field").val(), 'instructor');
     $("#instructor_search_field").val('');
@@ -149,10 +229,17 @@ $("#add_staff").click(function(event){
     $("#staff_search_field").val('');
 });
 
-
 $("#add_student").click(function(event){
     add_person($("#student_search_field").val(), 'student');
     $("#student_search_field").val('');
+});
+
+$("#add_assignment").click(function(event){
+    add_assignment(
+        $("#assignment_title_field").val(),
+        $("#assignment_number_field").val());
+    $("#assignment_title_field").val('');
+    $("#assignment_number_field").val('');
 });
 
 // asynchronously submit the class preferences

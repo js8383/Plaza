@@ -17,6 +17,18 @@ from django.core import serializers
 
 ############################################## Functionality #############################################
 
+###### AJAX Helper Functions #######
+
+# used in sending status/error messages back
+# to the client
+def HttpJSONStatus(msg,status):
+
+    json_obj = {"message":msg}
+
+    return HttpResponse(json.dumps(json_obj),
+                        content_type='application/json',
+                        status=status)
+
 ####### Login/register #######
 
 @transaction.atomic
@@ -194,6 +206,68 @@ def save_course_pref(request, course_number, course_semester):
     json_obj = {"message": "Successfully updated"}
 
     return HttpResponse(json.dumps(json_obj), content_type='application/json')
+
+@login_required
+@transaction.atomic
+def add_assignment_to_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=400)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    assignment_title = request.POST.get("assignment_title", "")
+    assignment_number = request.POST.get("assignment_number", "")
+
+    if (course_number == "" or course_semester == "" or
+        assignment_title == "" or assignment_number == ""):
+        return HttpJSONStatus("Invalid parameters", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+
+    if (course.assignments.filter(title=assignment_title).count() != 0):
+        return HttpJSONStatus("Assignment with title already exists.", status=400)
+
+    if (course.assignments.filter(number=assignment_number).count() != 0):
+        return HttpJSONStatus("Assignment with number already exists.", status=400)
+
+    assignment = Assignment(title=assignment_title,
+                            number=assignment_number,
+                            course=course)
+    assignment.save()
+
+    return HttpJSONStatus("Assignment "+assignment_number+" successfully created!", status=200)
+
+@login_required
+@transaction.atomic
+def remove_assignment_from_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=400)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    assignment_title = request.POST.get("assignment_title", "")
+
+    if (course_number == "" or course_semester == "" or
+        assignment_title == ""):
+        return HttpJSONStatus("Invalid parameters", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    try:
+        assignment = course.assignments.get(title=assignment_title)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("Assignment doesn not exist", status=400)
+
+    assignment.delete()
+
+    return HttpJSONStatus("Assignment "+assignment_title+" successfully deleted!", status=200)
+
+
 
 
 @login_required
@@ -487,8 +561,6 @@ def get_notification(request, id):
 def send_notifications(message, redirect_url, receivers):
     # TODO: implement soon
     return
-
-
 
 
 @login_required
