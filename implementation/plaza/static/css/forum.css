@@ -10,3 +10,9 @@
 {
 	display: inline;
 }
+
+.clickable
+{
+      cursor: pointer;
+}
+

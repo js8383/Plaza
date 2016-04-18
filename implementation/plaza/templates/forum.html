@@ -46,7 +46,7 @@
           </div>
           <div class="list-group" style="word-wrap: break-word;">
             {% for post in posts %}
-            <div class="list-group-item panel panel-default">
+            <div class="list-group-item panel panel-default clickable" id="post_{{ post.id }}">
               <div class="panel-heading"> 
                 <div class="row">
                   <div class="col-md-8">
@@ -78,11 +78,21 @@
           </div>
         </div>
         <div class="col-md-9" style="height:100vh;min-height:100vh">
-          <iframe src="{% url 'view_posts' 1 %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
+          {% ifequal selected_post 0 %}
+          <iframe src="{% url 'home' %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
+          {% else %}
+          <iframe src="{% url 'view_posts' selected_post %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
+          {% endifequal %}
         </div>
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="{% static 'js/forum.js' %}"/>
 
+  {% endblock %}
+  {% block footer %}
+    <script type="text/javascript">
+        semester_id = "{{semester_id}}";
+        course_id = "{{course_id}}";
+    </script>
     {% endblock %}
+

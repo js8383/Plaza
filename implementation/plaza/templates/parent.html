@@ -15,6 +15,9 @@
         <!-- Custom CSS -->
         <link href="{% static 'css/sb-admin-2-modified.css' %}" rel="stylesheet">
 
+        <!-- Custom CSS -->
+        <link href="{% static 'css/forum.css' %}" rel="stylesheet">
+        
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     </head>
@@ -234,6 +237,8 @@
     </body>
 
     <!-- jQuery -->
+    <!-- TODO: Solve duplication -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
@@ -247,6 +252,9 @@
 
     <!-- Generic Javascript --!>
     <script src="{% static 'js/plaza.js' %}"></script>
+
+
+    <script src="{% static 'js/forum.js' %}"></script>
 
     <!-- Make user accessible by js --!>
     <script type="text/javascript">

@@ -67,4 +67,5 @@ class CourseForm(forms.Form):
 class PostForm(ModelForm):
     class Meta:
       model = Post
+      widgets = {'tags':forms.CheckboxSelectMultiple(attrs={'class':'btn-group','data-toggle':'buttons'})}
       exclude = ['assignees', 'readers', 'followers', 'editors', 'pinned', 'status', 'course','author','upvotes','downvotes','parent_id']

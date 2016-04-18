@@ -262,6 +262,7 @@ def forum(request, semester_id, course_id):
     context['following'] = []
     context['course_id'] = course_id
     context['semester_id'] = semester_id
+    context['selected_post'] = int(request.GET.get('p',0))
     
     return render(request, 'forum.html',context)
 
