@@ -11,6 +11,30 @@ function getCSRFToken() {
     return "unknown";
 }
 
+// Grabbed from Django site
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Grabbed from django site
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
 
 function remove_tag(type, id)
 {
@@ -37,7 +61,6 @@ function create_tag_html(text, type, id, link, css_type)
 
 function append_error(errorThrown)
 {
-        $("#errors").children().remove()
         $("#errors").append(
             '<div class="alert alert-danger">' +
             '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
@@ -48,7 +71,7 @@ function append_error(errorThrown)
 
 function append_success(success)
 {
-    $("#errors").append(
+    $("#statuses").append(
             '<div class="alert alert-success">' +
             '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
             success +
@@ -56,10 +79,19 @@ function append_success(success)
             );
 }
 
+function display_success(success)
+{
+    $("#statuses").children().remove()
+    append_success(success)
+}
+
+
+
 function display_error(xhr, status, errorThrown)
 {
     console.log( "Error: " + errorThrown );
     console.log( "Status: " + status );
     console.dir( xhr );
+    $("#errors").children().remove()
     append_error(errorThrown);
 }

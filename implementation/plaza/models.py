@@ -38,6 +38,7 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     max_enroll = models.IntegerField(null=True)
+    access_code = models.IntegerField(null=True)
     public = models.BooleanField(default=True)
 
     # TODO: Possibly move to a permission-based model instead of rule-based (last sprint)

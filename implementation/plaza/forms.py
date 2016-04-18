@@ -50,13 +50,12 @@ class RegistrationForm(forms.Form):
         # dictionary
         return username
 
-class CourseForm(forms.Form):
-    number = forms.CharField(max_length=10, required=True)
-    name = forms.CharField(max_length=128, required=True)
-    semester = forms.CharField(max_length=3, required=True) # Create choices
-    description = forms.CharField(max_length=160, required=True)
-    maxenroll = forms.IntegerField(required=False)
-    public = forms.BooleanField(initial=True, required=False)
+class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course
+        fields=['number', 'name', 'semester', 'description',
+                'max_enroll', 'access_code', 'public']
 
     def clean(self):
         cleaned_data = super(CourseForm, self).clean()

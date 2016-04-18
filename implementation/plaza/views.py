@@ -102,6 +102,102 @@ def clogin(request):
 
 @login_required
 @transaction.atomic
+def remove_person_from_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpResponse("Request is not valid",
+                                content_type="application/json",
+                                status=404)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    username = request.POST.get("username", "")
+    role = request.POST.get("role", "")
+
+    if (course_number == "" or course_semester == "" or
+        username == "" or role == ""):
+        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    if role == 'instructor':
+        group = course.instructors
+    elif role == 'staff':
+        group = course.staff
+    elif role == 'student':
+        group = course.students
+    else:
+        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+
+    # if we are removing an instructor, we need to check
+    # that there are more in the course
+    if role == 'instructor':
+        if course.instructors.count() == 1:
+            return HttpResponse("Can't remove last instructor",
+                    content_type="applicaiton/json",
+                    status=400)
+
+    user = get_object_or_404(User, username__exact=username)
+
+    # remove the person from the group if they exist
+
+    if group.filter(username__exact=username).count() != 0:
+        group.remove(user)
+    else:
+        return HttpResponse("Not a member", content_type="application/json", status=400)
+
+    message = ("You have been removed from " + course_number + " " + course_semester +
+               " as a " + role + ".")
+
+    # TODO: send notifications to user
+
+    json_obj = {
+            "first_name":user.first_name,
+            "last_name":user.last_name
+            }
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+
+@login_required
+@transaction.atomic
+def save_course_pref(request, course_number, course_semester):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpResponse("Request is not valid",
+                                content_type="application/json",
+                                status=404)
+
+    form = CourseForm(request.POST)
+    # fix cleaning, error reporting
+    if not form.is_valid() and 0:
+        return HttpResponse("Form is invalid",
+                            content_type="application/json",
+                            status=404)
+
+    course = get_object_or_404(
+                Course,
+                number=course_number,
+                semester=course_semester)
+
+    course.name = form.cleaned_data['name']
+    course.number = form.cleaned_data['number']
+    course.semester = form.cleaned_data['semester']
+    course.max_enroll = form.cleaned_data['max_enroll']
+    course.description = form.cleaned_data['description']
+    course.access_code = form.cleaned_data['access_code']
+    course.public = form.cleaned_data['public']
+
+    course.save()
+
+    json_obj = {"message": "Successfully updated"}
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+
+
+@login_required
+@transaction.atomic
 def add_person_to_course(request):
     if not request.is_ajax():
         if request.method != 'POST':
@@ -257,13 +353,13 @@ def forum(request, semester_id, course_id):
     # TODO : Add filtering based on user visibility of that post
     context = {'posts' : posts }
     filters = [ ('All',24),('Unread',18) ]
-    context['filters'] = filters 
-    context['selected'] = None 
+    context['filters'] = filters
+    context['selected'] = None
     context['following'] = []
     context['course_id'] = course_id
     context['semester_id'] = semester_id
     context['selected_post'] = int(request.GET.get('p',0))
-    
+
     return render(request, 'forum.html',context)
 
 
@@ -421,6 +517,8 @@ def home_page(request):
 def manage_courses(request):
     return render(request, "managecourses.html", {})
 
+## TODO: this currently holds the edit course page,
+##       change this to the forum page once it is done
 @login_required
 def view_course_page(request, number):
     context={}
@@ -486,7 +584,8 @@ def course_creation_page(request):
                     name=form.cleaned_data['name'],
                     semester=form.cleaned_data['semester'],
                     description=form.cleaned_data['description'],
-                    max_enroll=form.cleaned_data['maxenroll'],
+                    max_enroll=form.cleaned_data['max_enroll'],
+                    access_code=form.cleaned_data['access_code'],
                     public=form.cleaned_data['public'])
 
     course.save()

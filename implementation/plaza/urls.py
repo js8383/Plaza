@@ -64,7 +64,10 @@ urlpatterns = [
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
     url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
+    url(r'^save_course_pref/(?P<course_number>\d+)/(?P<course_semester>\w+)/$',
+        plaza_views.save_course_pref, name='savecoursepref'),
     url(r'^add_person_to_course/$', plaza_views.add_person_to_course, name='addpersontocourse'),
+    url(r'^remove_person_from_course/$', plaza_views.remove_person_from_course, name='removepersonfromcourse'),
+]
 
      url(r'^tinymce/', include('tinymce.urls')),
-]
