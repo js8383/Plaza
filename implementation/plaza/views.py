@@ -355,6 +355,7 @@ def submit_team(request):
     team_members = json.loads(request.POST.get("team_members",""))
     assignment_number = request.POST.get("assignment_number", "")
     course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
 
     if (team_name == "" or team_members == "" or
         course_number == "" or assignment_number == ""):
@@ -371,7 +372,7 @@ def submit_team(request):
                 return HttpResponse("Person is already in a team", content_type="application/json", status=400)
 
     try:
-        course = Course.objects.get(number=course_number)
+        course = Course.objects.get(number=course_number, semester=course_semester)
     except ObjectDoesNotExist:
         return HttpResponse("Course does not exist", content_type="application/json", status=400);
 
@@ -381,7 +382,7 @@ def submit_team(request):
     except ObjectDoesNotExist:
         return HttpResponse("Assignment does not exist", content_type="application/json", status=400)
 
-    team = Team(team_name=team_name, assignment=assignment, members=team_members)
+    team = Team(name=team_name, assignment=assignment, members=team_members)
     team.save()
 
 
@@ -731,8 +732,12 @@ def staff_team_page(request, id):
 
 # @login_required
 @transaction.atomic
-def team_creation_page(request, course_number, assignment_number):
-    context = {"course_number": course_number, "assignment_number":assignment_number}
+def team_creation_page(request, course_number, course_semester, assignment_number):
+    context = {
+            "course_number": course_number,
+            "course_semester": course_semester,
+            "assignment_number":assignment_number
+            }
     return render(request, "team_creation.html", context)
 
 def resource_page(request):

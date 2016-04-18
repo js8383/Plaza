@@ -1,4 +1,5 @@
 var course_number = -1;
+var course_semester = -1;
 var assignment_number = -1;
 
 $("#person_search_field").keyup(function(event){
@@ -26,6 +27,7 @@ function submit_team()
 
             data: {
                 course_number: course_number,
+                course_semester: course_semester,
                 assignment_number: assignment_number,
                 team_name: team_name,
                 team_members: JSON.stringify(members),
