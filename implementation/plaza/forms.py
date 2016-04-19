@@ -102,7 +102,7 @@ class PersonForm(forms.Form):
 
 class PostForm(forms.Form):
     title = forms.CharField(max_length=128)
-    text = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    text = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30,'class':'form-control'}))
     visibility = forms.MultipleChoiceField(choices=Post.ANONYMITY_CHOICES)
 
     def clean(self):
