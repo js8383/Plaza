@@ -49,7 +49,7 @@ urlpatterns = [
     ## Resource urls ##
     url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
     url(r'^resource$', plaza_views.resource_page, name='resource'),
-    url(r'^uploadr$', plaza_views.upload_resource, name='uploadr'),
+    url(r'^createresource$', plaza_views.create_resource, name='createresource'),
 
     url(r'^forum/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum, name='forum'),
     url(r'^view_post/(?P<post_id>\d+)$', plaza_views.view_post, name='view_posts'),

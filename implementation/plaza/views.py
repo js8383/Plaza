@@ -738,9 +738,34 @@ def team_creation_page(request, course_number, assignment_number):
 def resource_page(request):
 	# Show the page of resources (notes, videos)
 	# For staff, there's an optiona for uploading new resources
-	return render(request, "resources.html", {})
+    context = {}
+    context['resource_file_form'] = ResourceFileForm()
+    context['resource_folder_form'] = ResourceFolderForm()
+    top_level_resources = Resource.objects.filter(child=None)
+    context['resources'] = top_level_resources
+    return render(request, "resources.html", context)
 
-@login_required
+def create_resource(request):
+    rtype = request.POST.get('rtype', False)
+    title = request.POST.get('title', False)
+    notes = request.POST.get('title', False)
+    if rtype == "folder":
+        resource = Resource(resource_type='F')
+        resource_folder_form = ResourceFolderForm(request.POST, instance=resource)
+        resource_folder_form.save()
+    if rtype == "file":
+        resource = Resource(resource_type='P')
+        resource_file_form = ResourceFileForm(request.POST, request.FILES, instance=resource)
+        if not resource_file_form.is_valid():
+            errors = json.dumps([{'errors': True}, resource_file_form.errors])
+            return HttpResponse(errors, content_type='application/json')
+        resource_file_form.save()
+    return redirect(reverse('resource'))
+
+def delete_resource(request, id):
+    return
+    
+# @login_required
 def resource_slide_page(request):
 	# Show the page a slide (could be a pdf slide, or just streaming the video)
 	# Students could post comments to each slide / video

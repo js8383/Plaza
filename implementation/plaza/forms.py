@@ -111,14 +111,55 @@ class PersonForm(forms.Form):
         person.save()
         return user
 
-class ResourceForm(forms.ModelForm):
+class ResourceFileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(ResourceFileForm, self).__init__(*args, **kwargs)
+        self.fields['file'].required = False
+        self.fields['tags'].required = False
+        self.fields['due'].required = False
+        
     class Meta:
         model = Resource
-        fields = ('title',)
+        fields = ('title','notes', 'file', 'tags', 'due',)
         widgets = {
-            'title': forms.TextInput(attrs={'placeholder': "Add your comment here...", 'id':'comment_input','class': 'form-control input-sm'})
+            'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'due': forms.DateInput(attrs={'placeholder': "", 'id':'dpicker', 'class': 'form-control'}),
+        }
+        labels = {
+            'title': 'Title',
+            'notes': 'Notes',
+            'file': 'Attach File',
+            'tags':'Tags',
+            'due': 'Due'
         }
         
     def clean(self):
-        cleaned_data = super(ResourceForm, self).clean()
+        cleaned_data = super(ResourceFileForm, self).clean()
+        return cleaned_data
+
+
+class ResourceFolderForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(ResourceFolderForm, self).__init__(*args, **kwargs)
+        
+    class Meta:
+        model = Resource
+        fields = ('title','notes',)
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
+            
+        }
+        labels = {
+            'title': 'Title',
+            'notes': 'Notes',
+        }
+        
+    def clean(self):
+        cleaned_data = super(ResourceFolderForm, self).clean()
         return cleaned_data

@@ -28,7 +28,55 @@
                 <div class="tab-content">
 
                     <div class="tab-pane fade in active" id="All">
-                        <ul class="list-group">
+                    <br>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+
+                            <div class="panel-group" id="accordion">
+                            {% for resource in resources %}
+                            
+                            {% if resource.resource_type != "F" %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <i class="fa fa-file" aria-hidden="true"></i> &nbsp;<a data-toggle="collapse" data-parent="#accordion" href="#collapse-id-{{ resource.id }}"> {{ resource.title }}</a>
+                                        <span class="pull-right">&nbsp;  <a href="#"> <i class="fa fa-times" aria-hidden="true"></i> </a> </span>
+                                        {% if resource.file %} 
+                                       <span class="label label-default label-pill pull-right">Due Mar. 22nd</span>
+                                        {% endif %}
+                                        
+                                    </h4>
+                                </div>
+                                <div id="collapse-id-{{ resource.id }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        {{resource.notes}}
+                                        
+                                        {% if resource.file %}
+                                        <hr>
+                                        <a href="media/{{resource.file}}">Attached File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if resource.resource_type == "F" %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <i class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; <a href="#">{{ resource.title }}</a>
+                                        <span class="pull-right">&nbsp;  <a href="#"> <i class="fa fa-times" aria-hidden="true"></i> </a> </span>
+                                    </h4>
+                                </div>
+                                
+                            </div>
+                            {% endif %}
+
+                            {% endfor %}
+                            </div>
+
+                        </li>
+
 
  <!--                        <li class="list-group-item">
                         <b>Homework 1</b> <span class="label label-default label-pill pull-right">Due Mar. 22nd</span>
@@ -41,6 +89,8 @@
                         </li> -->
 
                         <li class="list-group-item">
+
+
 
                             <button type="button" class="btn btn-link" data-toggle="modal" data-target="#CreateResource">
                                                 <span class="glyphicon glyphicon-plus" title="Create Assignment"></span>
@@ -68,8 +118,8 @@
                                             <div class="tab-content">
 
                                                 <div class="tab-pane fade in active" id="File">
-                                                <form class="form-horizontal" role="form" method="post" action="/instructor/create_course/8/">
-                                                    <div class="form-group">
+                                                <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' %}">
+                                                    <!-- <div class="form-group">
                                                         <label class="control-label col-md-3" for="number">Title</label>
                                                         <div class="col-md-9">
                                                             <input type="text" class="form-control" name="title">
@@ -106,7 +156,19 @@
                                                         <div class="col-md-9">
                                                             <input name="due" id="dpicker" type="text" class="form-control">
                                                         </div>
+                                                    </div> -->
+
+                                                    {% for field in resource_file_form.visible_fields %}
+                                                     <div class="form-group">
+                                                        <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                        <div class="col-md-9">
+                                                           {{field}}
+                                                        </div>
                                                     </div>
+                                                    
+                                                    {% endfor %}
+
+                                                    <input type="hidden" name="rtype" value="file">
 
                                                     <div class="form-group">
                                                         <div class="col-md-offset-3 col-md-9">
@@ -114,15 +176,15 @@
                                                         </div>
                                                     </div>
 
-                                                    <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
+                                                    {% csrf_token %}
 
                                                 </form>
 
                                                 </div>
 
                                                 <div class="tab-pane fade" id="Folder">
-                                                   <form class="form-horizontal" role="form" method="post" action="/instructor/create_course/8/">
-                                                   <div class="form-group">
+                                                   <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' %}">
+                                                   <!-- <div class="form-group">
                                                         <label class="control-label col-md-3" for="number">Title</label>
                                                         <div class="col-md-9">
                                                             <input type="text" class="form-control" name="title">
@@ -134,7 +196,19 @@
                                                         <div class="col-md-9">
                                                             <textarea name="notes" style="resize:none;"class="form-control" rows="4"></textarea>
                                                         </div>
+                                                    </div> -->
+
+                                                     {% for field in resource_folder_form.visible_fields %}
+                                                     <div class="form-group">
+                                                        <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                        <div class="col-md-9">
+                                                           {{field}}
+                                                        </div>
                                                     </div>
+                                                       
+                                                    {% endfor %}
+
+                                                    <input type="hidden" name="rtype" value="folder">
 
                                                     <div class="form-group">
                                                         <div class="col-md-offset-3 col-md-9">
@@ -142,7 +216,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
+                                                    {% csrf_token %}
 
                                                     </form>
                                                 </div>
