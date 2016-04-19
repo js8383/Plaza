@@ -39,7 +39,7 @@ function add_person(teammate)
         url: "/add_person_to_team/",
 
     data: {
-        username: username,
+        username: teammate,
         team_id: team_id,
         csrfmiddlewaretoken: getCSRFToken()
     },
@@ -77,7 +77,9 @@ $("#add_member").click(function(event){
     add_person($("#person_search_field").val());
     $("#person_search_field").val('');
 });
-
+$("#alert_cancel").click(function(event){
+    $("#alert_leave").modal("hide");
+});
 $("#alert_confirm").click(function(event){
     leave_team();
 });

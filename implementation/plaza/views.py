@@ -350,7 +350,7 @@ def add_person_to_team(request):
             return HttpJSONStatus("Request is not valid", status=404)
 
     username = request.POST.get("username", "")
-    team_id = request.POST.get("team_name", "")
+    team_id = request.POST.get("team_id", "")
 
     if username == "" or team_id == "":
         return HttpJSONStatus("Invalid request parameters", status=400)
@@ -360,13 +360,22 @@ def add_person_to_team(request):
     except ObjectDoesNotExist:
         return HttpJSONStatus("Team does not exist!", status=400)
 
+    assignment = team.assignment
+    if assignment == None:
+        return HttpJSONStatus("Team does not have an assignment!", status=400)
+
     try:
         user = User.objects.get(username__exact=username)
     except ObjectDoesNotExist:
         return HttpJSONStatus("User does not exist!", status=400)
 
+    if user.person.teams.filter(assignment__id=assignment.id).count() == 1:
+        return HttpJSONStatus(username+" already has a team for this assignment!", status=400)
+
     team.members.add(user.person)
     team.save()
+
+    return HttpJSONStatus("Added " +username+ " to team!", status=200)
 
 @login_required
 @transaction.atomic
@@ -392,8 +401,12 @@ def remove_person_from_team(request):
     except ObjectDoesNotExist:
         return HttpJSONStatus("User does not exist!", status=400)
 
+    # remove ourselves from the team
     team.members.remove(user.person)
-    team.save()
+    # if we were the last person
+    # delete this team
+    if team.members.count() == 0:
+        team.delete()
 
     obj = {"url":"You have successfully left the team!/"}
 
@@ -519,7 +532,7 @@ def view_post(request, post_id):
 def post(request,semester_id,course_id,parent_id):
   if request.method == 'POST':
     form = PostForm(request.POST)
-    print request.POST 
+    print request.POST
     context = {'form':form}
     if form.is_valid():
       c = Course.objects.get(semester=semester_id,number=course_id)
