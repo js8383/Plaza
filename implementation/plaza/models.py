@@ -30,14 +30,6 @@ class Person(models.Model):
         return self.__unicode__()
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=16)
-    def __unicode__(self):
-        return self.name
-    def __str__(self):
-        return self.__unicode__()
-
-
 class Course(models.Model):
     number = models.CharField(max_length=10)
     name = models.CharField(max_length=128)
@@ -55,7 +47,6 @@ class Course(models.Model):
     students = models.ManyToManyField(User, related_name='courses_taken')
     staff = models.ManyToManyField(User, related_name='courses_assisted')
     instructors = models.ManyToManyField(User, related_name='courses_managed')
-    tags = models.ManyToManyField(Tag, related_name='tag_courses')
 
     def __unicode__(self):
         return self.semester+'. '+self.name
@@ -63,12 +54,21 @@ class Course(models.Model):
         return self.__unicode__()
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=16)
+    courses = models.ForeignKey(Course, related_name='tags')
+    def __unicode__(self):
+        return self.name
+    def __str__(self):
+        return self.__unicode__()
+
+
 class Post(models.Model):
     title = models.CharField(max_length=128)
     text = HTMLField()
-    author = models.ForeignKey(Person,related_name='posts')
-    parent_id = models.ForeignKey('Post',related_name='children',default=None, null=True)
-    root_id = models.ForeignKey('Post',related_name='entire_thread',default=None, null=True)
+    author = models.ForeignKey(Person,related_name='posts',null=True)
+    parent_id = models.IntegerField(default=0)
+    root_id = models.IntegerField(default=0)
     course = models.ForeignKey(Course, related_name='posts')
 
     ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))

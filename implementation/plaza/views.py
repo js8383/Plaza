@@ -498,7 +498,7 @@ def my_team_page(request, course_number, course_semester, assignment_number):
 def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
     c = Course.objects.get(semester=semester_id,number=course_id)
-    posts = Post.objects.filter(course=c).order_by('-updated_at')
+    posts = Post.objects.filter(course=c).filter(parent_id=0).order_by('-updated_at')
     # TODO : Add filtering based on user visibility of that post
     context = {'posts' : posts }
     filters = [ ('All',24),('Unread',18) ]
@@ -523,8 +523,13 @@ def forum_home(request, semester_id, course_id):
 
 @login_required
 def view_post(request, post_id):
-    posts = [Post.objects.get(id=post_id)]
+    p = Post.objects.get(id=post_id)
+    root_id = p.id if p.root_id == 0 else p.root_id
+    posts = [Post.objects.get(id=root_id)]
+    posts += Post.objects.filter(root_id=root_id)
+
     context = {'posts' : posts }
+    context['root_id'] = root_id 
     return render(request, 'view_post.html',context)
 
 @login_required
@@ -532,7 +537,6 @@ def view_post(request, post_id):
 def post(request,semester_id,course_id,parent_id):
   if request.method == 'POST':
     form = PostForm(request.POST)
-    print request.POST
     context = {'form':form}
     if form.is_valid():
       c = Course.objects.get(semester=semester_id,number=course_id)
@@ -545,23 +549,31 @@ def post(request,semester_id,course_id,parent_id):
       if str(parent_id) <> '0':
         parent_post = Post.objects.get(id=parent_id)
         root_post   = parent_post
-        while parent_post.parent_id is not None:
+        while str(parent_post.parent_id) <> '0':
           root_post = Post.objects.get(id=root_post.parent_id)
 
       p = Post(title      = form.cleaned_data['title'],
                text       = form.cleaned_data['text'],
                author     = author,
-               parent_id  = parent_post,
-               root_id    = parent_post,
+               parent_id  = parent_id,
+               root_id    = root_post.id if root_post is not None else 0,
                course     = c,
                visibility = form.cleaned_data['visibility'],
                post_type  = form.cleaned_data['post_type'],
                )
 
-
       p.save()
 
+      if str(p.post_type[0]) == '0':
+        q = Post(title = '', text = 'Students, please use this space to answer the question', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 1)
+        q.save()
+
+        s = Post(title = '', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
+        s.save()
+
       return view_post(request,p.id)
+    else:
+      print form.errors
 
   else:
     form = PostForm()
@@ -574,8 +586,11 @@ def post(request,semester_id,course_id,parent_id):
   if str(parent_id) == '0':
     context['vis'] = [('0','Use my name: ' + request.user.first_name),('1','Anonymous to other students'),('2','Anonymous to all')]
   if str(parent_id) == '0':
-    context['types'] = [('0','Question'),('3','Comment')]
-    return render(request, 'post.html',context)
+    context['types'] = [('3','Comment')]
+  if request.user in c.students.all():
+    context['types'].insert(0,('0','Question') )
+
+  return render(request, 'post.html',context)
 
 
 @login_required
