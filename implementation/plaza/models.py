@@ -134,9 +134,10 @@ class Assignment(models.Model):
 
 
 class Resource(models.Model):
+    course = models.ForeignKey(Course, related_name='resources')
     title = models.CharField(max_length=128)
     notes = models.CharField(max_length=128)
-    RTYPE_CHOICES = (('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))
+    RTYPE_CHOICES = (('P', 'Plain'), ('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))
     resource_type = models.CharField(max_length=16, choices=RTYPE_CHOICES) 
     due = models.DateField(null=True)
     models.FileField(upload_to='resources/')
@@ -144,7 +145,7 @@ class Resource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='tag_resources')
-    child = models.ManyToManyField(Resource, related_name='resource_parent')
+    child = models.ManyToManyField('self', related_name='resource_parent')
 
     def __unicode__(self):
         return self.title

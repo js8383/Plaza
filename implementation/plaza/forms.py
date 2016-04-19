@@ -78,7 +78,7 @@ class PersonForm(forms.Form):
     email = forms.CharField(max_length = 40, validators = [validate_email])
     date_of_birth = forms.DateField(label="Date of Birth", required=False)
     gender = forms.CharField(max_length=6, label='Gender', required=False)
-    field = forms.CharField(max_length=32, label='Field',required=False)
+    field = forms.CharField(max_length=32, label='Field', required=False)
     institution = forms.CharField(max_length=32, label='Institution',required=False)
     short_bio = forms.CharField(max_length=1024, label="Short Bio", required=False)
     profile_image = forms.ImageField(label='Profile Image', required=False)
@@ -110,3 +110,15 @@ class PersonForm(forms.Form):
         user.save()
         person.save()
         return user
+
+class ResourceForm(forms.ModelForm):
+    class Meta:
+        model = Resource
+        fields = ('title',)
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': "Add your comment here...", 'id':'comment_input','class': 'form-control input-sm'})
+        }
+        
+    def clean(self):
+        cleaned_data = super(ResourceForm, self).clean()
+        return cleaned_data
