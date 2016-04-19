@@ -1,5 +1,10 @@
 {% extends "parent.html" %}
 {% load staticfiles %}
+
+{% block nav %}
+<li class="active"><a href="#">Forum</a></li>
+<li><a href="{% url 'resource' %}">Resources</a></li>
+{% endblock %}
 {% block content %}
 <div class="container-fluid"> 
   <div class="row">
@@ -90,9 +95,9 @@
 
   {% endblock %}
   {% block footer %}
-    <script type="text/javascript">
-        semester_id = "{{semester_id}}";
-        course_id = "{{course_id}}";
+  <script type="text/javascript">
+    semester_id = "{{semester_id}}";
+    course_id = "{{course_id}}";
     </script>
     {% endblock %}
 

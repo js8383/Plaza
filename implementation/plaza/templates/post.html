@@ -5,14 +5,38 @@
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
-  <form method=POST> 
-    {% for element in form %}
-    <div class="form-group">
-      <label>{{ element.label }}</label>{{ element }} 
+  <form enctype="multipart/form-data" method="POST"> 
+    <div class="row">
+      <div class="form-group col-lg-4 col-lg-offset-1">
+        <label>Please enter a short summary of your post ( max 128 characters )</label>
+        <input name="title" value="" class="form-control" placeholder="Enter title here">
+      </div>
+      {% for element in form %}
+      {% if element.label == 'Text' %}
+      <div class="row">
+        <div class="form-group col-lg-12 col-lg-offset-1">
+          <label>{{ element.label }}</label>{{ element }} 
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      <div class="row">
+        <div class="form-group col-lg-12 col-lg-offset-1">
+          <label>Tags</label> 
+          {% for tag in tags %}
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+              <input type="checkbox" id ="{{tag}}"></input>{{tag}}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% csrf_token %}
+      <div class="form-group col-lg-12 col-lg-offset-1">
+        <button type="submit" class="btn btn-submit">Submit</button>
+      </div>
     </div>
-    {% endfor %}
-    {% csrf_token %}
-    <button type="submit" class="btn btn-submit">Submit</button>
   </form>
 </div>
 {% endblock %}

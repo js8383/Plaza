@@ -438,7 +438,7 @@ def my_team_page(request, course_number, course_semester, assignment_number):
 @login_required
 def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
-    c = Course.objects.filter(semester=semester_id,number=course_id)
+    c = Course.objects.get(semester=semester_id,number=course_id)
 
     context = {}
     posts = Post.objects.filter(course=c).order_by('-updated_at')
@@ -466,7 +466,8 @@ def view_post(request, post_id):
 def post(request,semester_id,course_id,parent_id):
     form = PostForm()
     context = {'form':form}
-    print form
+    c = Course.objects.get(semester=semester_id,number=course_id)
+    context['tags']=c.tags.all()
     # Create new post
     return render(request, 'post.html',context)
 
