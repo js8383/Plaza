@@ -20,7 +20,7 @@ class Person(models.Model):
     GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('N', 'N/A'))
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
     field = models.CharField(max_length=32)
-    institution = models.CharField(max_length=32) 
+    institution = models.CharField(max_length=32)
     profile_image = models.ImageField(upload_to=profile_image_rename, blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
@@ -154,7 +154,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     sender = models.OneToOneField(Person, related_name='notifications_sent')
     receiver = models.OneToOneField(Person, related_name='notifications_received')
-    
+
     ACTION_CHOICES = (('ANSWER', "answered"), ('FOLLOW', "followed"), ('ASSIGN', "invited "))
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
 
@@ -178,7 +178,7 @@ class Team(models.Model):
     members = models.ManyToManyField(Person, related_name='teams')
 
     def __unicode__(self):
-        return self.team_name
+        return self.name
     def __str__(self):
         return self.__unicode__()
 

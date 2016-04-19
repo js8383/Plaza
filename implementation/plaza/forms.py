@@ -59,12 +59,6 @@ class CourseForm(forms.ModelForm):
         fields=['number', 'name', 'semester', 'description',
                 'max_enroll', 'access_code', 'public']
 
-    def clean(self):
-        cleaned_data = super(CourseForm, self).clean()
-        course_num = cleaned_data['number']
-        if Course.objects.filter(number=course_num).count() != 0:
-            raise forms.ValidationError("Course already exists")
-
 # TODO: add more validation
 class PersonForm(forms.Form):
     first_name = forms.CharField(max_length=20, label='First Name', required=True)
@@ -110,8 +104,8 @@ class PostForm(forms.Form):
     title = forms.CharField(max_length=128)
     text = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
     visibility = forms.MultipleChoiceField(choices=Post.ANONYMITY_CHOICES)
-    
+
     def clean(self):
         cleaned_data = super(PostForm, self).clean()
-        return 
+        return
 

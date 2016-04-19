@@ -191,7 +191,7 @@ def save_course_pref(request, course_number, course_semester):
 
     form = CourseForm(request.POST)
     # fix cleaning, error reporting
-    if not form.is_valid() and 0:
+    if not form.is_valid():
         return HttpResponse("Form is invalid",
                             content_type="application/json",
                             status=404)
@@ -208,7 +208,6 @@ def save_course_pref(request, course_number, course_semester):
     course.description = form.cleaned_data['description']
     course.access_code = form.cleaned_data['access_code']
     course.public = form.cleaned_data['public']
-
     course.save()
 
     json_obj = {"message": "Successfully updated"}
@@ -382,12 +381,18 @@ def submit_team(request):
     except ObjectDoesNotExist:
         return HttpResponse("Assignment does not exist", content_type="application/json", status=400)
 
-    team = Team(name=team_name, assignment=assignment, members=team_members)
+    team = Team(name=team_name, assignment=assignment)
     team.save()
+
+    #add ourselves to the team and then the other members
+    team.members.add(get_object_or_404(Person, user=request.user))
+    for member in team_members:
+        team.members.add(get_object_or_404(Person,user__username=member))
+
 
 
     # TODO: send notifications
-    send_notifications(message, '/myteam/'+course_number+'/'+assignment_number+'/', team_members)
+    # send_notifications(message, '/myteam/'+course_number+'/'+assignment_number+'/', team_members)
 
     json_obj = {
             "message":"Team "+team_name+" created!"
@@ -409,7 +414,11 @@ def my_team_page(request, course_number, course_semester, assignment_number):
     try:
         team = person.teams.get(assignment_id=assignment.id)
     except ObjectDoesNotExist:
-        return HttpResponse("Team does not exist", status=400)
+        return redirect(
+                'createteam',
+                course_semester=course_semester,
+                course_number=course_number,
+                assignment_number=assignment_number)
 
 
     context['course'] = course
