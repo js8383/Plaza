@@ -31,21 +31,24 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Course Number</label>
-                            <input name="number" class="form-control">
+                            <input name="number" class="form-control"
+                            value="{{form.number.value}}">
                         </div>
                     </div>
 
                     <div class="col-lg-5">
                         <div class="form-group">
                             <label>Course Name</label>
-                            <input name="name" class="form-control">
+                            <input name="name" class="form-control"
+                            value="{{form.name.value}}">
                         </div>
                     </div>
 
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label>Semester</label>
-                            <input name="semester" class="form-control">
+                            <input name="semester" class="form-control"
+                            value="{{form.semester.value}}">
                         </div>
                     </div>
 
@@ -53,7 +56,8 @@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label>Max Enroll</label>
-                            <input name="max_enroll" class="form-control">
+                            <input name="max_enroll" class="form-control"
+                            value="{{form.max_enroll.value}}">
                         </div>
                     </div>
 
@@ -66,7 +70,9 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea name="description" class="form-control" rows="3"></textarea>
+                            <textarea name="description"
+                                class="form-control" rows="3">{{form.description.value}}
+                            </textarea>
                         </div>
                     </div>
                 </div>
@@ -93,7 +99,8 @@
                     <div class="col-lg-8">
                         <div class="form-group">
                             <label>Access Code</label>
-                            <input class="form-control">
+                            <input name="access_code" class="form-control"
+                            value="{{form.access_code.value}}">
                         </div>
                     </div>
 
@@ -102,7 +109,8 @@
                         <div class="checkbox">
                             &nbsp;&nbsp;
                             <label>
-                                <input name="public" type="checkbox" value="">
+                                <input name="public" type="checkbox"
+                                value="{{form.public.value}}">
                             </label>
                         </div>
                     </div>
