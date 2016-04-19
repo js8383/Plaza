@@ -81,10 +81,20 @@
             </ul>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Find a course">
+                    <input id="course_search_field" autocomplete="off"
+                    type="text" class="form-control" placeholder="Find a course">
+                    <button id="go_to_course"
+                        class="btn btn-default">Go
+                    </button>
+                    <div id="dropdown" class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                            id="dropdown-toggle" data-toggle="dropdown" hidden></a>
+                        <ul id="courses_list" class="dropdown-menu">
+                        </ul>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-default">Search</button>
-            </form>
+            </div>
+        </div>
 
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">

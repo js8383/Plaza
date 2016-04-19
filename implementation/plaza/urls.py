@@ -87,6 +87,8 @@ urlpatterns = [
             name='removeassignmentfromcourse'),
     url(r'^remove_person_from_course/$', plaza_views.remove_person_from_course,
             name='removepersonfromcourse'),
+    url(r'^dynamic_obj_suggestion/', plaza_views.dynamic_obj_suggestion,
+            name='dynamicobjsuggestion'),
 
     url(r'^tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

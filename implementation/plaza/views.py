@@ -904,3 +904,41 @@ def resource_slide_page(request):
 
 def notification_page(request):
     return render(request, "notification.html", {})
+
+
+## Dynamic Object Suggestion ##
+def course_num_suggestions(input_data):
+    courses = Course.objects.filter(number__startswith=input_data).all()
+    serialized_courses = serializers.serialize("json",courses)
+    return serialized_courses
+
+def username_suggestions(input_data):
+    users = User.objects.filter(username__startswith=input_data).all()
+    serialized_users = serializers.serialize("json", users)
+    return serialized_users
+
+@login_required
+def dynamic_obj_suggestion(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            return HttpJSONStatus("Request is not valid",status=400)
+
+    input_type = request.POST.get("input_type", "")
+    input_data = request.POST.get("input_data", "")
+
+    if input_type == "":
+        return HttpJSONStatus("Invalid parameters", status=400)
+
+    if input_data =="":
+        return HttpResponse(json.dumps(None), content_type='application/json')
+
+    # find any suggestions on the object based on the type
+    if input_type == "course_number":
+        suggestions = course_num_suggestions(input_data)
+    elif input_type == "username":
+        suggestions = username_suggestions(input_data)
+    else:
+        return HttpJSONStatus("Unsupported input type!", status=400)
+
+    return HttpResponse(suggestions, content_type='application/json')
+

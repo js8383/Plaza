@@ -121,3 +121,74 @@ $('#input-repl-1a').on('filecleared', function(event) {
     $('#input-repl-1a').fileinput('reset');
 });
 
+
+/*
+ * COURSE SEARCH
+ */
+
+
+
+$("#course_search_field").keyup(function(event){
+    if(event.keyCode == 13)
+    {
+        $("#go_to_course").click();
+    }
+    else
+    {
+        $.ajax({
+
+                url: "/dynamic_obj_suggestion/",
+
+                async: false,
+
+                data: {
+                    input_type: "course_number",
+                    input_data: $("#course_search_field").val(),
+                    csrfmiddlewaretoken: getCSRFToken()
+                },
+
+                type: "POST",
+
+                dataType: "json",
+
+                success: function (response) {
+                    $("#courses_list").empty();
+                        if (response != null)
+                        {
+                            for (var i = 0; i < response.length; i++)
+                            {
+                                var c = response[i].fields;
+                                $("#courses_list").append(
+                                '<li>'+
+                                    '<a href="/forum/'+c.semester+'/'+c.number+'">'
+                                     +c.number+' '+c.semester+'</a></li>');
+                            }
+                            if (response.length != 0)
+                            {
+                                $("#courses_list").show();
+                            }
+                            else
+                            {
+                                $("#courses_list").hide();
+                            }
+                        }
+                        else
+                        {
+                            $("#courses_list").hide();
+                        }
+                },
+
+                error: function (xhr, status, errorThrown) {
+                    display_error(xhr, status, errorThrown);
+                }
+            });
+    }
+});
+
+$("#go_to_course").click(function(event){
+    $("#courses_list").find("a")[0].click();
+    event.preventDefault();
+});
+
+
+
