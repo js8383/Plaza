@@ -4,7 +4,12 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.forms import ModelForm
 from models import *
+<<<<<<< Updated upstream
 from datetime import datetime
+=======
+from tinymce.widgets import TinyMCE
+
+>>>>>>> Stashed changes
 
 MAX_UPLOAD_SIZE = 2500000
 
@@ -64,6 +69,7 @@ class CourseForm(forms.ModelForm):
         if Course.objects.filter(number=course_num).count() != 0:
             raise forms.ValidationError("Course already exists")
 
+<<<<<<< Updated upstream
 class PostForm(ModelForm):
     class Meta:
       model = Post
@@ -110,3 +116,13 @@ class PersonForm(forms.Form):
         user.save()
         person.save()
         return user
+=======
+class PostForm(forms.Form):
+    title = forms.CharField(max_length=128)
+    text = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    visibility = forms.MultipleChoiceField(choices=Post.ANONYMITY_CHOICES)
+    
+    def clean(self):
+        cleaned_data = super(PostForm, self).clean()
+        return 
+>>>>>>> Stashed changes

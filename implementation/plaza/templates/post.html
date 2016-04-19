@@ -5,14 +5,14 @@
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
-  <form class="margin-bottom-40" role="form">
+  <form method=POST> 
     {% for element in form %}
     <div class="form-group">
       <label>{{ element.label }}</label>{{ element }} 
     </div>
     {% endfor %}
+    {% csrf_token %}
     <button type="submit" class="btn btn-submit">Submit</button>
   </form>
 </div>
-
 {% endblock %}

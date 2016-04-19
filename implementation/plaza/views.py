@@ -457,6 +457,7 @@ def view_post(request, post_id):
 def post(request,semester_id,course_id,parent_id):
     form = PostForm()
     context = {'form':form}
+    print form
     # Create new post
     return render(request, 'post.html',context)
 
@@ -480,25 +481,23 @@ def delete_tags(request, id):
 
 @login_required
 @transaction.atomic
-def upvote(request):
+def upvote(request,post_id):
     # Upvote a post
     return
 
 @login_required
 @transaction.atomic
-def downvote(request):
+def downvote(request,post_id):
     # Downvote a post
     return
 
 @login_required
 @transaction.atomic
-def edit_post(request, id):
+def edit_post(request, post_id):
 	# Edit content
 	# Change visibility
 	# Assign to students
     return
-
-# Mrigesh's part ends here
 
 @login_required
 @transaction.atomic
@@ -513,13 +512,9 @@ def unfollow_tag(request):
     return
 
 ####### For ajax  #######
-def get_post(request):
-	# With specification of what posts to get (all or just those have specific tags) and how the post is going to
-	# be sorted (by number of upvotes or date or length)
-    return
+# Mrigesh's part ends here
 
-
-def get_notication(request):
+def get_notification(request):
 	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it
 	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
     return
