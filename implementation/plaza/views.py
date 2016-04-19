@@ -1,6 +1,6 @@
 import json
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -343,62 +343,108 @@ def add_person_to_course(request):
 
 @login_required
 @transaction.atomic
-def submit_team(request):
+def add_person_to_team(request):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid", content_type="application/json", status=404)
+            return HttpJSONStatus("Request is not valid", status=404)
 
-    # TODO: fix error messages
+    username = request.POST.get("username", "")
+    team_id = request.POST.get("team_name", "")
+
+    if username == "" or team_id == "":
+        return HttpJSONStatus("Invalid request parameters", status=400)
+
+    try:
+        team = Team.objects.get(id=team_id)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("Team does not exist!", status=400)
+
+    try:
+        user = User.objects.get(username__exact=username)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("User does not exist!", status=400)
+
+    team.members.add(user.person)
+    team.save()
+
+@login_required
+@transaction.atomic
+def remove_person_from_team(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=404)
+
+    username = request.POST.get("username", "")
+    team_id = request.POST.get("team_id", "")
+
+    if username == "" or team_id == "":
+        return HttpJSONStatus("Invalid request parameters", status=400)
+
+    try:
+        team = Team.objects.get(id=team_id)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("Team does not exist!", status=400)
+
+    try:
+        user = User.objects.get(username__exact=username)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("User does not exist!", status=400)
+
+    team.members.remove(user.person)
+    team.save()
+
+    obj = {"url":"You have successfully left the team!/"}
+
+    return HttpResponse(json.dumps(obj), content_type="application/json", status=200)
+
+@login_required
+@transaction.atomic
+def submit_team(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            return HttpJSONStatus("Request is not valid", status=404)
+
     team_name = request.POST.get("team_name", "")
     team_members = json.loads(request.POST.get("team_members",""))
     assignment_number = request.POST.get("assignment_number", "")
     course_number = request.POST.get("course_number", "")
     course_semester = request.POST.get("course_semester", "")
 
+    # add ourselves to the list
+    team_members.append(request.user.username)
+
     if (team_name == "" or team_members == "" or
         course_number == "" or assignment_number == ""):
-        return HttpResponse("No team name provided", content_type="application/json", status=400)
+        return HttpJSONStatus("No team name provided", status=400)
 
-    # TODO: race condition in this case
     for member in team_members:
         person = Person.objects.get(user__username=member);
-        if person == None:
-            return HttpResponse("Team member does not exist", content_type="application/json", status=400)
         teams = person.teams
         if teams != None:
             if teams.filter(assignment__number=assignment_number).count() != 0:
-                return HttpResponse("Person is already in a team", content_type="application/json", status=400)
-
+                return HttpJSONStatus("Person is already in a team", status=400)
     try:
         course = Course.objects.get(number=course_number, semester=course_semester)
     except ObjectDoesNotExist:
-        return HttpResponse("Course does not exist", content_type="application/json", status=400);
+        return HttpJSONStatus("Course does not exist", status=400);
 
     course_assignments = course.assignments
+
     try:
         assignment = course_assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
-        return HttpResponse("Assignment does not exist", content_type="application/json", status=400)
+        return HttpJSONStatus("Assignment does not exist", status=400)
 
     team = Team(name=team_name, assignment=assignment)
     team.save()
 
     #add ourselves to the team and then the other members
-    team.members.add(get_object_or_404(Person, user=request.user))
     for member in team_members:
         team.members.add(get_object_or_404(Person,user__username=member))
 
-
-
-    # TODO: send notifications
-    # send_notifications(message, '/myteam/'+course_number+'/'+assignment_number+'/', team_members)
-
-    json_obj = {
-            "message":"Team "+team_name+" created!"
-            }
-
-    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+    return HttpJSONStatus("Team "+team_name+" created!", status=200)
 
 @login_required
 def my_team_page(request, course_number, course_semester, assignment_number):
@@ -420,11 +466,11 @@ def my_team_page(request, course_number, course_semester, assignment_number):
                 course_number=course_number,
                 assignment_number=assignment_number)
 
-
     context['course'] = course
     context['assignment'] = assignment
     context['team_members'] = team.members
     context['team_name'] = team.name
+    context['team_id'] = team.id
 
     return render(request, "my_team_page.html", context)
 
@@ -701,6 +747,26 @@ def home_page(request):
     # With different users, display either home/staff home page
     return render(request, "home.html", {})
 
+# Used when we want to redirect users
+# back to the home page with a status/err
+# message. (course left etc.)
+@login_required
+def home_page_with_msg(request, status, error):
+    statuses = []
+    errors = []
+
+    if status != "":
+        statuses.append(status)
+    if error != "":
+        errors.append(error)
+
+    # With different users, display either home/staff home page
+    return render(
+            request,
+            "home.html",
+            {"statuses":statuses, "errors":errors})
+
+
 @login_required
 def manage_courses(request):
     return render(request, "managecourses.html", {})
@@ -734,14 +800,11 @@ def edit_profile_page(request):
     update_session_auth_hash(request, user)
     return render(request, "profile_edit.html", context)
 
-
-
 @login_required
 def administration_page(request, id):
 	# Show the page of administration (link to course_creation)
 	# This is only accessible by staffs (from staff_home_page)
 	return
-
 
 # @login_required
 # @transaction.atomic
@@ -781,6 +844,18 @@ def staff_team_page(request, id):
 # @login_required
 @transaction.atomic
 def team_creation_page(request, course_number, course_semester, assignment_number):
+
+    # if we already have a team for this assignment
+    if (request.user.person.teams.filter(
+                assignment__number=assignment_number,
+                assignment__course__number=course_number,
+                assignment__course__semester=course_semester).count() == 1):
+        return redirect(
+                'myteamview',
+                course_semester=course_semester,
+                course_number=course_number,
+                assignment_number=assignment_number)
+
     context = {
             "course_number": course_number,
             "course_semester": course_semester,

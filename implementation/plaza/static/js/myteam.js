@@ -1,0 +1,84 @@
+var my_username = "";
+var course_semester = '';
+var course_number = -1;
+var team_id = -1;
+
+function leave_team()
+{
+    console.log("username:"+my_username);
+    console.log("team_id:"+team_id);
+    $.ajax({
+
+        url: "/remove_person_from_team/",
+
+    data: {
+        username: my_username,
+        team_id: team_id,
+        csrfmiddlewaretoken: getCSRFToken()
+    },
+
+    type: "POST",
+
+    dataType: "json",
+
+    success: function (obj) {
+        window.location.replace(window.location.origin + '/home/' + obj.url)
+    },
+
+    error: function (xhr, status, errorThrown) {
+               display_error(xhr, status, errorThrown);
+           }
+    });
+
+}
+
+function add_person(teammate)
+{
+    $.ajax({
+
+        url: "/add_person_to_team/",
+
+    data: {
+        username: username,
+        team_id: team_id,
+        csrfmiddlewaretoken: getCSRFToken()
+    },
+
+    type: "POST",
+
+    dataType: "json",
+
+    success: function (user) {
+        $('#member_table').append(
+        '<tr>'+
+            '<td>'+user.first_name+' '+user.last_name+'</td>'+
+            '<td>'+user.username+'</td>'+
+        '</tr>'
+        );
+    },
+
+    error: function (xhr, status, errorThrown) {
+               display_error(xhr, status, errorThrown);
+           }
+    });
+}
+
+$("#student_search_field").keyup(function(event){
+    if(event.keyCode == 13)
+    {
+        $("#add_student").click();
+    }
+    else
+    {
+    }
+});
+
+$("#add_member").click(function(event){
+    add_person($("#person_search_field").val());
+    $("#person_search_field").val('');
+});
+
+$("#alert_confirm").click(function(event){
+    leave_team();
+});
+

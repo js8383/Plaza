@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^administration/(?P<id>\d+)$', plaza_views.administration_page, name='administration'),
 
     url(r'^$', plaza_views.home_page, name='home'),
+    url(r'^home/(?P<status>[\w|\W]{,})/(?P<error>[\w|\W]{,})$', plaza_views.home_page_with_msg, name='home_msg'),
     url(r'^staffhome/(?P<id>\d+)$', plaza_views.staffhome_page, name='staffhome'), # Does staffhome need a separate URL endpoint, shouldn't it use the same URL, just check the role
 
     url(r'^profile/(?P<id>\d+)$', plaza_views.profile_page, name='profile'),
@@ -73,6 +74,9 @@ urlpatterns = [
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
     url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
+    url(r'^add_person_to_team/$', plaza_views.add_person_to_team, name='addpersontoteam'),
+    url(r'^remove_person_from_team/$', plaza_views.remove_person_from_team,
+            name='removepersonfromteam'),
 
     url(r'^save_course_pref/(?P<course_semester>\w+)/(?P<course_number>\d+)/$',
         plaza_views.save_course_pref, name='savecoursepref'),
