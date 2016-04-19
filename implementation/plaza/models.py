@@ -83,8 +83,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    upvotes = models.IntegerField(default=0) #Duplicate upvotes?
+    downvotes = models.IntegerField(default=0) 
 
     assignees = models.ManyToManyField(User, related_name="assigned_posts")
     editors = models.ManyToManyField(User, related_name="edited_posts")
@@ -135,11 +135,16 @@ class Assignment(models.Model):
 
 class Resource(models.Model):
     title = models.CharField(max_length=128)
-    resource_type = models.CharField(max_length=16) # TODO: ENUMERATE
-    comments = models.ForeignKey(Post,related_name='courses')
+    notes = models.CharField(max_length=128)
+    RTYPE_CHOICES = (('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))
+    resource_type = models.CharField(max_length=16, choices=RTYPE_CHOICES) 
+    due = models.DateField(null=True)
+    models.FileField(upload_to='resources/')
+    # comments = models.ForeignKey(Post,related_name='courses')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='tag_resources')
+    child = models.ManyToManyField(Resource, related_name='resource_parent')
 
     def __unicode__(self):
         return self.title
