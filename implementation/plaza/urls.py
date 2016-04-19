@@ -35,16 +35,16 @@ urlpatterns = [
     url(r'^editprofile$', plaza_views.edit_profile_page, name='editprofile'),
     url(r'^profilepicture/(?P<id>\d+)$', plaza_views.get_profile_picture, name='profilepicture'),
 
-    url(r'^viewcourse/(?P<number>\d+)$', plaza_views.view_course_page, name='viewcourse'),
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
-    url(r'^editcourse/(?P<course_number>\d+)/(?P<course_semester>\w)$', plaza_views.edit_course, name='editcourse'),
+    url(r'^editcourse/(?P<course_semester>\w+)/(?P<course_number>\d+)$', plaza_views.edit_course, name='editcourse'),
     url(r'^managecourses$', plaza_views.manage_courses, name='managecourses'),
 
     ## Team urls ##
-    url(r'^createteam/(?P<course_number>\d+)/(?P<course_semester>\w+)/(?P<assignment_number>\d+)$',
+    url(r'^createteam/(?P<course_semester>\w+)/(?P<course_number>\d+)/(?P<assignment_number>\d+)$',
         plaza_views.team_creation_page, name='createteam'),
     url(r'^staffteamview/(?P<id>\d+)$', plaza_views.staff_team_page, name='staffteamview'),
-    url(r'^myteam/(?P<course_number>\d+)/(?P<assignment_number>\d+)$', plaza_views.my_team_page, name='myteamview'),
+    url(r'^myteam/(?P<course_semester>\w+)/(?P<course_number>\d+)/(?P<assignment_number>\d+)$',
+        plaza_views.my_team_page, name='myteamview'),
 
     ## Resource urls ##
     url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
@@ -73,7 +73,7 @@ urlpatterns = [
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),
     url(r'^submit_team/$', plaza_views.submit_team, name='submitteam'),
 
-    url(r'^save_course_pref/(?P<course_number>\d+)/(?P<course_semester>\w+)/$',
+    url(r'^save_course_pref/(?P<course_semester>\w+)/(?P<course_number>\d+)/$',
         plaza_views.save_course_pref, name='savecoursepref'),
     url(r'^add_person_to_course/$', plaza_views.add_person_to_course, name='addpersontocourse'),
     url(r'^add_assignment_to_course/$', plaza_views.add_assignment_to_course,

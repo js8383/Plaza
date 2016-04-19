@@ -256,7 +256,7 @@ $("#course_pref_form").submit(function(event) {
 
         type: "POST",
 
-        url: "/save_course_pref/"+course_number+"/"+course_semester+"/",
+        url: "/save_course_pref/"+course_semester+"/"+course_number+"/",
 
         data: $("#course_pref_form").serialize(),
 

@@ -396,10 +396,10 @@ def submit_team(request):
     return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 @login_required
-def my_team_page(request, course_number, assignment_number):
+def my_team_page(request, course_number, course_semester, assignment_number):
     context={}
 
-    course = get_object_or_404(Course, number=course_number)
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
     try:
         assignment = course.assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
@@ -574,8 +574,31 @@ def send_notifications(message, redirect_url, receivers):
 
 @login_required
 @transaction.atomic
-def edit_course(request, id):
-	# Edit general settings
+def edit_course(request, course_semester, course_number):
+    context={}
+
+    try:
+        course = Course.objects.get(number=course_number)
+    except ObjectDoesNotExist:
+        HttpResponse("Course not found", status=400);
+
+    role = ''
+
+    if course.instructors.filter(username=request.user.username).count() > 0:
+        role = "instructor"
+    elif course.staff.filter(username=request.user.username).count() > 0:
+        role = "staff"
+    elif course.students.filter(username=request.user.username).count() > 0:
+        role = "student"
+
+    context['role'] = role
+
+    # TODO: change this to the forum page
+    if role == "staff" or role == "instructor":
+        return render(request, "edit_course.html",{"course": course, "role":role})
+    else:
+        return render(request, "home.html", {"errors": ["Course is not public."]})
+
     return
 
 @login_required
@@ -595,7 +618,7 @@ def save_and_notify(nfilter, sender, receiver, action, target):
             notification = Notification(sender=sender, receiver=receiver, action=action, target_text="you")
             notification.save()
             # notify the leancloud api
-    return 
+    return
 
 # @login_required
 @transaction.atomic
@@ -629,34 +652,6 @@ def home_page(request):
 def manage_courses(request):
     return render(request, "managecourses.html", {})
 
-## TODO: this currently holds the edit course page,
-##       change this to the forum page once it is done
-@login_required
-def view_course_page(request, number):
-    context={}
-
-    try:
-        course = Course.objects.get(number=number)
-    except ObjectDoesNotExist:
-        HttpResponse("Course not found", status=400);
-
-    role = ''
-
-    if course.instructors.filter(username=request.user.username).count() > 0:
-        role = "instructor"
-    elif course.staff.filter(username=request.user.username).count() > 0:
-        role = "staff"
-    elif course.students.filter(username=request.user.username).count() > 0:
-        role = "student"
-
-    context['role'] = role
-
-    # TODO: change this to the forum page
-    if role != '' or course.public:
-        return render(request, "edit_course.html",{"course": course})
-    else:
-        return render(request, "home.html", {"errors": ["Course is not public."]})
-
 @login_required
 def staffhome_page(request, id):
     # With different users, display either home/staff home page
@@ -678,16 +673,16 @@ def edit_profile_page(request):
         return render(request, "profile_edit.html", context)
     form = PersonForm(request.POST, request.FILES)
     # print request.POST["date_of_birth"]
-     
+
     form.is_valid()
         # return render(request, "profile_edit.html", context)
     form.save(user=user, person=user.person)
-    context['form'] = form   
+    context['form'] = form
     update_session_auth_hash(request, user)
     return render(request, "profile_edit.html", context)
 
 
-    
+
 @login_required
 def administration_page(request, id):
 	# Show the page of administration (link to course_creation)
