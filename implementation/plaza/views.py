@@ -464,12 +464,24 @@ def view_post(request, post_id):
 @login_required
 @transaction.atomic
 def post(request,semester_id,course_id,parent_id):
+  if request.method == 'GET':
     form = PostForm()
     context = {'form':form}
     c = Course.objects.get(semester=semester_id,number=course_id)
     context['tags']=c.tags.all()
-    # Create new post
+    context['tags']=['hw1','hw2','hw3']
     return render(request, 'post.html',context)
+
+  form = PostForm(request.POST)
+  print form
+  context = {'form':form}
+  if not form.is_valid():
+    print 11111111111111111
+  else:
+    print 22222222222222222
+
+  return render(request, 'post.html',context)
+
 
 @login_required
 @transaction.atomic
