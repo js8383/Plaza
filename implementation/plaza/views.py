@@ -439,8 +439,6 @@ def my_team_page(request, course_number, course_semester, assignment_number):
 def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
     c = Course.objects.get(semester=semester_id,number=course_id)
-
-    context = {}
     posts = Post.objects.filter(course=c).order_by('-updated_at')
     # TODO : Add filtering based on user visibility of that post
     context = {'posts' : posts }
@@ -456,6 +454,15 @@ def forum(request, semester_id, course_id):
 
 
 @login_required
+def forum_home(request, semester_id, course_id):
+    c = Course.objects.get(semester=semester_id,number=course_id)
+    context = {}
+    context['course_id'] = course_id
+    context['semester_id'] = semester_id
+
+    return render(request, 'forum_home.html',context)
+
+@login_required
 def view_post(request, post_id):
     posts = [Post.objects.get(id=post_id)]
     context = {'posts' : posts }
@@ -464,23 +471,52 @@ def view_post(request, post_id):
 @login_required
 @transaction.atomic
 def post(request,semester_id,course_id,parent_id):
-  if request.method == 'GET':
-    form = PostForm()
+  if request.method == 'POST':
+    form = PostForm(request.POST)
+    print request.POST 
     context = {'form':form}
-    c = Course.objects.get(semester=semester_id,number=course_id)
-    context['tags']=c.tags.all()
-    context['tags']=['hw1','hw2','hw3']
-    return render(request, 'post.html',context)
+    if form.is_valid():
+      c = Course.objects.get(semester=semester_id,number=course_id)
+      author = Person.objects.get(user=request.user)
+      # TODO : Check if author can post in this course
 
-  form = PostForm(request.POST)
-  print form
-  context = {'form':form}
-  if not form.is_valid():
-    print 11111111111111111
+      parent_post = None
+      root_post   = None
+
+      if str(parent_id) <> '0':
+        parent_post = Post.objects.get(id=parent_id)
+        root_post   = parent_post
+        while parent_post.parent_id is not None:
+          root_post = Post.objects.get(id=root_post.parent_id)
+
+      p = Post(title      = form.cleaned_data['title'],
+               text       = form.cleaned_data['text'],
+               author     = author,
+               parent_id  = parent_post,
+               root_id    = parent_post,
+               course     = c,
+               visibility = form.cleaned_data['visibility'],
+               post_type  = form.cleaned_data['post_type'],
+               )
+
+
+      p.save()
+
+      return view_post(request,p.id)
+
   else:
-    print 22222222222222222
+    form = PostForm()
 
-  return render(request, 'post.html',context)
+  context = {'form':form}
+  c = Course.objects.get(semester=semester_id,number=course_id)
+  context['course_id'] = course_id
+  context['semester_id'] = semester_id
+  context['tags']=c.tags.all()
+  if str(parent_id) == '0':
+    context['vis'] = [('0','Use my name: ' + request.user.first_name),('1','Anonymous to other students'),('2','Anonymous to all')]
+  if str(parent_id) == '0':
+    context['types'] = [('0','Question'),('3','Comment')]
+    return render(request, 'post.html',context)
 
 
 @login_required

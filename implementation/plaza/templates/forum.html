@@ -85,7 +85,7 @@
         </div>
         <div class="col-md-9" style="height:100vh;min-height:100vh">
           {% ifequal selected_post 0 %}
-          <iframe src="{% url 'home' %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
+          <iframe src="{% url 'forum_home' semester_id course_id %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
           {% else %}
           <iframe src="{% url 'view_posts' selected_post %}" style="overflow-y: scroll;height:80vh;width:100%;min-height:80vh" %} name="frame" id="frame"></iframe>
           {% endifequal %}

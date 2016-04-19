@@ -75,10 +75,10 @@ class Post(models.Model):
     visibility =  models.CharField(max_length=1, choices=ANONYMITY_CHOICES,  default='0')
 
     POST_CHOICES = (('0', 'question'),('1', 'student_reply'),('2', 'staff_reply'),('3', 'comments'))
-    types = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
+    post_type = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
 
-    STATUS_CHOICE = (('0', 'resolved'),('1', 'unresolved'),('2', 'answered'),('3', 'unanswered'))
-    status = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
+    STATUS_CHOICES = (('0', 'resolved'),('1', 'unresolved'),('2', 'answered'),('3', 'unanswered'))
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
