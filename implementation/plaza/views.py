@@ -532,17 +532,24 @@ def forum_home(request, semester_id, course_id):
 
 @login_required
 def view_post(request, post_id):
+  if int(post_id) > 0:
     p = Post.objects.get(id=post_id)
     root_id = p.id if p.root_id == 0 else p.root_id
     posts = [Post.objects.get(id=root_id)]
-    posts += Post.objects.filter(root_id=root_id)
 
+  elif int(post_id) < 0:
+    p = Post.objects.get(parent_id=post_id)
+    posts = [p]
+    root_id = p.id
+
+  posts += Post.objects.filter(root_id=p.id)
     
-    context = {'posts' : posts }
-    context['root_id'] = root_id
-    context['course_id'] = p.course.number
-    context['semester_id'] = p.course.semester
-    return render(request, 'view_post.html',context)
+  context = {'posts' : posts }
+  context['root_id'] = root_id
+  context['course_id'] = p.course.number
+  context['semester_id'] = p.course.semester
+  return render(request, 'view_post.html',context)
+
 
 @login_required
 @transaction.atomic
@@ -561,7 +568,7 @@ def post(request,semester_id,course_id,parent_id):
       if str(parent_id) <> '0':
         parent_post = Post.objects.get(id=parent_id)
         root_post   = parent_post
-        while str(parent_post.parent_id) <> '0':
+        while int(parent_post.parent_id) > 0:
           root_post = Post.objects.get(id=root_post.parent_id)
 
       p = Post(title      = form.cleaned_data['title'],
