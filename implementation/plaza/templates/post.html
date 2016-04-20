@@ -23,7 +23,9 @@
     </div>
     <div class="row">
       <div class="form-group col-lg-4 col-lg-offset-1">
+        {% if tags %}
         <label>Tags</label> 
+        {% endif %}
         {% for tag in tags %}
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-primary">
@@ -42,17 +44,6 @@
     </div>
     {% endif %}
     {% endfor %}
-
-    <div class="row">
-      <div class="form-group col-lg-4 col-lg-offset-1">
-        <label>Anonymity options</label> 
-        <select class="form-control" name="visibility">
-          {% for element in vis %}
-          <option value={{element.0}}>{{element.1}}</option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
 
     <div class="row">
       <div class="form-group col-lg-4 col-lg-offset-1">

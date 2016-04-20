@@ -533,8 +533,11 @@ def view_post(request, post_id):
     posts = [Post.objects.get(id=root_id)]
     posts += Post.objects.filter(root_id=root_id)
 
+    
     context = {'posts' : posts }
     context['root_id'] = root_id
+    context['course_id'] = p.course.number
+    context['semester_id'] = p.course.semester
     return render(request, 'view_post.html',context)
 
 @login_required
@@ -587,11 +590,60 @@ def post(request,semester_id,course_id,parent_id):
   context['course_id'] = course_id
   context['semester_id'] = semester_id
   context['tags']=c.tags.all()
-  if str(parent_id) == '0':
-    context['vis'] = [('0','Use my name: ' + request.user.first_name),('1','Anonymous to other students'),('2','Anonymous to all')]
-  if str(parent_id) == '0':
-    context['types'] = [('3','Comment')]
-  if request.user in c.students.all():
+  context['types'] = [('3','Comment')]
+  if str(parent_id) == '0' and request.user in c.students.all():
+    context['types'].insert(0,('0','Question') )
+
+  return render(request, 'post.html',context)
+
+
+@login_required
+@transaction.atomic
+def edit_post(request,post_id):
+  if request.method == 'POST':
+    form = PostForm(request.POST)
+    context = {'form':form}
+    if form.is_valid():
+      c = Course.objects.get(semester=semester_id,number=course_id)
+      author = Person.objects.get(user=request.user)
+      # TODO : Check if author can post in this course
+
+      parent_post = None
+      root_post   = None
+
+      p = Post(title      = form.cleaned_data['title'],
+               text       = form.cleaned_data['text'],
+               author     = author,
+               parent_id  = parent_id,
+               root_id    = root_post.id if root_post is not None else 0,
+               course     = c,
+               post_type  = form.cleaned_data['post_type'],
+               )
+
+      p.save()
+
+      if str(p.post_type[0]) == '0':
+        q = Post(title = 'student answer', text = 'Students, please use this space to answer the question', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 1)
+        q.save()
+
+        s = Post(title = 'staff answer', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
+        s.save()
+
+      return render(request, 'home.html',{})
+    else:
+      print form.errors
+
+  else:
+    form = PostForm()
+
+  context = {'form':form}
+  c = Course.objects.get(semester=semester_id,number=course_id)
+  context['course_id'] = course_id
+  context['semester_id'] = semester_id
+  context['tags']=c.tags.all()
+  context['types'] = [('3','Comment')]
+
+  if str(parent_id) == '0' and request.user in c.students.all():
     context['types'].insert(0,('0','Question') )
 
   return render(request, 'post.html',context)

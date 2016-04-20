@@ -12,32 +12,36 @@
   {% elif post.post_type == '0' %}
   <div class="list-group-item panel panel-danger">
   {% else %}
-  <div class="list-group-item panel panel-warning">
+  <div class="list-group-item panel panel-warning" style="margins:30px; margins:20px">
   {% endif %}
 
     <div class="panel-heading">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8" style="margins:30px">
           <h4> <p>{{ post.title }}</p></h4>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margins:30px">
           <p><small><small>{{ post.updated_at }}</small></small></p>
         </div>
       </div>
     </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md">
+    <div class="panel-body" style="margins:30px">
+      <div class="row" style="margins:30px">
+        <div class="col-md" style="margins:30px">
           <p>{{ post.text|safe }}...</p>
         </div>
       </div>
     </div>
     <div class="panel-footer">
+      <a href="{% url 'edit_post' post.id %}" role="button"  class="btn btn-sm btn-warning">Edit</a>
+      
       {% for tag in post.tags.all %}
       <button class="btn btn-default btn-sm" >{{ tag }}</button>
       {% endfor %}
     </div>
   </div>
   {% endfor %}
+  <a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Start new thread of comments</a>
+
 </div>
 {% endblock %}
