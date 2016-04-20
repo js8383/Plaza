@@ -375,9 +375,6 @@ def add_person_to_team(request):
     team.members.add(user.person)
     team.save()
 
-    team_post_id = -team.id
-    p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = c, post_type = 2)
-    p.save()
 
 
     return HttpJSONStatus("Added " +username+ " to team!", status=200)
@@ -457,6 +454,13 @@ def submit_team(request):
 
     team = Team(name=team_name, assignment=assignment)
     team.save()
+
+    team_post_id = -team.id
+    print team_post_id
+    p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = course, post_type = 2)
+    print p
+    p.save()
+
 
     #add ourselves to the team and then the other members
     for member in team_members:
