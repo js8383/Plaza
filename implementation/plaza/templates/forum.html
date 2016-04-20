@@ -52,11 +52,12 @@
           </div>
           <div class="list-group" style="word-wrap: break-word;">
             {% for post in posts %}
+            <small>
             <div class="list-group-item panel panel-default clickable" id="post_{{ post.id }}">
               <div class="panel-heading"> 
                 <div class="row">
                   <div class="col-md-8">
-                    <h4> <p>{{ post.title }}</p></h4>
+                    <h4> <p>{{ post.title|striptags }}</p></h4>
                   </div>
                   <div class="col-md-4">
                     <p><small><small>{{ post.updated_at }}</small></small></p>
@@ -66,7 +67,7 @@
               <div class="panel-body"> 
                 <div class="row">
                   <div class="col-md-10">
-                    <p>{{ post.text|slice:":33"|safe }}...</p>
+                    <p>{{ post.text|striptags|slice:":66" }}...</p>
                   </div>
                   <div class="col-md-2">
                     <p>{{ post.status }}</p>
@@ -76,7 +77,8 @@
               </div>
               <div class="panel-footer">
                 {% for tag in post.tags.all %}
-                <button class="btn btn-default btn-sm" >{{ tag }}</button>
+                <button class="btn btn-default btn-sm" >{{ tag.nam }}</button>
+                <small>
                 {% endfor %}
               </div>
             </div>

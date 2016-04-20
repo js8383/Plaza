@@ -3,7 +3,18 @@
 {% block content %}
 <div class="list-group" style="word-wrap: break-word;">
   {% for post in posts %}
-  <div class="list-group-item panel panel-default">
+  {% if post.post_type == '3' %}
+  <div class="list-group-item panel panel-primary">
+  {% elif post.post_type == '2' %}
+  <div class="list-group-item panel panel-info">
+  {% elif post.post_type == '1' %}
+  <div class="list-group-item panel panel-success">
+  {% elif post.post_type == '0' %}
+  <div class="list-group-item panel panel-danger">
+  {% else %}
+  <div class="list-group-item panel panel-warning">
+  {% endif %}
+
     <div class="panel-heading">
       <div class="row">
         <div class="col-md-8">

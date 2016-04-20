@@ -71,9 +71,6 @@ class Post(models.Model):
     root_id = models.IntegerField(default=0)
     course = models.ForeignKey(Course, related_name='posts')
 
-    ANONYMITY_CHOICES = (('0', 'public'),('1', 'anonymous_to_students'),('2', 'anonymous_to_all'))
-    visibility =  models.CharField(max_length=1, choices=ANONYMITY_CHOICES,  default='0')
-
     POST_CHOICES = (('0', 'question'),('1', 'student_reply'),('2', 'staff_reply'),('3', 'comments'))
     post_type = models.CharField(max_length=1, choices=POST_CHOICES,  default='0')
 

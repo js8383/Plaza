@@ -375,6 +375,11 @@ def add_person_to_team(request):
     team.members.add(user.person)
     team.save()
 
+    team_post_id = -team.id
+    p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = c, post_type = 2)
+    p.save()
+
+
     return HttpJSONStatus("Added " +username+ " to team!", status=200)
 
 @login_required
@@ -558,17 +563,16 @@ def post(request,semester_id,course_id,parent_id):
                parent_id  = parent_id,
                root_id    = root_post.id if root_post is not None else 0,
                course     = c,
-               visibility = form.cleaned_data['visibility'],
                post_type  = form.cleaned_data['post_type'],
                )
 
       p.save()
 
       if str(p.post_type[0]) == '0':
-        q = Post(title = '', text = 'Students, please use this space to answer the question', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 1)
+        q = Post(title = 'student answer', text = 'Students, please use this space to answer the question', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 1)
         q.save()
 
-        s = Post(title = '', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
+        s = Post(title = 'staff answer', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
         s.save()
 
       return view_post(request,p.id)
