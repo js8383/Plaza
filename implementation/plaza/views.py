@@ -13,8 +13,9 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from plaza.models import *
 from django.core import serializers
 from mimetypes import guess_type
-
+from django.http import JsonResponse
 from django.conf import settings
+from datetime import datetime
 
 
 # Create your views here.
@@ -702,11 +703,6 @@ def unfollow_tag(request):
 ####### For ajax  #######
 # Mrigesh's part ends here
 
-def get_notification(request):
-	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it
-	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
-    return
-
 
 @login_required
 def search_student(request):
@@ -741,19 +737,6 @@ def upload_resource(request):
 
 
 ####### Other functionalities #######
-@login_required
-def get_notification(request, id):
-	# Edit content
-	# Change visibility
-	# Assign to students
-    return
-
-# Used to send notifications to a list of people
-@login_required
-def send_notifications(message, redirect_url, receivers):
-    # TODO: implement soon
-    return
-
 
 @login_required
 @transaction.atomic
@@ -794,12 +777,6 @@ def search(request):
 
 # All notifications stuff and resources and etc.
 
-# General notification API
-def save_and_notify(action, sender, receiver, extra_content, destination):
-    notification = Notification(action=action, sender=sender, receiver=receiver, extra_content=extra_content, destination=destination)
-    notification.save()
-    return
-
 # @login_required
 @transaction.atomic
 def follow_user(request, id):
@@ -826,26 +803,31 @@ def get_profile_picture(request, id):
     content_type = guess_type(person.profile_image.name)
     return HttpResponse(person.profile_image, content_type=content_type)
 
-def get_notification(request, id):
-    unread_notis = Notification.objects.filter(status='0')
-    json = []
-    i = 0
+# General notification API
+def save_and_notify(action, sender, receiver, extra_content, destination):
+    notification = Notification(action=action, sender=sender, receiver=receiver, extra_content=extra_content, destination=destination)
+    notification.save()
+    return
 
-    noti_json = None
+# @login_required
+def get_notification(request, id):
+    unread_notis = Notification.objects.filter(status='0', receiver__user__id=id).order_by('-created_at')
+    json = []
     for n in unread_notis:
         noti_json = {
             "sender": n.sender.user.username,
             "sender_id": n.sender.user.id,
             "action": n.get_action_display(),
             "extra_content": n.extra_content,
-            "created_at": n.created_at,
+            "created_at": n.created_at.strftime("%b %d, %H:%M:%S"),
             "destination": n.destination
         }
         json.append(noti_json)
-    # response_json = serializers.serialize('json', noti_json)
-    return HttpResponse(noti_json, content_type='application/json')
+    return JsonResponse(json, safe=False)
 
-    
+def mark_as_read(request, id):
+    notification = Notification.objects.filter(id=id).update(status='1')
+    return redirect(reverse('notification'))
 
 ############################################## Display pages #############################################
 
@@ -1036,7 +1018,9 @@ def resource_slide_page(request):
 	return
 
 def notification_page(request):
-    return render(request, "notification.html", {})
+    context = {}
+    context['notifications'] = Notification.objects.all()
+    return render(request, "notification.html", context)
 
 
 ## Dynamic Object Suggestion ##

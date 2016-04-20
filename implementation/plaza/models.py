@@ -168,8 +168,8 @@ class Resource(models.Model):
 class Notification(models.Model):
     # course = models.ForeignKey(Course)
     created_at = models.DateTimeField(auto_now_add=True)
-    sender = models.OneToOneField(Person, related_name='notifications_sent')
-    receiver = models.OneToOneField(Person, related_name='notifications_received')
+    sender = models.ForeignKey(Person, related_name='notifications_sent')
+    receiver = models.ForeignKey(Person, related_name='notifications_received')
     ACTON_CHOICES = (('0', " answered your question"), ('1', " followed your question"), ('2', " assigned you a question"), ('3', " upvoted your answer"),
                      ('4', " commented your answer"), ('5', " replied to your comments"), ('6'," posted a new question in your following tag"), ('7', " followed you"))
     action = models.CharField(max_length=1, choices=ACTON_CHOICES) 
@@ -179,7 +179,7 @@ class Notification(models.Model):
     destination = models.URLField(max_length=256)
 
     def __unicode__(self):
-        return self.sender.user.username + self.get_action_display() + " (" + self.extra_content + ")"
+        return self.sender.user.username + self.get_action_display()
     def __str__(self):
         return self.__unicode__()
 
