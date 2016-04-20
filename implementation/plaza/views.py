@@ -535,7 +535,7 @@ def view_post(request, post_id):
     root_id = p.id
 
   posts += Post.objects.filter(root_id=p.id)
-    
+
   context = {'posts' : posts }
   context['root_id'] = root_id
   context['course_id'] = p.course.number

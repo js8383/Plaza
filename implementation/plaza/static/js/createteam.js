@@ -1,9 +1,3 @@
-var course_number = -1;
-var course_semester = -1;
-var assignment_number = -1;
-
-
-
 // submit the team
 function submit_team()
 {
@@ -72,48 +66,44 @@ function add_person(teammate)
     }
 }
 
-function get_person(username)
+function get_person(a)
 {
-    if (username == null)
-    {
-        return null
-    }
-    else
-    {
-        $.ajax({
+    var username = a.text;
+    $.ajax({
 
-            url: "/search_student/",
+        url: "/search_student/",
 
-            data: {
-                username: username,
-                csrfmiddlewaretoken: getCSRFToken()
-            },
+        data: {
+            username: username,
+            csrfmiddlewaretoken: getCSRFToken()
+        },
 
-            type: "POST",
+        type: "POST",
 
-            dataType: "json",
+        dataType: "json",
 
-            success: function (user) {
-                add_person(user);
-            },
+        success: function (user) {
+            add_person(user);
+        },
 
-            error: function (xhr, status, errorThrown) {
-                display_error(xhr.responseJSON.message);
-                log_error(xhr, status, errorThrown);
-            }
-        });
-    }
+        error: function (xhr, status, errorThrown) {
+            display_error(xhr.responseJSON.message);
+            log_error(xhr, status, errorThrown);
+        }
+    });
 }
 
+function make_member_html(user)
+{
+    return '<a href="#">'+user.username+'</a>';
+}
 
-init_people_suggestions(
+init_suggestions(
+        "username",
         $("#person_search_field"),
         $("#add_person"),
         $("#students_list"),
-        get_person);
-
-$(document).ajaxStart(function () {
-});
-
-$(document).ajaxStop(function() {
-});
+        make_member_html,
+        get_person,
+        course_semester,
+        course_number);
