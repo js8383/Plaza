@@ -131,203 +131,153 @@ $('#input-repl-1a').on('filecleared', function(event) {
 /*
  * USER SEARCH
  */
-function get_people_suggestions(input, dropdown_list)
+
+/* @brief install the appropriate handlers for the
+ *        dynamic search box
+ */
+function init_suggestions(input_type,
+                          input_box,
+                          input_button,
+                          dropdown_list,
+                          dropdown_html_maker,
+                          callback,
+                          course_semester,
+                          course_number)
 {
-    $.ajax({
+    /* Event handlers */
 
-            url: "/dynamic_obj_suggestion/",
+    course_semester = course_semester || "";
+    course_number = course_number || "";
 
-            async: false,
+    var list_i = 0;
+    input_button.click(function(event){
+        callback(dropdown_list.find("li.active").find("a")[0]);
+        dropdown_list.hide();
+        dropdown_list.empty();
+        input_box.val('');
+        event.preventDefault();
+    });
 
-            data: {
-                input_type: "username",
-                input_data: input,
-                csrfmiddlewaretoken: getCSRFToken()
-            },
-
-            type: "POST",
-
-            dataType: "json",
-
-            success: function (response) {
-                dropdown_list.empty();
-                console.log(response);
-                if (response != null)
-                {
-                    for (var i = 0; i < response.length; i++)
-                    {
-                        var s = response[i];
-                        dropdown_list.append(
-                        '<li>'+
-                            '<a href="#">'+s.username+'</a></li>');
-                    }
-                    if (response.length != 0)
-                    {
-                        dropdown_list.show();
-                    }
-                    else
-                    {
-                        dropdown_list.hide();
-                        dropdown_list.empty();
-                    }
-                }
-                else
-                {
-                    dropdown_list.hide();
-                    dropdown_list.empty();
-                }
-            },
-
-            error: function (xhr, status, errorThrown) {
-                display_error(xhr.responseJSON.message);
-                log_error(xhr, status, errorThrown);
+    input_box.keyup(function(event){
+        if(event.keyCode == 13)
+        {
+            input_button.click();
+        }
+        else if (event.keyCode == 40) // Down key
+        {
+            if (list_i < dropdown_list.children().length-1)
+            {
+                dropdown_list.children().eq(list_i+1).addClass("active");
+                dropdown_list.children().eq(list_i).removeClass("active");
+                list_i++;
             }
-        });
-}
-
-function get_people_suggestions_with_profile(input, dropdown_list)
-{
-    $.ajax({
-
-            url: "/dynamic_obj_suggestion/",
-
-            async: false,
-
-            data: {
-                input_type: "username",
-                input_data: input,
-                csrfmiddlewaretoken: getCSRFToken()
-            },
-
-            type: "POST",
-
-            dataType: "json",
-
-            success: function (response) {
-                dropdown_list.empty();
-                console.log(response);
-                if (response != null)
-                {
-                    for (var i = 0; i < response.length; i++)
-                    {
-                        var s = response[i];
-                        dropdown_list.append(
-                        '<li>'+
-                            '<a href="/profile/'+s.user_id+'">'+s.username+'</a></li>');
-                    }
-                    if (response.length != 0)
-                    {
-                        dropdown_list.show();
-                    }
-                    else
-                    {
-                        dropdown_list.hide();
-                        dropdown_list.empty();
-                    }
-                }
-                else
-                {
-                    dropdown_list.hide();
-                    dropdown_list.empty();
-                }
-            },
-
-            error: function (xhr, status, errorThrown) {
-                display_error(xhr.responseJSON.message);
-                log_error(xhr, status, errorThrown);
+        }
+        else if (event.keyCode == 38) // Up key
+        {
+            if (list_i > 0)
+            {
+                dropdown_list.children().eq(list_i-1).addClass("active");
+                dropdown_list.children().eq(list_i).removeClass("active");
+                list_i--;
             }
-        });
+        }
+        else
+        {
+            if (course_semester == "" && course_number == "")
+            {
+                var data = {
+                        input_type: input_type,
+                        input_data: input_box.val(),
+                        csrfmiddlewaretoken: getCSRFToken()
+                    };
+            }
+            else
+            {
+                var data = {
+                        input_type: input_type,
+                        input_data: input_box.val(),
+                        course_semester: course_semester,
+                        course_number: course_number,
+                        csrfmiddlewaretoken: getCSRFToken()
+                    };
+            }
+            console.log(data);
+            $.ajax({
+
+                    url: "/dynamic_obj_suggestion/",
+
+                    async: false,
+
+                    data: data,
+
+                    type: "POST",
+
+                    dataType: "json",
+
+                    success: function (response) {
+                        dropdown_list.empty();
+                        console.log(response);
+                        if (response != null)
+                        {
+                            list_i = 0;
+                            for (var i = 0; i < response.length; i++)
+                            {
+                                var s = response[i];
+                                var block = '';
+                                if (i == 0)
+                                    block='<li class="active">'+
+                                        dropdown_html_maker(s)+
+                                        '</li>';
+                                else
+                                    block='<li>'+dropdown_html_maker(s)+'</li>';
+                                dropdown_list.append(block);
+                            }
+                            if (response.length != 0)
+                            {
+                                dropdown_list.show();
+                            }
+                            else
+                            {
+                                dropdown_list.hide();
+                                dropdown_list.empty();
+                            }
+                        }
+                        else
+                        {
+                            dropdown_list.hide();
+                            dropdown_list.empty();
+                        }
+                    },
+
+                    error: function (xhr, status, errorThrown) {
+                        display_error(xhr.responseJSON.message);
+                        log_error(xhr, status, errorThrown);
+                    }
+                });
+        }
+    });
 }
-
-/* Event handlers */
-
-$("#user_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#go_to_user").click();
-    }
-    else
-    {
-        get_people_suggestions_with_profile($("#user_search_field").val(), $("#users_list"))
-    }
-});
-
-$("#go_to_user").click(function(event){
-    $("#users_list").find("a")[0].click();
-    event.preventDefault();
-});
-
 
 /*
  * COURSE SEARCH
  */
 
+function course_suggestion_html(c)
+{
+    return '<a href="/forum/'+c.fields.semester+'/'+c.fields.number+'">'+
+                            +c.fields.number+' '+c.fields.semester+'</a>';
+}
 
+function on_course_suggestion_click(a)
+{
+    a.click();
+}
 
-$("#course_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#go_to_course").click();
-    }
-    else
-    {
-        $.ajax({
-
-                url: "/dynamic_obj_suggestion/",
-
-                async: false,
-
-                data: {
-                    input_type: "course_number",
-                    input_data: $("#course_search_field").val(),
-                    csrfmiddlewaretoken: getCSRFToken()
-                },
-
-                type: "POST",
-
-                dataType: "json",
-
-                success: function (response) {
-                    $("#courses_list").empty();
-                        if (response != null)
-                        {
-                            for (var i = 0; i < response.length; i++)
-                            {
-                                var c = response[i].fields;
-                                $("#courses_list").append(
-                                '<li>'+
-                                    '<a href="/forum/'+c.semester+'/'+c.number+'">'
-                                     +c.number+' '+c.semester+'</a></li>');
-                            }
-                            if (response.length != 0)
-                            {
-                                $("#courses_list").show();
-                            }
-                            else
-                            {
-                                $("#courses_list").hide();
-                                $("#courses_list").empty();
-                            }
-                        }
-                        else
-                        {
-                            $("#courses_list").hide();
-                            $("#courses_list").empty();
-                        }
-                },
-
-                error: function (xhr, status, errorThrown) {
-                    display_error(xhr.responseJSON.message);
-                    log_error(xhr, status, errorThrown);
-                }
-            });
-    }
-});
-
-$("#go_to_course").click(function(event){
-    $("#courses_list").find("a")[0].click();
-    event.preventDefault();
-});
-
-
+init_suggestions(
+        "course_number",
+        $("#course_search_field"),
+        $("#go_to_course"),
+        $("#courses_list"),
+        course_suggestion_html,
+        on_course_suggestion_click);
 

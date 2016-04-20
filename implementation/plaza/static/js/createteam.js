@@ -1,71 +1,3 @@
-var course_number = -1;
-var course_semester = -1;
-var assignment_number = -1;
-
-$("#person_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#add_person").click();
-    }
-    else
-    {
-        $.ajax({
-
-                url: "/dynamic_obj_suggestion/",
-
-                async: false,
-
-                data: {
-                    input_type: "username",
-                    input_data: $("#person_search_field").val(),
-                    course_number: course_number,
-                    course_semester: course_semester,
-                    csrfmiddlewaretoken: getCSRFToken()
-                },
-
-                type: "POST",
-
-                dataType: "json",
-
-                success: function (response) {
-                    $("#student_list").empty();
-                    console.log(response);
-                    if (response != null)
-                    {
-                        for (var i = 0; i < response.length; i++)
-                        {
-                            var s = response[i];
-                            $("#students_list").empty();
-                            $("#students_list").append(
-                            '<li>'+
-                                '<a href="#">'+s.username+'</a></li>');
-                        }
-                        if (response.length != 0)
-                        {
-                            $("#students_list").show();
-                        }
-                        else
-                        {
-                            $("#students_list").empty();
-                            $("#students_list").hide();
-                        }
-                    }
-                    else
-                    {
-                        $("#students_list").empty();
-                        $("#students_list").hide();
-                    }
-                },
-
-                error: function (xhr, status, errorThrown) {
-                    display_error(xhr.responseJSON.message);
-                    log_error(xhr, status, errorThrown);
-                }
-            });
-
-    }
-});
-
 // submit the team
 function submit_team()
 {
@@ -134,48 +66,44 @@ function add_person(teammate)
     }
 }
 
-function get_person(username)
+function get_person(a)
 {
-    if (username == null)
-    {
-        return null
-    }
-    else
-    {
-        $.ajax({
+    var username = a.text;
+    $.ajax({
 
-            url: "/search_student/",
+        url: "/search_student/",
 
-            data: {
-                username: username,
-                csrfmiddlewaretoken: getCSRFToken()
-            },
+        data: {
+            username: username,
+            csrfmiddlewaretoken: getCSRFToken()
+        },
 
-            type: "POST",
+        type: "POST",
 
-            dataType: "json",
+        dataType: "json",
 
-            success: function (user) {
-                add_person(user);
-            },
+        success: function (user) {
+            add_person(user);
+        },
 
-            error: function (xhr, status, errorThrown) {
-                display_error(xhr.responseJSON.message);
-                log_error(xhr, status, errorThrown);
-            }
-        });
-    }
+        error: function (xhr, status, errorThrown) {
+            display_error(xhr.responseJSON.message);
+            log_error(xhr, status, errorThrown);
+        }
+    });
 }
 
-$("#add_person").click(function(event){
-    get_person($("#students_list").find('a').first().text());
-    $("#students_list").empty();
-    $("#students_list").hide();
-    $("#person_search_field").val('');
-});
+function make_member_html(user)
+{
+    return '<a href="#">'+user.username+'</a>';
+}
 
-$(document).ajaxStart(function () {
-});
-
-$(document).ajaxStop(function() {
-});
+init_suggestions(
+        "username",
+        $("#person_search_field"),
+        $("#add_person"),
+        $("#students_list"),
+        make_member_html,
+        get_person,
+        course_semester,
+        course_number);
