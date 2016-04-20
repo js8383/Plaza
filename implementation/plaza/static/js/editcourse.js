@@ -37,8 +37,9 @@ function append_assignment(title, number)
     );
 }
 
-function add_tag(name)
+function add_tag(dirty_name)
 {
+    var name=remove_special(dirty_name)
     $.ajax({
 
         url: "/add_tag_to_course/",
@@ -68,8 +69,9 @@ function add_tag(name)
 }
 
 
-function add_assignment(title, number)
+function add_assignment(dirty_title, number)
 {
+    var title=remove_special(dirty_title)
     $.ajax({
 
         url: "/add_assignment_to_course/",
