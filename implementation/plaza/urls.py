@@ -38,7 +38,6 @@ urlpatterns = [
 
     url(r'^createcourse$', plaza_views.course_creation_page, name='createcourse'),
     url(r'^editcourse/(?P<course_semester>\w+)/(?P<course_number>\d+)$', plaza_views.edit_course, name='editcourse'),
-    url(r'^managecourses$', plaza_views.manage_courses, name='managecourses'),
 
     ## Team urls ##
     url(r'^createteam/(?P<course_semester>\w+)/(?P<course_number>\d+)/(?P<assignment_number>\d+)$',
