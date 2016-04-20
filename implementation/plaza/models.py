@@ -56,7 +56,7 @@ class Course(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=16)
-    courses = models.ForeignKey(Course, related_name='tags')
+    course = models.ForeignKey(Course, related_name='tags')
     def __unicode__(self):
         return self.name
     def __str__(self):
@@ -81,7 +81,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     upvotes = models.IntegerField(default=0) #Duplicate upvotes?
-    downvotes = models.IntegerField(default=0) 
+    downvotes = models.IntegerField(default=0)
 
     assignee = models.OneToOneField(User, related_name="assigned_posts", null=True)
     editors = models.ManyToManyField(User, related_name="edited_posts")
@@ -135,7 +135,7 @@ class Resource(models.Model):
     title = models.CharField(max_length=128)
     notes = models.CharField(max_length=128)
     RTYPE_CHOICES = (('P', 'Plain'), ('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))
-    resource_type = models.CharField(max_length=16, choices=RTYPE_CHOICES) 
+    resource_type = models.CharField(max_length=16, choices=RTYPE_CHOICES)
     due = models.DateField(null=True)
     file = models.FileField(upload_to='resources/')
     # comments = models.ForeignKey(Post,related_name='courses')

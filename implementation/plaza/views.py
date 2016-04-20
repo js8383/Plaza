@@ -205,6 +205,34 @@ def save_course_pref(request, course_number, course_semester):
 
 @login_required
 @transaction.atomic
+def add_tag_to_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            return HttpJSONStatus("Request is not valid", status=400)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    tag_name = request.POST.get("tag_name", "")
+
+    if (course_number == "" or course_semester == "" or
+        tag_name == ""):
+        return HttpJSONStatus("Invalid parameters", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+
+    if (course.tags.filter(name=tag_name).count() != 0):
+        return HttpJSONStatus("Tag with name already exists.", status=400)
+
+    tag = Tag(name=tag_name, course=course)
+    tag.save()
+
+    return HttpJSONStatus("Tag "+tag_name+" successfully created!", status=200)
+
+
+
+@login_required
+@transaction.atomic
 def add_assignment_to_course(request):
     if not request.is_ajax():
         if request.method != 'POST':
@@ -234,7 +262,39 @@ def add_assignment_to_course(request):
                             course=course)
     assignment.save()
 
+    # automatically create a tag for assignment
+    if course.tags.filter(name=assignment_title).count() == 0:
+        tag = Tag(name=assignment_title, course=course)
+        tag.save()
+
     return HttpJSONStatus("Assignment "+assignment_number+" successfully created!", status=200)
+
+
+@login_required
+@transaction.atomic
+def remove_tag_from_course(request):
+    if not request.is_ajax():
+        if request.method != 'POST':
+            return HttpJSONStatus("Request is not valid", status=400)
+
+    course_number = request.POST.get("course_number", "")
+    course_semester = request.POST.get("course_semester", "")
+    tag_name = request.POST.get("tag_name", "")
+
+    if (course_number == "" or course_semester == "" or
+        tag_name == ""):
+        return HttpJSONStatus("Invalid parameters", status=400)
+
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    tags = course.tags.filter(name=tag_name)
+    if tags.count() > 0:
+        tags.all()[0].delete()
+
+    return HttpJSONStatus("Tag "+tag_name+" successfully deleted!", status=200)
+
+
+
 
 @login_required
 @transaction.atomic
@@ -259,6 +319,10 @@ def remove_assignment_from_course(request):
     except ObjectDoesNotExist:
         return HttpJSONStatus("Assignment doesn not exist", status=400)
 
+
+    tags = course.tags.filter(name=assignment_title)
+    if tags.count() == 1:
+        tags.all()[0].delete()
     assignment.delete()
 
     return HttpJSONStatus("Assignment "+assignment_title+" successfully deleted!", status=200)
