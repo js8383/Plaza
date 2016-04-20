@@ -3,7 +3,7 @@
 
 {% block nav %}
 <li class="active"><a href="#">Forum</a></li>
-<li><a href="{% url 'managecourses' %}">Manage Class</a></li>
+<li><a href="{% url 'editcourse' course_semester=semester_id course_number=course_id %}">Manage Course</a></li>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">

@@ -1,6 +1,11 @@
 {% extends "parent.html" %}
 {% load static %}
 
+{% block nav %}
+<li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">Forum</a></li>
+<li class="active"><a href="#">Manage Course</a></li>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class = "row">
