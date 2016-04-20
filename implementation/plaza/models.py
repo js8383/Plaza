@@ -3,7 +3,7 @@ from tinymce.models import HTMLField
 
 from django.contrib.auth.models import User
 from django.db import models
-from datetime import datetime
+from datetime import datetime,date
 from time import time
 
 
@@ -83,8 +83,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
+    upvotes = models.IntegerField(default=0) #Duplicate upvotes?
+    downvotes = models.IntegerField(default=0) 
 
     assignees = models.ManyToManyField(User, related_name="assigned_posts")
     editors = models.ManyToManyField(User, related_name="edited_posts")
@@ -134,17 +134,39 @@ class Assignment(models.Model):
 
 
 class Resource(models.Model):
+    # course = models.ForeignKey(Course, related_name='resources')
     title = models.CharField(max_length=128)
-    resource_type = models.CharField(max_length=16) # TODO: ENUMERATE
-    comments = models.ForeignKey(Post,related_name='courses')
+    notes = models.CharField(max_length=128)
+    RTYPE_CHOICES = (('P', 'Plain'), ('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))
+    resource_type = models.CharField(max_length=16, choices=RTYPE_CHOICES) 
+    due = models.DateField(null=True)
+    file = models.FileField(upload_to='resources/')
+    # comments = models.ForeignKey(Post,related_name='courses')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='tag_resources')
+    parent = models.ForeignKey('self', related_name='children', null=True)
 
     def __unicode__(self):
         return self.title
     def __str__(self):
         return self.__unicode__()
+
+    @property
+    def is_past_due(self):
+        if date.today() > self.due:
+            return True
+        return False
+
+    @property
+    def get_path(self):
+        result = "/" + self.title + "/"
+        p = self.parent
+        while p != None:
+            result = "/" + p.title + result
+            p = p.parent
+        return result
+
 
 # Modified by Jason
 class Notification(models.Model):

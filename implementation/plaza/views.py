@@ -891,12 +891,62 @@ def team_creation_page(request, course_number, course_semester, assignment_numbe
             }
     return render(request, "team_creation.html", context)
 
-def resource_page(request):
+def resource_page(request, id):
 	# Show the page of resources (notes, videos)
 	# For staff, there's an optiona for uploading new resources
-	return render(request, "resources.html", {})
+    context = {}
+    if id != '0':
+        context['parent'] = Resource.objects.get(id=id)
+    context['parent_rid'] = id
+    context['resource_file_form'] = ResourceFileForm()
+    context['resource_folder_form'] = ResourceFolderForm()
+    if id == '0':
+        resources = Resource.objects.filter(parent=None)
+        context['resources'] = resources
+    else:
+        resources = Resource.objects.get(id=id).children.all()
+        context['resources'] = resources
+    return render(request, "resources.html", context)
 
-@login_required
+def create_resource(request, id):
+    rtype = request.POST.get('rtype', False)
+    parent = None
+    if id != '0':
+        parent = Resource.objects.get(id=id)
+    if rtype == "folder":
+        resource = Resource(resource_type='F', parent=parent)
+        resource_folder_form = ResourceFolderForm(request.POST, instance=resource)
+        resource_folder_form.save()
+    if rtype == "file":
+        resource = Resource(resource_type='P', parent=parent)
+        resource_file_form = ResourceFileForm(request.POST, request.FILES, instance=resource)
+        if not resource_file_form.is_valid():
+            errors = json.dumps([{'errors': True}, resource_file_form.errors])
+            return HttpResponse(errors, content_type='application/json')
+        resource_file_form.save()
+    return redirect(reverse('resource', kwargs={'id':id}))
+
+def delete_resource(request, id):
+    parent = Resource.objects.get(id=id).parent
+    pid = 0
+    if parent:
+        pid = parent.id
+    resource = Resource.objects.filter(id=id)
+    resource.delete()
+    return redirect(reverse('resource', kwargs={'id':pid}))
+
+def resource_parent(request, id):
+    if id == '0':
+        return redirect(reverse('resource', kwargs={'id':0}))
+    parent = Resource.objects.get(id=id).parent
+    pid = 0
+    if parent:
+        pid = parent.id
+    return redirect(reverse('resource', kwargs={'id':pid}))
+
+
+
+# @login_required
 def resource_slide_page(request):
 	# Show the page a slide (could be a pdf slide, or just streaming the video)
 	# Students could post comments to each slide / video

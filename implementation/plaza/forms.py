@@ -67,7 +67,7 @@ class PersonForm(forms.Form):
     email = forms.CharField(max_length = 40, validators = [validate_email])
     date_of_birth = forms.DateField(label="Date of Birth", required=False)
     gender = forms.CharField(max_length=6, label='Gender', required=False)
-    field = forms.CharField(max_length=32, label='Field',required=False)
+    field = forms.CharField(max_length=32, label='Field', required=False)
     institution = forms.CharField(max_length=32, label='Institution',required=False)
     short_bio = forms.CharField(max_length=1024, label="Short Bio", required=False)
     profile_image = forms.ImageField(label='Profile Image', required=False)
@@ -110,3 +110,57 @@ class PostForm(forms.Form):
         cleaned_data = super(PostForm, self).clean()
         return
 
+class ResourceFileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(ResourceFileForm, self).__init__(*args, **kwargs)
+        self.fields['notes'].required = False
+        # self.fields['file'].required = False
+        self.fields['tags'].required = False
+        self.fields['due'].required = False
+        
+    class Meta:
+        model = Resource
+        fields = ('title','notes', 'file', 'tags', 'due',)
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'due': forms.DateInput(attrs={'placeholder': "", 'id':'dpicker', 'class': 'form-control'}),
+        }
+        labels = {
+            'title': 'Title',
+            'notes': 'Notes',
+            'file': 'Attach File',
+            'tags':'Tags',
+            'due': 'Due'
+        }
+        
+    def clean(self):
+        cleaned_data = super(ResourceFileForm, self).clean()
+        return cleaned_data
+
+
+class ResourceFolderForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(ResourceFolderForm, self).__init__(*args, **kwargs)
+        self.fields['notes'].required = False
+        
+    class Meta:
+        model = Resource
+        fields = ('title','notes',)
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
+            
+        }
+        labels = {
+            'title': 'Title',
+            'notes': 'Notes',
+        }
+        
+    def clean(self):
+        cleaned_data = super(ResourceFolderForm, self).clean()
+        return cleaned_data

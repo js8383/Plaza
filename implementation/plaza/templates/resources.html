@@ -5,246 +5,213 @@
 <div class="row">
     <br>
 
-	<div class="col-lg-8 col-lg-offset-2">
+	<div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Resources
+                Resources - {% if parent %} {{parent.get_path}} {% else %} / {% endif %}
+                {% if parent %} <span class="pull-right"> <a class="btn btn-default btn-xs" href="{% url 'resourceparent' parent_rid %}" role="button">Back</a> </span> {% endif %}
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#Homework" data-toggle="tab">Homework</a>
+                <!-- <ul class="nav nav-tabs">
+                    <li class="active"><a href="#All" data-toggle="tab">All</a>
+                    </li>
+                    <li><a href="#Homework" data-toggle="tab">Homework</a>
                     </li>
                     <li><a href="#Video" data-toggle="tab">Video</a>
                     </li>
                     <li><a href="#Notes" data-toggle="tab">Slides</a>
                     </li>
-                </ul>
+                </ul> -->
 
                 <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="Homework">
-                        <ul class="list-group">
+                <!-- <div class="tab-content"> -->
 
-                        <li class="list-group-item">
-                        <b>Homework 1</b> <span class="label label-default label-pill pull-right">Due Mar. 22nd</span>
-                        </li>
-                        <li class="list-group-item">
-                        <b>Homework 2</b> <span class="label label-default label-pill pull-right">Due Mar. 29th</span>
-                        </li>
-                        <li class="list-group-item">
-                        <b>Homework 3</b> <span class="label label-default label-pill pull-right">Due Apr. 1st</span>
-                        </li>
+                    <!-- <div class="tab-pane fade in active" id="All"> -->
+                    <br>
+                    <!-- <ul class="list-group"> -->
+                        <!-- <li class="list-group-item"> -->
 
-                        <li class="list-group-item">
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#CreateAssignment-8">
-                                            <span class="glyphicon glyphicon-plus" title="Create Assignment"></span>
-                        </button>
-                        
+                            <div class="panel-group" id="accordion">
+                            {% for resource in resources %}
+                            
+                            {% if resource.resource_type != "F" %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <i class="fa fa-file" aria-hidden="true"></i> &nbsp;<a data-toggle="collapse" data-parent="#accordion" href="#collapse-id-{{ resource.id }}">  {{ resource.title }}</a>
+                                        <span class="pull-right">&nbsp;  <a href="{% url 'deleteresource' resource.id %}"> <i class="fa fa-times" aria-hidden="true"></i> </a> </span>
+                                        {% if resource.due %} 
+                                          {% if resource.is_past_due %}
+                                          <span class="label label-success label-pill pull-right">Due {{resource.due}}</span>
+                                          {% else %}
+                                          <span class="label label-warning label-pill pull-right">Due {{resource.due}}</span>
+                                          {% endif %}
+                                        {% endif %}
+                                        
+                                    </h4>
+                                </div>
+                                <div id="collapse-id-{{ resource.id }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        
+                                        {% if resource.notes %} {{resource.notes}} {% else %} No description {% endif %}
+                                        
+                                        {% if resource.file %}
+                                        <hr>
+                                        <a href="/media/{{resource.file}}">Attached File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if resource.resource_type == "F" %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <i class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; <a href="{% url 'resource' resource.id %}"> {{ resource.title }}</a>
+                                        <span class="pull-right">&nbsp;  <a href="{% url 'deleteresource' resource.id %}"> <i class="fa fa-times" aria-hidden="true"></i> </a> </span>
+                                    </h4>
+                                </div>
+                                
+                            </div>
+                            {% endif %}
+
+                            {% endfor %}
+                            </div>
+
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#CreateResource">
+                                                <span class="glyphicon glyphicon-plus" title="Create Assignment"></span> 
+                            </button>
+                            </div>
+                            </div>
+
+                        <!-- </li> -->
+
+                            
                         <!-- Modal -->
-                        <div class="modal fade" id="CreateAssignment-8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal fade" id="CreateResource" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
+
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Create assignment</h4>
+                                        <!-- <h4 class="modal-title" id="myModalLabel">Add a resource</h4> -->
+
+                                        <ul class="nav nav-pills">
+                                          <li><h4>Add &nbsp;</h4></li>
+                                          <li class="active"><a href="#File" data-toggle="tab">File</a> </li>
+                                          <li><a href="#Folder" data-toggle="tab">Folder</a></li>
+                                        </ul>
+
                                     </div>
+
                                     <div class="modal-body">
-                                        <form class="form-horizontal" role="form" method="post" action="/instructor/create_course/8/">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="number">Title</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control" id="number" name="number">
+                                    
+                                        <div class="tab-content">
+
+                                            <div class="tab-pane fade in active" id="File">
+                                            <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' parent_rid %}">
+
+                                                {% for field in resource_file_form.visible_fields %}
+                                                 <div class="form-group">
+                                                    <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                    <div class="col-md-9">
+                                                       {{field}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="name">Writeup</label>
-                                                <div class="col-md-9">
-                                                    <input type="file">
+                                                
+                                                {% endfor %}
+
+                                                <input type="hidden" name="rtype" value="file">
+
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-3 col-md-9">
+                                                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                                    </div>
                                                 </div>
+
+                                                {% if form.errors %}
+                                                    <div class="alert alert-warning">
+                                                       {{form.errors}}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% csrf_token %}
+
+                                            </form>
+
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="description">Tags</label>
-                                                <div class="col-md-9">
-                                                    <select multiple class="form-control">
-                                                        <option>Tag 1</option>
-                                                        <option>Tag 2</option>
-                                                        <option>Tag 3</option>
-                                                        <option>Tag 4</option>
-                                                    </select>
+
+                                            <div class="tab-pane fade" id="Folder">
+                                               <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' parent_rid %}">
+                                               <!-- <div class="form-group">
+                                                    <label class="control-label col-md-3" for="number">Title</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="title">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="start_time">Start time</label>
-                                                <div class="col-md-9">
-                                                    <input type="datetime" class="form-control" id="start_time" name="start_time">
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3" for="number">Notes</label>
+                                                    <div class="col-md-9">
+                                                        <textarea name="notes" style="resize:none;"class="form-control" rows="4"></textarea>
+                                                    </div>
+                                                </div> -->
+
+                                                 {% for field in resource_folder_form.visible_fields %}
+                                                 <div class="form-group">
+                                                    <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                    <div class="col-md-9">
+                                                       {{field}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="end_time">End time</label>
-                                                <div class="col-md-9">
-                                                    <input type="datetime" class="form-control" id="end_time" name="end_time">
+                                                   
+                                                {% endfor %}
+
+                                                <input type="hidden" name="rtype" value="folder">
+
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-3 col-md-9">
+                                                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                                    </div>
                                                 </div>
+
+                                                {% csrf_token %}
+
+                                                </form>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
-                                        </form>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        </li>
-
-                        </ul>
+                        <!-- </ul> -->
                     </div>
+
+<!--                     <div class="tab-pane fade" id="Homework">
+
+                    </div>
+
                     <div class="tab-pane fade" id="Video">
-                        <ul class="list-group">
-                        <br>
-                         <li class="list-group-item">
-                            <h2>Lecture 1</h2>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PfBVIHgQbYk"></iframe>
-                            </div>
-                        </li>
-
-                        <hr>
-
-                         <li class="list-group-item">
-                            <h2>Lecture 2</h2>
-                                <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/dgI2fqUNqPs"></iframe>
-                            </div>
-                        </li>
                         
-                        </ul>
                     </div>
+
                     <div class="tab-pane fade" id="Notes">
-                        <ul class="list-group">
-                        <br>
-                        <li class="list-group-item"> 
-                        <h4>Slide 1</h4>
-                        <iframe src="http://15418.courses.cs.cmu.edu/spring2016content/lectures/01_whyparallelism/01_whyparallelism_slides.pdf" style="width:600px; height:500px;" frameborder="0"></iframe>
-                        </li>
-                        <hr>
-
-                        <li class="list-group-item"> 
-                        <h4>Slide 2</h4>
-                        <iframe src="http://15418.courses.cs.cmu.edu/spring2016content/lectures/17_lockfree/17_lockfree_slides.pdf" style="width:600px; height:500px;" frameborder="0"></iframe>
-                        </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                        
+                    </div> -->
+                <!-- </div> -->
+            <!-- </div> -->
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
         <br>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Roster
-            </div>
-
-            <div class="panel-body">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#Students" data-toggle="tab">Students</a>
-                    </li>
-                    <li><a href="#TAs" data-toggle="tab">TAs</a>
-                    </li>
-                    <li><a href="#Instructors" data-toggle="tab">Instructors</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane fade in active" id="Students">
-                        <ul class="list-group" id="ul-Student">
-                            
-                        </ul>
-
-                    </div>
-
-                    <div class="tab-pane fade in active" id="TAs">
-                        <ul class="list-group" id="ul-TA">
-                            
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade in active" id="Instructors">
-                        <ul class="list-group" id="ul-Instructor">
-                            
-                        </ul>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#AddStudent">
-                    <span class="glyphicon glyphicon-plus" title="Add student"></span>
-                </button>
-                
-
-                <!-- Modal -->
-                <div class="modal fade" id="AddStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Add to your course </h4>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="form-horizontal" role="form" method="post" action="">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3" for="number"> ID</label>
-                                        <div class="col-md-9">
-                                            <input id="target1" type="text" class="form-control" placeholder="Username or Email">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3" for="number"> Role </label>
-                                        <div class="col-md-9">
-                                            <select class="form-control" id="roleselection">
-                                                <option>Student</option>
-                                                <option>TA</option>
-                                                <option>Instructor</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <button class="btn btn-primary pull-right" onclick="add()">Confirm</button>
-                                        </div>
-                                    </div>
-
-                                    
-                                </div>
-                            </div>
-
-                            <script>
-                               function add() {
-                                  var name = document.getElementById('target1').value;
-                                  var role = document.getElementById('roleselection').value;
-                                  var listnode = "<li class='list-group-item'>" + name+  "</li>"
-                                  $("#ul-" + role).append(listnode);
-                                  $('#AddStudent').modal('hide');
-                                }
-                            </script>
-
-                        </div>
-                    </div>
-                </div>
-                </div>
-
-
-
-        </div>
     </div>
 </div>
 
