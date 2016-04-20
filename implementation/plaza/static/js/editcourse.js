@@ -224,17 +224,20 @@ $("#assignment_add_field").keyup(function(event){
 $("#add_instructor").click(function(event){
     add_person($("#instructors_list").find('a').first().text(), 'instructor');
     $("#instructors_list").hide();
+    $("#instructors_list").empty();
     $("#instructor_search_field").val('');
 });
 
 $("#add_staff").click(function(event){
     add_person($("#staff_list").find('a').first().text(), 'staff');
+    $("#staff_list").empty();
     $("#staff_list").hide();
     $("#staff_search_field").val('');
 });
 
 $("#add_student").click(function(event){
     add_person($("#students_list").find('a').first().text(), 'student');
+    $("#students_list").empty();
     $("#students_list").hide();
     $("#student_search_field").val('');
 });

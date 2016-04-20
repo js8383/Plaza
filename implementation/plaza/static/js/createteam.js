@@ -46,11 +46,13 @@ $("#person_search_field").keyup(function(event){
                         }
                         else
                         {
+                            $("#students_list").empty();
                             $("#students_list").hide();
                         }
                     }
                     else
                     {
+                        $("#students_list").empty();
                         $("#students_list").hide();
                     }
                 },
@@ -164,6 +166,7 @@ function get_person(username)
 
 $("#add_person").click(function(event){
     get_person($("#students_list").find('a').first().text());
+    $("#students_list").empty();
     $("#students_list").hide();
     $("#person_search_field").val('');
 });

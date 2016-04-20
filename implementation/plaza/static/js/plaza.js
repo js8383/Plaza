@@ -162,11 +162,13 @@ function get_people_suggestions(input, dropdown_list)
                     else
                     {
                         dropdown_list.hide();
+                        dropdown_list.empty();
                     }
                 }
                 else
                 {
                     dropdown_list.hide();
+                    dropdown_list.empty();
                 }
             },
 
@@ -213,11 +215,13 @@ function get_people_suggestions_with_profile(input, dropdown_list)
                     else
                     {
                         dropdown_list.hide();
+                        dropdown_list.empty();
                     }
                 }
                 else
                 {
                     dropdown_list.hide();
+                    dropdown_list.empty();
                 }
             },
 
@@ -294,11 +298,13 @@ $("#course_search_field").keyup(function(event){
                             else
                             {
                                 $("#courses_list").hide();
+                                $("#courses_list").empty();
                             }
                         }
                         else
                         {
                             $("#courses_list").hide();
+                            $("#courses_list").empty();
                         }
                 },
 
