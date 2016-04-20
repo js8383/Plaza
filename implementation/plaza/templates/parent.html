@@ -33,224 +33,147 @@
 
             <!-- Navigation -->
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href={% url 'home' %}>Plaza</a>
-            </div>
-            <!-- /.navbar-header -->
-            <ul class="nav navbar-nav">
-                {% block nav %}
-                {% endblock %}
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Your Teams<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    {% if user.person.teams.count %}
-                    {% for team in user.person.teams.all %}
-                    <li>
-                    <a href="{% url 'myteamview' course_semester=team.assignment.course.semester course_number=team.assignment.course.number assignment_number=team.assignment.number %}">{{team}}</a></li>
-                    {% endfor %}
-                    {% else %}
-                    <li><a href="#">No Teams</a></li>
-                    {% endif %}
-                </ul>
-                </li>
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose course<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    {% if user.courses_taken.count %}
-                    {% for course in user.courses_taken.all %}
-                    <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
-                    {% endfor %}
-                    {% else %}
-                    <li><a href="#">No Courses Taken</a></li>
-                    {% endif %}
-                    <li class="divider"></li>
-                    {% if user.courses_assisted.count %}
-                    {% for course in user.courses_assisted.all %}
-                    <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
-                    {% endfor %}
-                    {% else %}
-                    <li><a href="#">No Courses Assisted</a></li>
-                    {% endif %}
-                    <li class="divider"></li>
-                    {% if user.courses_managed.count %}
-                    {% for course in user.courses_managed.all %}
-                    <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
-                    {% endfor %}
-                    {% else %}
-                    <li><a href="#">No Courses Managed</a></li>
-                    {% endif %}
-                    <li class="divider"></li>
-                    <li><a href="{% url 'createcourse' %}">Create course</a></li>
-                </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input id="course_search_field" autocomplete="off"
-                    type="text" class="form-control" placeholder="Find a course">
-                    <button id="go_to_course"
-                        class="btn btn-default">Go
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
-                    <div id="dropdown" class="dropdown">
-                        <a href="#" class="dropdown-toggle"
-                            id="dropdown-toggle" data-toggle="dropdown" hidden></a>
-                        <ul id="courses_list" class="dropdown-menu">
-                        </ul>
+                    <a class="navbar-brand" href={% url 'home' %}>Plaza</a>
+                </div>
+                <!-- /.navbar-header -->
+                <ul class="nav navbar-nav">
+                    {% block nav %}
+                    {% endblock %}
+
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose course<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if user.courses_taken.count %}
+                        {% for course in user.courses_taken.all %}
+                        <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
+                        {% endfor %}
+                        {% else %}
+                        <li><a href="#">No Courses Taken</a></li>
+                        {% endif %}
+                        <li class="divider"></li>
+                        {% if user.courses_assisted.count %}
+                        {% for course in user.courses_assisted.all %}
+                        <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
+                        {% endfor %}
+                        {% else %}
+                        <li><a href="#">No Courses Assisted</a></li>
+                        {% endif %}
+                        <li class="divider"></li>
+                        {% if user.courses_managed.count %}
+                        {% for course in user.courses_managed.all %}
+                        <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">{{course}}</a></li>
+                        {% endfor %}
+                        {% else %}
+                        <li><a href="#">No Courses Managed</a></li>
+                        {% endif %}
+                        <li class="divider"></li>
+                        <li><a href="{% url 'createcourse' %}">Create course</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'managecourses' %}">Manage courses</a></li>
+                    </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input id="course_search_field" autocomplete="off"
+                        type="text" class="form-control" placeholder="Find a course">
+                        <button id="go_to_course"
+                            class="btn btn-default">Go
+                        </button>
+                        <div id="dropdown" class="dropdown">
+                            <a href="#" class="dropdown-toggle"
+                                id="dropdown-toggle" data-toggle="dropdown" hidden></a>
+                            <ul id="courses_list" class="dropdown-menu">
+                            </ul>
+                        </div>
                     </div>
                 </form>
-            </div>
-        </div>
 
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-messages">
-                    <li>
-                    <a href="#">
-                        <div>
-                            <strong>Jason Song</strong>
-                            <span class="pull-right text-muted">
-                                <em>Yesterday</em>
-                            </span>
-                        </div>
-                        <div>Hi </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a class="text-center" href="#">
-                        <strong>Read All Messages</strong>
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-messages -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-tasks">
-                    <li>
-                    <a href="#">
-                        <div>
-                            <p>
-                            <strong>Task 1</strong>
-                            <span class="pull-right text-muted">40% Complete</span>
-                            </p>
-                            <div class="progress progress-striped active">
-                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                        <a href="#">
+                            <div>
+                                <strong>Jason Song</strong>
+                                <span class="pull-right text-muted">
+                                    <em>Yesterday</em>
+                                </span>
                             </div>
-                        </div>
-                    </a>
+                            <div>Hi </div>
+                        </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                        <a class="text-center" href="#">
+                            <strong>Read All Messages</strong>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
                     </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a class="text-center" href="#">
-                        <strong>See All Tasks</strong>
-                        <i class="fa fa-angle-right"></i>
-                    </a>
+                    
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  <i style="color:#337AB7;" class="fa fa-caret-down"></i></button>
+                    
+                    <ul id="notidropdown" class="dropdown-menu dropdown-alerts">
+                        <!-- <li>
+                        <a href="#">
+                            <div>
+                                New Comment New Comment New Comment New Comment New Comment
+                                <span class="pull-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                        </li>
+                        <li class="divider"></li> -->
+                        
+                        <li> 
+                        <a class="text-center" href="{% url 'notification' %}">
+                            <strong>See Detail</strong>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
                     </li>
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="{% url 'profile' request.user.id %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
                 </ul>
-                <!-- /.dropdown-tasks -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-alerts">
-                    <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-comment fa-fw"></i> New Comment
-                            <span class="pull-right text-muted small">4 minutes ago</span>
-                        </div>
-                    </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                            <span class="pull-right text-muted small">12 minutes ago</span>
-                        </div>
-                    </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-envelope fa-fw"></i> Message Sent
-                            <span class="pull-right text-muted small">4 minutes ago</span>
-                        </div>
-                    </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-tasks fa-fw"></i> New Task
-                            <span class="pull-right text-muted small">4 minutes ago</span>
-                        </div>
-                    </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                            <span class="pull-right text-muted small">4 minutes ago</span>
-                        </div>
-                    </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                    <a class="text-center" href="#">
-                        <strong>See All Alerts</strong>
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-alerts -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="{% url 'profile' request.user.id %}"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
-            </nav>
+                <!-- /.navbar-top-links -->
+                </nav>
 
             <!-- Page Content -->
             <div id="page-wrapper">
                 <div class="container-fluid">
 
-                    <!-- Error and Status messages --!>
+                    <!-- Error and Status messages -->
                     <div class="container">
                         <br>
                         <div class="row">

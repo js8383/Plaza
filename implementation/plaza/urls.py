@@ -71,7 +71,8 @@ urlpatterns = [
 
     ## Notification URL ##
     url(r'^notification$', plaza_views.notification_page, name='notification'),
-    url(r'^getnotification$', plaza_views.get_notification, name='getnotification'),
+    url(r'^getnotification/(?P<id>\d+)$', plaza_views.get_notification, name='getnotification'),
+    url(r'^markreadnoti/(?P<id>\d+)$', plaza_views.mark_as_read, name='markreadnoti'),
 
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),

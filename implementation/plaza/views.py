@@ -14,8 +14,9 @@ from plaza.models import *
 from django.core import serializers
 from mimetypes import guess_type
 from django.db.models import Q
-
+from django.http import JsonResponse
 from django.conf import settings
+from datetime import datetime
 
 
 # Create your views here.
@@ -711,11 +712,6 @@ def unfollow_tag(request):
 ####### For ajax  #######
 # Mrigesh's part ends here
 
-def get_notification(request):
-	# Get new notification in all pages (notifications is in homepage, but for other pages, just do it
-	# as a dropdown from nav bar. Another good way is to use push notification library such as Parse
-    return
-
 
 @login_required
 def search_student(request):
@@ -750,19 +746,6 @@ def upload_resource(request):
 
 
 ####### Other functionalities #######
-@login_required
-def get_notification(request, id):
-	# Edit content
-	# Change visibility
-	# Assign to students
-    return
-
-# Used to send notifications to a list of people
-@login_required
-def send_notifications(message, redirect_url, receivers):
-    # TODO: implement soon
-    return
-
 
 @login_required
 @transaction.atomic
@@ -803,26 +786,23 @@ def search(request):
 
 # All notifications stuff and resources and etc.
 
-# General notification API
-def save_and_notify(nfilter, sender, receiver, action, target):
-    if nfilter == "People":
-        if action == "FOLLOW":
-            notification = Notification(sender=sender, receiver=receiver, action=action, target_text="you")
-            notification.save()
-            # notify the leancloud api
-    return
-
 # @login_required
 @transaction.atomic
 def follow_user(request, id):
-    user = request.user
-    save_and_notify("People", user, user, "FOLLOW", "")
-    return
+    person = request.user.person
+    target_user = User.objects.get(id=id)
+    person.following.add(target_user)
+    save_and_notify('7', person, target_user.person, '', "/profile/"+str(request.user.id))
+    return redirect(reverse('profile', kwargs={'id': id}))
 
 # @login_required
 @transaction.atomic
 def unfollow_user(request,id):
-    return
+    person = request.user.person
+    target_user = User.objects.get(id=id)
+    # person.following.add(target_user)
+    person.following.remove(target_user)
+    return redirect(reverse('profile', kwargs={'id': id}))
 
 # @login_required
 def get_profile_picture(request, id):
@@ -831,6 +811,32 @@ def get_profile_picture(request, id):
         raise Http404
     content_type = guess_type(person.profile_image.name)
     return HttpResponse(person.profile_image, content_type=content_type)
+
+# General notification API
+def save_and_notify(action, sender, receiver, extra_content, destination):
+    notification = Notification(action=action, sender=sender, receiver=receiver, extra_content=extra_content, destination=destination)
+    notification.save()
+    return
+
+# @login_required
+def get_notification(request, id):
+    unread_notis = Notification.objects.filter(status='0', receiver__user__id=id).order_by('-created_at')
+    json = []
+    for n in unread_notis:
+        noti_json = {
+            "sender": n.sender.user.username,
+            "sender_id": n.sender.user.id,
+            "action": n.get_action_display(),
+            "extra_content": n.extra_content,
+            "created_at": n.created_at.strftime("%b %d, %H:%M:%S"),
+            "destination": n.destination
+        }
+        json.append(noti_json)
+    return JsonResponse(json, safe=False)
+
+def mark_as_read(request, id):
+    notification = Notification.objects.filter(id=id).update(status='1')
+    return redirect(reverse('notification'))
 
 ############################################## Display pages #############################################
 
@@ -875,8 +881,11 @@ def staffhome_page(request, id):
 # @login_required
 def profile_page(request, id):
     context = {}
-    context["person"] = request.user.person
-    context["target_id"] = id
+    user = User.objects.get(id=id)
+    context["person"] = user.person
+    context["request_id"] = request.user.id
+    if user in request.user.person.following.all():
+        context['following'] = 'Yes'
     return render(request, "profile.html", context)
 
 # @login_required
@@ -1021,7 +1030,9 @@ def resource_slide_page(request):
 	return
 
 def notification_page(request):
-    return render(request, "notification.html", {})
+    context = {}
+    context['notifications'] = Notification.objects.all()
+    return render(request, "notification.html", context)
 
 
 ## Dynamic Object Suggestion ##

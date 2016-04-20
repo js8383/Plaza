@@ -281,3 +281,38 @@ init_suggestions(
         course_suggestion_html,
         on_course_suggestion_click);
 
+// notification
+function displaynotidropdown(id) {
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState != 4) return;
+        if (req.status != 200) return;
+        var notifications = JSON.parse(req.responseText);
+        var innerhtml_format = "";
+        for (var i = 0; i < notifications.length; i++) {
+            var notification = notifications[i]
+            var sender = notification['sender']
+            var sender_id = notification['sender_id']
+            var action = notification['action']
+            var extra_content = notification['extra_content']
+            var created_at = notification['created_at']
+            var destination = notification['destination']
+            innerhtml_format += "<li> <a href='" + destination + "'> <div>" + sender + action +
+                                   "<span class='pull-right text-muted small'>" + created_at + "</span></div></a>" +
+                                   "</li> <li class='divider'></li>"
+            // console.log(innerhtml_format);
+            
+        }
+        $('#notidropdown li:not(:last)').remove();
+        $('#notidropdown').prepend(innerhtml_format);
+    
+        
+    }
+
+    req.open("POST", "/getnotification/" + id, true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send("csrfmiddlewaretoken="+getCSRFToken());
+    
+    $('#notidropdown').toggle();
+}
