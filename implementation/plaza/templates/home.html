@@ -1,547 +1,265 @@
 {% extends "parent.html" %}
 {% block content %}
 <div id="page-wrapper" style="min-height: 545px;">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Welcome to Plaza, {{user.first_name}}</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-comments fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">26</div>
-                                    <div>New Comments!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
-                                    <div>New Tasks!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-yellow">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-shopping-cart fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">124</div>
-                                    <div>New Orders!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-red">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-support fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
-                                    <div>Support Tickets!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-8">
-
-
-
-
-                    <div class="panel panel-default">
-            <div class="panel-heading">
-                Courses
-            </div>
-            <div class="panel-body">
-                <ul class="nav nav-tabs the-tabs">
-                    <li role="presentation" class="active"><a href="#">Current</a></li>
-                    <li role="presentation"><a href="#">Past</a></li>
-                    <li role="presentation"><a href="#">Future</a></li>
-                </ul>
-
-
-
-                            <div class="panel panel-default course-group course-group-instructor">
-                                <div class="panel-heading">
-                                    15719 : Advanced Web Application Development
-                                    <span class="pull-right">
-                                        Instructor
-                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#CreateCourseModal-8">
-                                            <span class="glyphicon glyphicon-plus" title="Create Course"></span>
-                                        </button>
-
-<!-- Modal -->
-<div class="modal fade" id="CreateCourseModal-8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="myModalLabel">Create course</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" role="form" method="post" action="/instructor/create_course/8/">
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="number">Course number</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="number" name="number">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="name">Course name</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="name" name="name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="description">Course description</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control" rows="3" id="description" name="description"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="start_time">Start time</label>
-                        <div class="col-md-9">
-                            <input type="datetime" class="form-control" id="start_time" name="start_time">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="end_time">End time</label>
-                        <div class="col-md-9">
-                            <input type="datetime" class="form-control" id="end_time" name="end_time">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
-                </form>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Welcome to Plaza, {{user.first_name}}</h1>
     </div>
-</div>
-
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-
-
-                                        <div class="panel panel-default course">
-                                            <div class="panel-heading">
-                                                <a href="/instructor/schedule/15/">S16-15719: Advanced Web Application Development</a>
-                                                <a href="/student/overview/15/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                                <span class="pull-right">
-                                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#EditCourseModal-15">
-                                                        <span class="glyphicon glyphicon-edit" title="Edit Course"></span>
-                                                    </button>
-                                                </span>
-                                                <!-- Modal -->
-<div class="modal fade" id="EditCourseModal-15" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit course</h4>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-comments fa-5x"></i>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal" role="form" method="post" action="/instructor/edit_course/15/">
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="number">Course number</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="number" name="number" value="S16-15719">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="name">Course name</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="name" name="name" value="Advanced Web Application Development">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="description">Course description</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control" rows="3" id="description" name="description" value=""></textarea>
-                        </div>
-                    </div>
-                   <div class="form-group">
-                        <label class="control-label col-md-3" for="start_time">Start time</label>
-                        <div class="col-md-9">
-                            <input type="datetime" class="form-control" id="start_time" name="start_time" value="2016-01-08 00:01">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3" for="end_time">End time</label>
-                        <div class="col-md-9">
-                            <input type="datetime" class="form-control" id="end_time" name="end_time" value="2016-05-01 23:59">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="csrfmiddlewaretoken" value="RwWnjOJMISRFseBzBCtpHnIrjW1Kd9ZX">
-                </form>
+            <div class="col-xs-9 text-right">
+              <div class="huge">26</div>
+              <div>New Comments!</div>
             </div>
+          </div>
         </div>
+        <a href="#">
+          <div class="panel-footer">
+            <span class="pull-left">View Details</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
     </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-green">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-tasks fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge">12</div>
+              <div>New Tasks!</div>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer">
+            <span class="pull-left">View Details</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-yellow">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-shopping-cart fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge">124</div>
+              <div>New Orders!</div>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer">
+            <span class="pull-left">View Details</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="panel panel-red">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-support fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge">13</div>
+              <div>Support Tickets!</div>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer">
+            <span class="pull-left">View Details</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Courses
+        </div>
+        <div class="panel-body">
+          <ul class="nav nav-tabs the-tabs">
+            <li role="presentation" class="active"><a href="#">Current</a></li>
+            <li role="presentation"><a href="#">Past</a></li>
+            <li role="presentation"><a href="#">Future</a></li>
+          </ul>
+
+
+
+          {% for course in c_instructor %}
+          <div class="panel-body">
+            <div class="panel panel-default course">
+              <div class="panel-heading">
+                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                <span class="pull-right">
+                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
+                    <span class="glyphicon glyphicon-edit" title="Manage Course"></span>
+                  </a>
+                </span>
+              </div>
+              <div class="panel-body">
+                <small>
+                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
+                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
+                </small>
+              </div>
+              <div>
+                {{course.description}}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          
+
+          {% for course in c_staff %}
+          <div class="panel-body">
+            <div class="panel panel-default course">
+              <div class="panel-heading">
+                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                <span class="pull-right">
+                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
+                  </button>
+                </span>
+              </div>
+              <div class="panel-body">
+                <small>
+                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
+                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
+                </small>
+              </div>
+              <div>
+                {{course.description}}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          {% for course in c_student %}
+          <div class="panel-body">
+            <div class="panel panel-default course">
+              <div class="panel-heading">
+                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                <span class="pull-right">
+                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
+                  </button>
+                </span>
+              </div>
+              <div class="panel-body">
+                <small>
+                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
+                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
+                </small>
+              </div>
+              <div>
+                {{course.description}}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- /.panel courses-->
+  </div>
+  <!-- /.col-lg-8 -->
+  <div class="col-lg-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="fa fa-bell fa-fw"></i> Notifications Panel
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <div class="list-group">
+          <a href="#" class="list-group-item">
+            <i class="fa fa-comment fa-fw"></i> New Comment
+            <span class="pull-right text-muted small"><em>4 minutes ago</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+            <span class="pull-right text-muted small"><em>12 minutes ago</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-envelope fa-fw"></i> Message Sent
+            <span class="pull-right text-muted small"><em>27 minutes ago</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-tasks fa-fw"></i> New Task
+            <span class="pull-right text-muted small"><em>43 minutes ago</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-upload fa-fw"></i> Server Rebooted
+            <span class="pull-right text-muted small"><em>11:32 AM</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-bolt fa-fw"></i> Server Crashed!
+            <span class="pull-right text-muted small"><em>11:13 AM</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-warning fa-fw"></i> Server Not Responding
+            <span class="pull-right text-muted small"><em>10:57 AM</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
+            <span class="pull-right text-muted small"><em>9:49 AM</em>
+            </span>
+          </a>
+          <a href="#" class="list-group-item">
+            <i class="fa fa-money fa-fw"></i> Payment Received
+            <span class="pull-right text-muted small"><em>Yesterday</em>
+            </span>
+          </a>
+        </div>
+        <!-- /.list-group -->
+        <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+      </div>
+      <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+
+    <!-- /.panel -->
+
+    <!-- /.panel .chat-panel -->
+  </div>
+  <!-- /.col-lg-4 -->
 </div>
-
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 01/08/2016 00:01 -0500</span>
-                                                    <span class="pull-right end-time">End Time: 05/01/2016 23:59 -0400</span>
-                                                </small>
-                                                <br>
-                                                <br>
-
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="panel panel-default course-group">
-                                <div class="panel-heading">
-                                    CC Primer Test
-                                    <span class="pull-right">
-                                        SuperTA
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-
-
-
-
-                                        <div class="panel panel-default course">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/16/">15619-Dev: Web Application Development Development Course</a>
-                                                <a href="/student/overview/16/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 01/01/2016 00:01 -0500</span>
-                                                    <span class="pull-right end-time">End Time: 05/31/2016 23:59 -0400</span>
-                                                </small>
-                                                <br>
-                                                <br>
-                                                Development Course for 619
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="panel panel-default course-group" style="display: none;">
-                                <div class="panel-heading">
-                                    Web Application Development Course F15
-                                    <span class="pull-right">
-                                        SuperTA
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-
-
-
-
-
-
-                                        <div class="panel panel-default course" style="display: none;">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/2/">F15-15437: Web Application Development TODO: ....HOME / DASHBOARD ....FORUM....RESOURCES....(IF STAFF : .... MANAGE CLASS) .... </a>
-                                                <a href="/student/overview/2/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 08/29/2015 00:01 -0400</span>
-                                                    <span class="pull-right end-time">End Time: 12/31/2015 23:59 -0500</span>
-                                                </small>
-                                                <br>TODO: Add progress bar on each course (time-based)
-                                                <br>
-                                                Undergraduate instance of the online Web Application Development course.
-                                            </div>
-                                        </div>
-
-
-
-                                        <div class="panel panel-default course" style="display: none;">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/3/">F15-15619: Web Application Development </a>
-                                                <a href="/student/overview/3/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 08/29/2015 00:01 -0400</span>
-                                                    <span class="pull-right end-time">End Time: 12/31/2015 23:59 -0500</span>
-                                                </small>
-                                                <br>
-                                                <br>
-                                                Graduate instance of the online Web Application Development course.
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="panel panel-default course-group" style="display: none;">
-                                <div class="panel-heading">
-                                    Design &amp; Engineering of Intelligent Information Systems
-                                    <span class="pull-right">
-                                        SuperTA
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-
-
-
-
-
-
-
-
-
-
-                                        <div class="panel panel-default course" style="display: none;">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/9/">11-791: Design &amp; Engineering of Intelligent Information Systems</a>
-                                                <a href="/student/overview/9/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 08/29/2015 00:01 -0400</span>
-                                                    <span class="pull-right end-time">End Time: 12/31/2015 23:59 -0500</span>
-                                                </small>
-                                                <br>
-                                                <br>
-
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="panel panel-default course-group">
-                                <div class="panel-heading">
-                                    Web Application Development Course S16
-                                    <span class="pull-right">
-                                        SuperTA
-                                    </span>
-                                </div>
-                                <div class="panel-body">
-
-                                        <div class="panel panel-default course">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/13/">S16-15437: Web Application Development</a>
-                                                <a href="/student/overview/13/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 01/11/2016 00:01 -0500</span>
-                                                    <span class="pull-right end-time">End Time: 05/15/2016 01:59 -0400</span>
-                                                </small>
-                                                <br>
-                                                <br>
-                                                Undergraduate instance of the online Web Application Development course.
-                                            </div>
-                                        </div>
-                                        <div class="panel panel-default course">
-                                            <div class="panel-heading">
-                                                <a href="/superstaff/schedule/14/">S16-15619: Web Application Development </a>
-                                                <a href="/student/overview/14/"><span class="glyphicon glyphicon-education" title="view as Student"></span></a>
-                                            </div>
-                                            <div class="panel-body">
-                                                <small>
-                                                    <span class="pull-left start-time">Start Time: 01/11/2016 00:01 -0500</span>
-                                                    <span class="pull-right end-time">End Time: 05/15/2016 01:59 -0400</span>
-                                                </small>
-                                                <br>
-                                                <br>
-                                                Graduate instance of the online Web Application Development course.
-                                            </div>
-                                        </div>
-
-
-                                </div>
-                            </div>
-
-
-
-
-            </div>
+<!-- /.row -->
         </div>
-                    <!-- /.panel courses-->
-                </div>
-                <!-- /.col-lg-8 -->
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> Notifications Panel
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                                </a>
-                            </div>
-                            <!-- /.list-group -->
-                            <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-
-                    <!-- /.panel -->
-
-                    <!-- /.panel .chat-panel -->
-                </div>
-                <!-- /.col-lg-4 -->
-            </div>
-            <!-- /.row -->
-        </div>
-{% endblock %}
+        {% endblock %}

@@ -832,7 +832,10 @@ def get_profile_picture(request, id):
 @login_required
 def home_page(request):
     # With different users, display either home/staff home page
-    return render(request, "home.html", {})
+    context = {'c_student'  : request.user.courses_taken.all()}
+    context['c_staff']      = request.user.courses_assisted.all()
+    context['c_instructor'] = request.user.courses_managed.all()
+    return render(request, "home.html", context)
 
 # Used when we want to redirect users
 # back to the home page with a status/err
