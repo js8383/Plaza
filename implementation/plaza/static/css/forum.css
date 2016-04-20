@@ -15,4 +15,8 @@
 {
       cursor: pointer;
 }
-
+.visborder
+{
+      border: 2px solid light-blue;
+      border-radius: 25px;
+}

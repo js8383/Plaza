@@ -3,66 +3,68 @@
 {% block content %}
 <div class="list-group" style="word-wrap: break-word;">
   {% for post in posts %}
-  {% if post.post_type == '3' %}
-  <div class="list-group-item panel panel-primary">
+  <div class="list-group-item panel
+    {% if post.post_type == '3' %}
+    panel-primary
     {% elif post.post_type == '2' %}
-    <div class="list-group-item panel panel-info">
-      {% elif post.post_type == '1' %}
-      <div class="list-group-item panel panel-success">
-        {% elif post.post_type == '0' %}
-        <div class="list-group-item panel panel-danger">
-          {% else %}
-          <div class="list-group-item panel panel-warning">
-            {% endif %}
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-md-8" style="margins:30px">
-                  <h4> <p>{{ post.title }}</p></h4>
-                </div>
-                <div class="col-md-4" style="margins:30px">
-                  <p><small><small>{{ post.updated_at }}</small></small></p>
-                </div>
-              </div>
-            </div>
-            <div class="panel-body" style="margins:30px">
-              <div class="row" style="margins:30px">
-                <div class="col-md" style="margins:30px">
-                  <p>{{ post.text|safe }}...</p>
-                </div>
-              </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <a href="{% url 'upvote' post.id %}"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a>
-                    <a href="{% url 'downvote' post.id %}"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a>
-                    <a href="{% url 'edit_post' post.id %}" role="button"  class="btn btn-sm btn-warning">Edit</a>
-                  </div>
-                  <div class="col-sm-4">
-                    {% if post.author %}
-                    <p>Posted by <a href="{% url 'profile' 1  %}">{{ post.author }}</a></p>
-                    <p>Assigned to XYZZY</p>
-                    {% endif %}
-                  </div>
-                  {% if post.post_type == '0' %}
-                  {% endif %}
-                  <div class="col-sm-4">
-                    {% if post.author %}
-                    <p>Creation time&nbsp;&nbsp; : {{post.created_at|date:"d M Y H:m"}}</p>
-                    <p>Last updated at : {{post.updated_at|date:"d M Y H:m"}}</p>
-                    {% endif %}
-                  </div>
-                </div>
-            </div>
-
-            {% for tag in post.tags.all %}
-            <button class="btn btn-default btn-sm" >{{ tag }}</button>
-            {% endfor %}
-          </div>
-
+    panel-info
+    {% elif post.post_type == '1' %}
+    panel-success
+    {% elif post.post_type == '0' %}
+    panel-danger
+    {% else %}
+    panel-warning
+    {% endif %}
+    visborder">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-8" style="margins:30px">
+          <h4> <p>{{ post.title }}</p></h4>
         </div>
-        {% endfor %}
-        <a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Start new thread of comments</a>
+        <div class="col-md-4" style="margins:30px">
+          <p><small><small>{{ post.updated_at }}</small></small></p>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body" style="margins:30px">
+      <div class="row" style="margins:30px">
+        <div class="col-md" style="margins:30px">
+          <p>{{ post.text|safe }}...</p>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-4">
+          <a href="{% url 'upvote' post.id %}"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a>
+          <a href="{% url 'downvote' post.id %}"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a>
+          <a href="{% url 'edit_post' post.id %}" role="button"  class="btn btn-sm btn-warning">Edit</a>
+        </div>
+        <div class="col-sm-4">
+          {% if post.author %}
+          <p>Posted by <a href="{% url 'profile' 1  %}">{{ post.author }}</a></p>
+          <p>Assigned to XYZZY</p>
+          {% endif %}
+        </div>
+        {% if post.post_type == '0' %}
+        {% endif %}
+        <div class="col-sm-4">
+          {% if post.author %}
+          <p>Creation time&nbsp;&nbsp; : {{post.created_at|date:"d M Y H:m"}}</p>
+          <p>Last updated at : {{post.updated_at|date:"d M Y H:m"}}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% for tag in post.tags.all %}
+    <button class="btn btn-default btn-sm" >{{ tag }}</button>
+    {% endfor %}
+  </div>
+
+</div>
+{% endfor %}
+<a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Start new thread of comments</a>
 
       </div>
       {% endblock %}
