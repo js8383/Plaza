@@ -13,6 +13,7 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from plaza.models import *
 from django.core import serializers
 from mimetypes import guess_type
+from django.db.models import Q
 
 from django.conf import settings
 
@@ -499,11 +500,18 @@ def my_team_page(request, course_number, course_semester, assignment_number):
 def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
     c = Course.objects.get(semester=semester_id,number=course_id)
+
     posts = Post.objects.filter(course=c).filter(parent_id=0).order_by('-updated_at')
-    # TODO : Add filtering based on user visibility of that post
+
+    q = request.GET.get('q', '')
+    for search_term in q.split():
+      posts=posts.filter(Q(title__icontains = search_term) | Q(text__icontains = search_term))
+    
+
     context = {'posts' : posts }
     filters = [ ('All',24),('Unread',18) ]
     context['filters'] = filters
+    context['search_term'] = q
     context['selected'] = None
     context['following'] = []
     context['course_id'] = course_id
@@ -537,8 +545,8 @@ def view_post(request, post_id):
   posts += Post.objects.filter(root_id=p.id)
     
   context = {'posts' : posts }
-  context['root_id'] = root_id
-  context['course_id'] = p.course.number
+  context['root_id'] = int(root_id)
+  context['course_id'] = int(p.course.number)
   context['semester_id'] = p.course.semester
   return render(request, 'view_post.html',context)
 

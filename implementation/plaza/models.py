@@ -83,7 +83,7 @@ class Post(models.Model):
     upvotes = models.IntegerField(default=0) #Duplicate upvotes?
     downvotes = models.IntegerField(default=0) 
 
-    assignees = models.ManyToManyField(User, related_name="assigned_posts")
+    assignee = models.OneToOneField(User, related_name="assigned_posts", null=True)
     editors = models.ManyToManyField(User, related_name="edited_posts")
     followers = models.ManyToManyField(User, related_name="followed_posts")
     readers = models.ManyToManyField(User, related_name="read_posts")

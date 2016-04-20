@@ -24,8 +24,8 @@
               <button onclick="post('{{ semester_id }}','{{ course_id  }}','0')" class="btn btn-default btn-success"> &#43; New Post</button>
             </div>
             <div class="col-md-9">
-              <form action = "search" action=".">
-                <input type="text" name="q" class="form-control" placeholder="Search this forum">
+              <form action="{% url 'forum' semester_id course_id %}" method="get">
+                <input type="text" name="q" class="form-control" placeholder="Search this forum" value="{{search_term}}"/>
               </form>
             </div>
           </form>

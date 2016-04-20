@@ -4,13 +4,13 @@
 <div class="list-group" style="word-wrap: break-word;">
   {% for post in posts %}
   <div class="list-group-item panel
-    {% if post.post_type == '3' %}
+    {% if post.post_type == 3 %}
     panel-primary
-    {% elif post.post_type == '2' %}
+    {% elif post.post_type == 2 %}
     panel-info
-    {% elif post.post_type == '1' %}
+    {% elif post.post_type == 1 %}
     panel-success
-    {% elif post.post_type == '0' %}
+    {% elif post.post_type == 0 %}
     panel-danger
     {% else %}
     panel-warning
@@ -26,10 +26,10 @@
         </div>
       </div>
     </div>
-    <div class="panel-body" style="margins:30px">
-      <div class="row" style="margins:30px">
-        <div class="col-md" style="margins:30px">
-          <p>{{ post.text|safe }}...</p>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-12">
+          <p>{{ post.text|safe }}</p>
         </div>
       </div>
     </div>
@@ -43,11 +43,11 @@
         <div class="col-sm-4">
           {% if post.author %}
           <p>Posted by <a href="{% url 'profile' 1  %}">{{ post.author }}</a></p>
-          <p>Assigned to XYZZY</p>
+          {% endif %}
+          {% if post.assignee %}
+          <p>Assigned to <a href="{% url 'profile' 1  %}">{{ post.assignee }}</a></p> 
           {% endif %}
         </div>
-        {% if post.post_type == '0' %}
-        {% endif %}
         <div class="col-sm-4">
           {% if post.author %}
           <p>Creation time&nbsp;&nbsp; : {{post.created_at|date:"d M Y H:m"}}</p>
