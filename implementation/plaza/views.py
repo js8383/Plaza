@@ -529,7 +529,7 @@ def view_post(request, post_id):
     posts += Post.objects.filter(root_id=root_id)
 
     context = {'posts' : posts }
-    context['root_id'] = root_id 
+    context['root_id'] = root_id
     return render(request, 'view_post.html',context)
 
 @login_required
@@ -908,13 +908,27 @@ def notification_page(request):
 
 ## Dynamic Object Suggestion ##
 def course_num_suggestions(input_data):
-    courses = Course.objects.filter(number__startswith=input_data).all()
+    courses = Course.objects.filter(number__startswith=input_data)[:10].all()
     serialized_courses = serializers.serialize("json",courses)
     return serialized_courses
 
+def user_as_simple_json(user):
+    return dict(username=user.username,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                user_id=user.id)
+
 def username_suggestions(input_data):
     users = User.objects.filter(username__startswith=input_data).all()
-    serialized_users = serializers.serialize("json", users)
+    simplified = [user_as_simple_json(usr) for usr in users]
+    serialized_users = json.dumps(simplified)
+    return serialized_users
+
+def username_in_course_suggestions(input_data, course_semester, course_number):
+    course = get_object_or_404(Course, semester=course_semester, number=course_number);
+    users = course.students.filter(username__startswith=input_data).all()
+    simplified = [user_as_simple_json(usr) for usr in users]
+    serialized_users = json.dumps(simplified)
     return serialized_users
 
 @login_required
@@ -936,7 +950,12 @@ def dynamic_obj_suggestion(request):
     if input_type == "course_number":
         suggestions = course_num_suggestions(input_data)
     elif input_type == "username":
-        suggestions = username_suggestions(input_data)
+        course_number = request.POST.get("course_number", "")
+        course_semester = request.POST.get("course_semester", "")
+        if course_number == "" or course_semester == "":
+            suggestions = username_suggestions(input_data)
+        else:
+            suggestions = username_in_course_suggestions(input_data, course_semester, course_number)
     else:
         return HttpJSONStatus("Unsupported input type!", status=400)
 
