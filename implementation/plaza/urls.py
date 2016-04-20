@@ -25,7 +25,7 @@ urlpatterns = [
 
     url(r'^login$', auth_views.login, {'template_name':'login.html'}, name='login'),
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
-    
+
     url(r'^administration/(?P<id>\d+)$', plaza_views.administration_page, name='administration'),
 
     url(r'^$', plaza_views.home_page, name='home'),
@@ -72,7 +72,7 @@ urlpatterns = [
 
     ## Notification URL ##
     url(r'^notification$', plaza_views.notification_page, name='notification'),
-    url(r'^getnotification$', plaza_views.get_notification, name='getnotification'),
+    url(r'^getnotification/(?P<id>\d+)$', plaza_views.get_notification, name='getnotification'),
 
     # AJAX urls
     url(r'^search_student/$', plaza_views.search_student, name='searchstudent'),

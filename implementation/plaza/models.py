@@ -179,7 +179,7 @@ class Notification(models.Model):
     destination = models.URLField(max_length=256)
 
     def __unicode__(self):
-        return self.sender + self.get_action_display() + " (" + extra_content + ")"
+        return self.sender.user.username + self.get_action_display() + " (" + self.extra_content + ")"
     def __str__(self):
         return self.__unicode__()
 

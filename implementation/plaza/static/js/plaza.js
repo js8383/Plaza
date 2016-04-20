@@ -320,5 +320,27 @@ $("#go_to_course").click(function(event){
     event.preventDefault();
 });
 
+// notification
+function displaynotidropdown(id) {
 
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState != 4) return;
+        if (req.status != 200) return;
+        // var notifications = JSON.parse(req.responseText);
+        // for (var i = 0; i < notifications.length; i++) {
+        //     // var username = notifications[i]["fields"]["sender"];
 
+        //     // console.log(username);
+        // }
+        console.log(req.responseText);
+        console.log("");
+        
+    }
+
+    req.open("POST", "/getnotification/" + id, true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send("csrfmiddlewaretoken="+getCSRFToken());
+    
+    // $('#notidropdown').toggle();
+}

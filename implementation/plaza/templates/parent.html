@@ -126,10 +126,9 @@
                     
                     <!-- /.dropdown -->
                     <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
+                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  <i style="color:#337AB7;" class="fa fa-caret-down"></i></button>
+                    
+                    <ul id="notidropdown" class="dropdown-menu dropdown-alerts">
                         <!-- <li>
                         <a href="#">
                             <div>

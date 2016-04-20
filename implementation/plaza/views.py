@@ -804,18 +804,17 @@ def save_and_notify(action, sender, receiver, extra_content, destination):
 @transaction.atomic
 def follow_user(request, id):
     person = request.user.person
-    # save_and_notify("People", user, user, "FOLLOW", "")
     target_user = User.objects.get(id=id)
     person.following.add(target_user)
+    save_and_notify('7', person, target_user.person, '', "/profile/"+str(request.user.id))
     return redirect(reverse('profile', kwargs={'id': id}))
 
 # @login_required
 @transaction.atomic
 def unfollow_user(request,id):
     person = request.user.person
-    # save_and_notify("People", user, user, "FOLLOW", "")
     target_user = User.objects.get(id=id)
-    person.following.add(target_user)
+    # person.following.add(target_user)
     person.following.remove(target_user)
     return redirect(reverse('profile', kwargs={'id': id}))
 
@@ -826,6 +825,27 @@ def get_profile_picture(request, id):
         raise Http404
     content_type = guess_type(person.profile_image.name)
     return HttpResponse(person.profile_image, content_type=content_type)
+
+def get_notification(request, id):
+    unread_notis = Notification.objects.filter(status='0')
+    json = []
+    i = 0
+
+    noti_json = None
+    for n in unread_notis:
+        noti_json = {
+            "sender": n.sender.user.username,
+            "sender_id": n.sender.user.id,
+            "action": n.get_action_display(),
+            "extra_content": n.extra_content,
+            "created_at": n.created_at,
+            "destination": n.destination
+        }
+        json.append(noti_json)
+    # response_json = serializers.serialize('json', noti_json)
+    return HttpResponse(noti_json, content_type='application/json')
+
+    
 
 ############################################## Display pages #############################################
 
