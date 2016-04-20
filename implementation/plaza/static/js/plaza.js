@@ -131,58 +131,105 @@ $('#input-repl-1a').on('filecleared', function(event) {
 /*
  * USER SEARCH
  */
-function get_people_suggestions(input, dropdown_list)
+
+/* @brief install the appropriate handlers for the
+ *        dynamic search box
+ */
+function init_people_suggestions(input_box, input_button, dropdown_list, callback)
 {
-    $.ajax({
+    /* Event handlers */
 
-            url: "/dynamic_obj_suggestion/",
+    var list_i = 0;
+    input_button.click(function(event){
+        callback(dropdown_list.find("li.active").find("a")[0].text);
+        dropdown_list.hide();
+        dropdown_list.empty();
+        input_box.val('');
+        event.preventDefault();
+    });
 
-            async: false,
-
-            data: {
-                input_type: "username",
-                input_data: input,
-                csrfmiddlewaretoken: getCSRFToken()
-            },
-
-            type: "POST",
-
-            dataType: "json",
-
-            success: function (response) {
-                dropdown_list.empty();
-                console.log(response);
-                if (response != null)
-                {
-                    for (var i = 0; i < response.length; i++)
-                    {
-                        var s = response[i];
-                        dropdown_list.append(
-                        '<li>'+
-                            '<a href="#">'+s.username+'</a></li>');
-                    }
-                    if (response.length != 0)
-                    {
-                        dropdown_list.show();
-                    }
-                    else
-                    {
-                        dropdown_list.hide();
-                        dropdown_list.empty();
-                    }
-                }
-                else
-                {
-                    dropdown_list.hide();
-                    dropdown_list.empty();
-                }
-            },
-
-            error: function (xhr, status, errorThrown) {
-                display_error(xhr.responseJSON.message);
-                log_error(xhr, status, errorThrown);
+    input_box.keyup(function(event){
+        if(event.keyCode == 13)
+        {
+            input_button.click();
+        }
+        else if (event.keyCode == 40) // Down key
+        {
+            if (list_i < dropdown_list.children().length-1)
+            {
+                dropdown_list.children().eq(list_i+1).addClass("active");
+                dropdown_list.children().eq(list_i).removeClass("active");
+                list_i++;
             }
-        });
+        }
+        else if (event.keyCode == 38) // Up key
+        {
+            if (list_i > 0)
+            {
+                dropdown_list.children().eq(list_i-1).addClass("active");
+                dropdown_list.children().eq(list_i).removeClass("active");
+                list_i--;
+            }
+        }
+        else
+        {
+            $.ajax({
+
+                    url: "/dynamic_obj_suggestion/",
+
+                    async: false,
+
+                    data: {
+                        input_type: "username",
+                        input_data: input_box.val(),
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+
+                    type: "POST",
+
+                    dataType: "json",
+
+                    success: function (response) {
+                        dropdown_list.empty();
+                        console.log(response);
+                        if (response != null)
+                        {
+                            list_i = 0;
+                            for (var i = 0; i < response.length; i++)
+                            {
+                                var s = response[i];
+                                var block = '';
+                                if (i == 0)
+                                    block='<li class="active">'+
+                                        '<a href="#">'+s.username+'</a></li>'
+                                else
+                                    block='<li>'+ '<a href="#">'+s.username+'</a></li>';
+                                dropdown_list.append(block);
+                            }
+                            if (response.length != 0)
+                            {
+                                dropdown_list.show();
+                            }
+                            else
+                            {
+                                dropdown_list.hide();
+                                dropdown_list.empty();
+                            }
+                        }
+                        else
+                        {
+                            dropdown_list.hide();
+                            dropdown_list.empty();
+                        }
+                    },
+
+                    error: function (xhr, status, errorThrown) {
+                        display_error(xhr.responseJSON.message);
+                        log_error(xhr, status, errorThrown);
+                    }
+                });
+        }
+    });
 }
 
 function get_people_suggestions_with_profile(input, dropdown_list)
@@ -238,24 +285,6 @@ function get_people_suggestions_with_profile(input, dropdown_list)
             }
         });
 }
-
-/* Event handlers */
-
-$("#user_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#go_to_user").click();
-    }
-    else
-    {
-        get_people_suggestions_with_profile($("#user_search_field").val(), $("#users_list"))
-    }
-});
-
-$("#go_to_user").click(function(event){
-    $("#users_list").find("a")[0].click();
-    event.preventDefault();
-});
 
 
 /*
