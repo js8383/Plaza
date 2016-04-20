@@ -48,6 +48,22 @@ function add_assignment(title, number)
 }
 
 
+
+function add_instructor(a)
+{
+    add_person(a.text, "instructor");
+}
+
+function add_staff(a)
+{
+    add_person(a.text, "staff");
+}
+
+function add_student(a)
+{
+    add_person(a.text, "student");
+}
+
 function add_person(username, role)
 {
     if (username == null)
@@ -182,68 +198,40 @@ function remove_assignment(title)
 
 /* Event handlers */
 
-$("#instructor_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#add_instructor").click();
-    }
-    else
-    {
-        get_people_suggestions($("#instructor_search_field").val(), $("#instructors_list"))
-    }
-});
+function make_member_html(user)
+{
+    return '<a href="#">'+user.username+'</a>';
+}
 
-$("#staff_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#add_staff").click();
-    }
-    else
-    {
-        get_people_suggestions($("#staff_search_field").val(), $("#staff_list"))
-    }
-});
+init_suggestions(
+        "username",
+        $("#instructor_search_field"),
+        $("#add_instructor"),
+        $("#instructors_list"),
+        make_member_html,
+        add_instructor);
 
-$("#student_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#add_student").click();
-    }
-    else
-    {
-        get_people_suggestions($("#student_search_field").val(), $("#students_list"))
-    }
-});
+init_suggestions(
+        "username",
+        $("#staff_search_field"),
+        $("#add_staff"),
+        $("#staff_list"),
+        make_member_html,
+        add_staff);
 
-$("#assignment_add_field").keyup(function(event){
+init_suggestions(
+        "username",
+        $("#student_search_field"),
+        $("#add_student"),
+        $("#students_list"),
+        make_member_html,
+        add_student);
+
+$("#assignment_number_field").keyup(function(event){
     if(event.keyCode == 13)
     {
         $("#add_assignment").click();
     }
-    else
-    {
-    }
-});
-
-$("#add_instructor").click(function(event){
-    add_person($("#instructors_list").find('a').first().text(), 'instructor');
-    $("#instructors_list").hide();
-    $("#instructors_list").empty();
-    $("#instructor_search_field").val('');
-});
-
-$("#add_staff").click(function(event){
-    add_person($("#staff_list").find('a').first().text(), 'staff');
-    $("#staff_list").empty();
-    $("#staff_list").hide();
-    $("#staff_search_field").val('');
-});
-
-$("#add_student").click(function(event){
-    add_person($("#students_list").find('a').first().text(), 'student');
-    $("#students_list").empty();
-    $("#students_list").hide();
-    $("#student_search_field").val('');
 });
 
 $("#add_assignment").click(function(event){
