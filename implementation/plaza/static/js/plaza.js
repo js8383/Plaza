@@ -86,14 +86,20 @@ function display_success(success)
 }
 
 
+function display_error(error)
+{
+    if (error != undefined)
+    {
+        $("#errors").children().remove();
+        append_error(error);
+    }
+}
 
-function display_error(xhr, status, errorThrown)
+function log_error(xhr, status, errorThrown)
 {
     console.log( "Error: " + errorThrown );
     console.log( "Status: " + status );
     console.dir( xhr );
-    $("#errors").children().remove()
-    append_error(errorThrown);
 }
 
 
@@ -173,7 +179,8 @@ function get_people_suggestions(input, dropdown_list)
             },
 
             error: function (xhr, status, errorThrown) {
-                display_error(xhr, status, errorThrown);
+                display_error(xhr.responseJSON.message);
+                log_error(xhr, status, errorThrown);
             }
         });
 }
@@ -226,7 +233,8 @@ function get_people_suggestions_with_profile(input, dropdown_list)
             },
 
             error: function (xhr, status, errorThrown) {
-                display_error(xhr, status, errorThrown);
+                display_error(xhr.responseJSON.message);
+                log_error(xhr, status, errorThrown);
             }
         });
 }
@@ -309,7 +317,8 @@ $("#course_search_field").keyup(function(event){
                 },
 
                 error: function (xhr, status, errorThrown) {
-                    display_error(xhr, status, errorThrown);
+                    display_error(xhr.responseJSON.message);
+                    log_error(xhr, status, errorThrown);
                 }
             });
     }

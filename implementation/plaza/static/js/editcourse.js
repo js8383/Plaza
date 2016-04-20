@@ -41,7 +41,8 @@ function add_assignment(title, number)
         },
 
         error: function (xhr, status, errorThrown) {
-            display_error(xhr, status, errorThrown);
+            display_error(xhr.responseJSON.message);
+            log_error(xhr, status, errorThrown);
         }
     });
 }
@@ -88,7 +89,8 @@ function add_person(username, role)
             },
 
             error: function (xhr, status, errorThrown) {
-                display_error(xhr, status, errorThrown);
+                display_error(xhr.responseJSON.message);
+                log_error(xhr, status, errorThrown);
             }
         });
     }
@@ -117,7 +119,8 @@ function ajax_remove(username, role)
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr, status, errorThrown);
+               display_error(xhr.responseJSON.message);
+               log_error(xhr, status, errorThrown);
            }
     });
 
@@ -170,7 +173,8 @@ function remove_assignment(title)
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr, status, errorThrown);
+               display_error(xhr.responseJSON.message);
+               log_error(xhr, status, errorThrown);
            }
     });
 
@@ -273,7 +277,8 @@ $("#course_pref_form").submit(function(event) {
         },
 
         error: function (xhr, status, errorThrown) {
-            display_error(xhr, status, errorThrown)
+            display_error(xhr.responseJSON.message);
+            log_error(xhr, status, errorThrown);
         }
     });
 

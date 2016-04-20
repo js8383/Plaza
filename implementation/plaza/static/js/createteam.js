@@ -58,7 +58,8 @@ $("#person_search_field").keyup(function(event){
                 },
 
                 error: function (xhr, status, errorThrown) {
-                    display_error(xhr, status, errorThrown);
+                    display_error(xhr.responseJSON.message);
+                    log_error(xhr, status, errorThrown);
                 }
             });
 
@@ -97,7 +98,8 @@ function submit_team()
             },
 
             error: function (xhr, status, errorThrown) {
-                display_error(xhr, status, errorThrown);
+                display_error(xhr.responseJSON.message);
+                log_error(xhr, status, errorThrown);
             }
         });
 
@@ -158,7 +160,8 @@ function get_person(username)
             },
 
             error: function (xhr, status, errorThrown) {
-                display_error(xhr, status, errorThrown);
+                display_error(xhr.responseJSON.message);
+                log_error(xhr, status, errorThrown);
             }
         });
     }

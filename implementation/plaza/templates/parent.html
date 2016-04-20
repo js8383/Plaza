@@ -52,10 +52,7 @@
                     {% if user.person.teams.count %}
                     {% for team in user.person.teams.all %}
                     <li>
-                    <a href="{% url 'myteamview'
-                        course_semester=team.assignment.course.semester
-                        course_number=team.assignment.course.number
-                        assignment_number=team.assignment.number %}">{{team}}</a></li>
+                    <a href="{% url 'myteamview' course_semester=team.assignment.course.semester course_number=team.assignment.course.number assignment_number=team.assignment.number %}">{{team}}</a></li>
                     {% endfor %}
                     {% else %}
                     <li><a href="#">No Teams</a></li>

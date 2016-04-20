@@ -26,7 +26,8 @@ function leave_team()
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr, status, errorThrown);
+               display_error(xhr.responseJSON.message);
+               log_error(xhr, status, errorThrown);
            }
     });
 
@@ -58,7 +59,8 @@ function add_person(teammate)
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr, status, errorThrown);
+               display_error(xhr.responseJSON.message);
+               log_error(xhr, status, errorThrown);
            }
     });
 }
