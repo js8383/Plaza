@@ -3,7 +3,7 @@ from tinymce.models import HTMLField
 
 from django.contrib.auth.models import User
 from django.db import models
-from datetime import datetime
+from datetime import datetime,date
 from time import time
 
 
@@ -145,12 +145,28 @@ class Resource(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='tag_resources')
-    child = models.ManyToManyField('self', related_name='resource_parent', symmetrical=False, null=True)
+    parent = models.ForeignKey('self', related_name='children', null=True)
 
     def __unicode__(self):
         return self.title
     def __str__(self):
         return self.__unicode__()
+
+    @property
+    def is_past_due(self):
+        if date.today() > self.due:
+            return True
+        return False
+
+    @property
+    def get_path(self):
+        result = "/" + self.title + "/"
+        p = self.parent
+        while p != None:
+            result = "/" + p.title + result
+            p = p.parent
+        return result
+
 
 # Modified by Jason
 class Notification(models.Model):

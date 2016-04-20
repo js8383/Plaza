@@ -115,7 +115,8 @@ class ResourceFileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super(ResourceFileForm, self).__init__(*args, **kwargs)
-        self.fields['file'].required = False
+        self.fields['notes'].required = False
+        # self.fields['file'].required = False
         self.fields['tags'].required = False
         self.fields['due'].required = False
         
@@ -146,6 +147,7 @@ class ResourceFolderForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '')
         super(ResourceFolderForm, self).__init__(*args, **kwargs)
+        self.fields['notes'].required = False
         
     class Meta:
         model = Resource
