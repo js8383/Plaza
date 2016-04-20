@@ -176,7 +176,6 @@ function remove_assignment(title)
 
 }
 
-
 /* Event handlers */
 
 $("#instructor_search_field").keyup(function(event){
@@ -186,6 +185,7 @@ $("#instructor_search_field").keyup(function(event){
     }
     else
     {
+        get_people_suggestions($("#instructor_search_field").val(), $("#instructors_list"))
     }
 });
 
@@ -196,6 +196,7 @@ $("#staff_search_field").keyup(function(event){
     }
     else
     {
+        get_people_suggestions($("#staff_search_field").val(), $("#staff_list"))
     }
 });
 
@@ -206,6 +207,7 @@ $("#student_search_field").keyup(function(event){
     }
     else
     {
+        get_people_suggestions($("#student_search_field").val(), $("#students_list"))
     }
 });
 
@@ -220,17 +222,20 @@ $("#assignment_add_field").keyup(function(event){
 });
 
 $("#add_instructor").click(function(event){
-    add_person($("#instructor_search_field").val(), 'instructor');
+    add_person($("#instructors_list").find('a').first().text(), 'instructor');
+    $("#instructors_list").hide();
     $("#instructor_search_field").val('');
 });
 
 $("#add_staff").click(function(event){
-    add_person($("#staff_search_field").val(), 'staff');
+    add_person($("#staff_list").find('a').first().text(), 'staff');
+    $("#staff_list").hide();
     $("#staff_search_field").val('');
 });
 
 $("#add_student").click(function(event){
-    add_person($("#student_search_field").val(), 'student');
+    add_person($("#students_list").find('a').first().text(), 'student');
+    $("#students_list").hide();
     $("#student_search_field").val('');
 });
 

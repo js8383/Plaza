@@ -123,6 +123,130 @@ $('#input-repl-1a').on('filecleared', function(event) {
 
 
 /*
+ * USER SEARCH
+ */
+function get_people_suggestions(input, dropdown_list)
+{
+    $.ajax({
+
+            url: "/dynamic_obj_suggestion/",
+
+            async: false,
+
+            data: {
+                input_type: "username",
+                input_data: input,
+                csrfmiddlewaretoken: getCSRFToken()
+            },
+
+            type: "POST",
+
+            dataType: "json",
+
+            success: function (response) {
+                dropdown_list.empty();
+                console.log(response);
+                if (response != null)
+                {
+                    for (var i = 0; i < response.length; i++)
+                    {
+                        var s = response[i];
+                        dropdown_list.append(
+                        '<li>'+
+                            '<a href="#">'+s.username+'</a></li>');
+                    }
+                    if (response.length != 0)
+                    {
+                        dropdown_list.show();
+                    }
+                    else
+                    {
+                        dropdown_list.hide();
+                    }
+                }
+                else
+                {
+                    dropdown_list.hide();
+                }
+            },
+
+            error: function (xhr, status, errorThrown) {
+                display_error(xhr, status, errorThrown);
+            }
+        });
+}
+
+function get_people_suggestions_with_profile(input, dropdown_list)
+{
+    $.ajax({
+
+            url: "/dynamic_obj_suggestion/",
+
+            async: false,
+
+            data: {
+                input_type: "username",
+                input_data: input,
+                csrfmiddlewaretoken: getCSRFToken()
+            },
+
+            type: "POST",
+
+            dataType: "json",
+
+            success: function (response) {
+                dropdown_list.empty();
+                console.log(response);
+                if (response != null)
+                {
+                    for (var i = 0; i < response.length; i++)
+                    {
+                        var s = response[i];
+                        dropdown_list.append(
+                        '<li>'+
+                            '<a href="/profile/'+s.user_id+'">'+s.username+'</a></li>');
+                    }
+                    if (response.length != 0)
+                    {
+                        dropdown_list.show();
+                    }
+                    else
+                    {
+                        dropdown_list.hide();
+                    }
+                }
+                else
+                {
+                    dropdown_list.hide();
+                }
+            },
+
+            error: function (xhr, status, errorThrown) {
+                display_error(xhr, status, errorThrown);
+            }
+        });
+}
+
+/* Event handlers */
+
+$("#user_search_field").keyup(function(event){
+    if(event.keyCode == 13)
+    {
+        $("#go_to_user").click();
+    }
+    else
+    {
+        get_people_suggestions_with_profile($("#user_search_field").val(), $("#users_list"))
+    }
+});
+
+$("#go_to_user").click(function(event){
+    $("#users_list").find("a")[0].click();
+    event.preventDefault();
+});
+
+
+/*
  * COURSE SEARCH
  */
 

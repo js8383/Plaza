@@ -29,7 +29,12 @@
                     {% endfor %}
                     <tr>
                         <td>
-                            <input type="text" class="form-control" id="instructor_search_field"></input>
+                            <input type="text" class="form-control"
+                            id="instructor_search_field" autocomplete="off"></input>
+                            <div class="dropdown">
+                                <ul id="instructors_list" class="dropdown-menu">
+                                </ul>
+                            </div>
                         </td>
                         <td>
                             <button class="btn btn-default" id="add_instructor">
@@ -58,7 +63,12 @@
                     {% endfor %}
                     <tr>
                         <td>
-                            <input type="text" class="form-control" id="staff_search_field"></input>
+                            <input type="text" class="form-control"
+                            id="staff_search_field" autocomplete="off"></input>
+                            <div class="dropdown">
+                                <ul id="staff_list" class="dropdown-menu">
+                                </ul>
+                            </div>
                         </td>
                         <td>
                             <button class="btn btn-default" id="add_staff">
@@ -89,7 +99,12 @@
                     {% endfor %}
                     <tr>
                         <td>
-                            <input type="text" class="form-control" id="student_search_field"></input>
+                            <input type="text" class="form-control"
+                                   id="student_search_field" autocomplete="off"></input>
+                            <div class="dropdown">
+                                <ul id="students_list" class="dropdown-menu">
+                                </ul>
+                            </div>
                         </td>
                         <td>
                             <button class="btn btn-default" id="add_student">
