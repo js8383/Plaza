@@ -2,6 +2,72 @@ var my_username = ""
 var course_number = -1
 var course_semester = ''
 
+function append_tag(name)
+{
+    $("#tag_table").prepend(
+        '<tr id="tag_'+name+'_row">'+
+            '<td>'+
+                name+
+            '</td>'+
+            '<td>'+
+                '<button class="btn btn-default"'+
+                    'onclick=remove_tag("'+name+'")>'+
+                    '<span class="glyphicon glyphicon-remove"></span></button>'+
+            '</td>'+
+        '</tr>'
+    );
+}
+
+function append_assignment(title, number)
+{
+    $("#assignment_table").prepend(
+        '<tr id="assignment_'+title+'_row">'+
+            '<td>'+
+                title+
+            '</td>'+
+            '<td>'+
+                number+
+            '</td>'+
+            '<td>'+
+                '<button class="btn btn-default"'+
+                    'onclick=remove_assignment("'+title+'")>'+
+                    '<span class="glyphicon glyphicon-remove"></span></button>'+
+            '</td>'+
+        '</tr>'
+    );
+}
+
+function add_tag(name)
+{
+    $.ajax({
+
+        url: "/add_tag_to_course/",
+
+        data: {
+            tag_name: name,
+            course_number: course_number,
+            course_semester: course_semester,
+            csrfmiddlewaretoken: getCSRFToken()
+        },
+
+        type: "POST",
+
+        dataType: "json",
+
+        success: function (message) {
+            display_success(message.message);
+            // add the user to the new roles table
+            append_tag(name);
+        },
+
+        error: function (xhr, status, errorThrown) {
+            display_error(xhr.responseJSON.message);
+            log_error(xhr, status, errorThrown);
+        }
+    });
+}
+
+
 function add_assignment(title, number)
 {
     $.ajax({
@@ -21,23 +87,12 @@ function add_assignment(title, number)
         dataType: "json",
 
         success: function (message) {
-            display_success(message.message);
             // add the user to the new roles table
-            $("#assignment_table").prepend(
-                '<tr id="'+title+'_row">'+
-                    '<td>'+
-                        title+
-                    '</td>'+
-                    '<td>'+
-                        number+
-                    '</td>'+
-                    '<td>'+
-                        '<button class="btn btn-default"'+
-                            'onclick=remove_assignment("'+title+'")>'+
-                            '<span class="glyphicon glyphicon-remove"></span></button>'+
-                    '</td>'+
-                '</tr>'
-            );
+            append_assignment(title, number);
+            // append a tag as well if
+            // one doesn't exist already
+            if (!($("#tag_"+title+"_row").length))
+                append_tag(title);
         },
 
         error: function (xhr, status, errorThrown) {
@@ -131,7 +186,7 @@ function ajax_remove(username, role)
     dataType: "json",
 
     success: function () {
-        $("#"+username+"_row").remove();
+        $("#assignment_"+username+"_row").remove();
     },
 
     error: function (xhr, status, errorThrown) {
@@ -165,6 +220,35 @@ function remove_person(username, role)
     }
 }
 
+function remove_tag(name)
+{
+    $.ajax({
+
+        url: "/remove_tag_from_course/",
+
+    data: {
+        tag_name: name,
+        course_number: course_number,
+        course_semester: course_semester,
+        csrfmiddlewaretoken: getCSRFToken()
+    },
+
+    type: "POST",
+
+    dataType: "json",
+
+    success: function (obj) {
+        $("#tag_"+name+"_row").remove();
+    },
+
+    error: function (xhr, status, errorThrown) {
+               display_error(xhr.responseJSON.message);
+               log_error(xhr, status, errorThrown);
+           }
+    });
+
+}
+
 
 function remove_assignment(title)
 {
@@ -184,8 +268,8 @@ function remove_assignment(title)
     dataType: "json",
 
     success: function (obj) {
-        display_success(obj.message);
-        $("#"+title+"_row").remove();
+        $("#assignment_"+title+"_row").remove();
+        $("#tag_"+title+"_row").remove();
     },
 
     error: function (xhr, status, errorThrown) {
@@ -226,6 +310,18 @@ init_suggestions(
         $("#students_list"),
         make_member_html,
         add_student);
+
+$("#tag_name_field").keyup(function(event){
+    if(event.keyCode == 13)
+    {
+        $("#add_tag").click();
+    }
+});
+
+$("#add_tag").click(function(event){
+    add_tag($("#tag_name_field").val());
+    $("#tag_name_field").val('');
+});
 
 $("#assignment_number_field").keyup(function(event){
     if(event.keyCode == 13)

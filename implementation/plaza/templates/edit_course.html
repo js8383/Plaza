@@ -214,7 +214,7 @@
                 </div>
                 <table class="table table-striped table-hover" id="assignment_table">
                     {% for assignment in course.assignments.all %}
-                    <tr id="{{assignment.title}}_row">
+                    <tr id="assignment_{{assignment.title}}_row">
                         <td>
                             {{assignment.title}}
                         </td>
@@ -240,6 +240,37 @@
                         </td>
                         <td>
                             <button class="btn btn-default" id="add_assignment">
+                                Add
+                            </button>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="display1"> Tags </div>
+                </div>
+                <table class="table table-striped table-hover" id="tag_table">
+                    {% for tag in course.tags.all %}
+                    <tr id="tag_{{tag.name}}_row">
+                        <td>
+                            {{tag.name}}
+                        </td>
+                        <td>
+                            <button class="btn btn-default"
+                                onclick="remove_tag('{{tag.name}}')">
+                                <span class="glyphicon glyphicon-remove"></span></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="tag_name_field">
+                            </input>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" id="add_tag">
                                 Add
                             </button>
                         </td>
