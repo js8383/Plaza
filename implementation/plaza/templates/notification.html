@@ -12,7 +12,7 @@
             <div class="panel-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#All" data-toggle="tab">All</a>
+                    <li class="active"><a href="#noti-999" data-toggle="tab">All</a>
                     </li>
 <!--                     <li><a href="#questions" data-toggle="tab">Questions</a>
                     </li>
@@ -26,8 +26,9 @@
 				      Your Questions <span class="caret"></span>
 				    </a>
 				    <ul class="dropdown-menu">
-				    	<li><a href="#Question-answer" data-toggle="tab">New Answer</a></li>
-				    	<li><a href="#Question-follow" data-toggle="tab">New Follow</a></li>
+				    	<li><a href="#noti-0" data-toggle="tab">New Answer</a></li>
+				    	<li><a href="#noti-1" data-toggle="tab">New Follow</a></li>
+				    	<li><a href="#noti-2" data-toggle="tab">New Comment</a></li>
 				    	<!-- <li><a href="#Question-assignment" data-toggle="tab">New Assignment</a></li> -->
 				    </ul>
 				    </li>
@@ -38,7 +39,8 @@
 				      Your Answers <span class="caret"></span>
 				    </a>
 				    <ul class="dropdown-menu">
-				    	<li><a href="#Answers-upvote" data-toggle="tab">New Upvote</a></li>
+				    	<li><a href="#noti-3" data-toggle="tab">New Upvote</a></li>
+				    	<li><a href="#noti-4" data-toggle="tab">New Downvote</a></li>
 				    	<!-- <li><a href="#Answers-comment" data-toggle="tab">Comment</a></li> -->
 				    </ul>
 				    </li>
@@ -49,7 +51,7 @@
 				      Your Comments <span class="caret"></span>
 				    </a>
 				    <ul class="dropdown-menu">
-				    	<li><a href="#Comments-reply" data-toggle="tab">New Reply</a></li>
+				    	<li><a href="#noti-5" data-toggle="tab">New Reply</a></li>
 				    </ul>
 				    </li>
 
@@ -58,7 +60,7 @@
 				      Following Tags <span class="caret"></span>
 				    </a>
 				    <ul class="dropdown-menu">
-				    	<li><a href="#Tags-questions" data-toggle="tab">New Questions</a></li>
+				    	<li><a href="#noti-6" data-toggle="tab">New Question</a></li>
 				    </ul>
 				    </li>
 
@@ -67,8 +69,18 @@
 				      People <span class="caret"></span>
 				    </a>
 				    <ul class="dropdown-menu">
-				    	<li><a href="#People-follow" data-toggle="tab">Follow Request</a></li>
-				    	<li><a href="#People-inmail" data-toggle="tab">InMail</a></li>
+				    	<li><a href="#noti-7" data-toggle="tab">New Follower</a></li>
+				    	<!-- <li><a href="#People-inmail" data-toggle="tab">InMail</a></li> -->
+				    </ul>
+				    </li>
+
+				    <li class="dropdown">
+				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+				      Team <span class="caret"></span>
+				    </a>
+				    <ul class="dropdown-menu">
+				    	<li><a href="#noti-8" data-toggle="tab">New Team</a></li>
+				    	<!-- <li><a href="#People-inmail" data-toggle="tab">InMail</a></li> -->
 				    </ul>
 				    </li>
 
@@ -77,7 +89,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="All">
+                    <div class="tab-pane fade in active" id="noti-999">
                         <br>
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading">
@@ -98,7 +110,7 @@
 				                            <p> notification.extra_content </p>
 
 				                            {% else %}
-				                            No additional description
+				                            No additional description 
 				                            {% endif %}
 				                            <hr>
 				                            <span class="pull-right">
@@ -136,10 +148,7 @@
 				                            {% else %}
 				                            No additional description
 				                            {% endif %}
-				                            <!-- <hr>
-				                            <span class="pull-right">
-				                            <button type="button" class="btn btn-outline btn-success btn-xs">Mark as read</button> -->
-				                            </span>
+				                            
 				                        </div>
 				                    </div>
 	                                {% endif %}
@@ -150,8 +159,88 @@
 
 
                     </div>
+
+                    {% for i in '012345678' %}
+                     <!-- {{ forloop.counter0}} -->
+
+                     <div class="tab-pane fade" id="noti-{{ forloop.counter0 }}">
+                        <br>
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">
+	                            Unread
+	                        </div>
+	                        <div class="panel-body">
+	                            {% for notification in notifications %}
+	                                <!-- {{ notification.action }} {{ forloop.parentloop.counter0 }} -->
+	                                {% if notification.status == "0" and notification.action|add:"0" == forloop.parentloop.counter0 %}
+                                    <div class="panel panel-warning">
+				                        <div class="panel-heading">
+				                            <a style="color:#ED9F35;" href="{{notification.destination}}">  {{ notification.sender}} {{notification.get_action_display}} </a>
+
+	                                     <span class="label label-warning label-pill pull-right">{{notification.created_at}}</span>
+				                        </div>
+				                        <div class="panel-body">
+				                            {% if notification.extra_content %}
+
+				                            <p> notification.extra_content </p>
+
+				                            {% else %}
+				                            No additional description
+				                            {% endif %}
+				                            <hr>
+				                            <span class="pull-right">
+				                            <form id="markreadform" method="post" action="{% url 'markreadnoti' notification.id %}">
+						                        {% csrf_token %}
+						                    </form>
+				                            <button type="submit" form="markreadform" class="btn btn-outline btn-warning btn-xs">Mark as read</button>
+				                            </span>
+				                        </div>
+				                    </div>
+	                                {% endif %}
+	                            {% endfor %}
+	                        </div>
+	                        
+	                    </div>
+
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">
+	                            Read
+	                        </div>
+	                        <div class="panel-body">
+	                            {% for notification in notifications %}
+	                                {% if notification.status == "1" and notification.action|add:"0" == forloop.parentloop.counter0 %}
+	                                <div class="panel panel-success">
+				                        <div class="panel-heading">
+				                            <a style="color:#4AAF46;" href="{{notification.destination}}">  {{ notification.sender}} {{notification.get_action_display}} </a>
+
+	                                     <span class="label label-success label-pill pull-right">{{notification.created_at}}</span>
+				                        </div>
+				                        <div class="panel-body">
+				                            {% if notification.extra_content %}
+
+				                            <p> notification.extra_content </p>
+
+				                            {% else %}
+				                            No additional description
+				                            {% endif %}
+				                            
+				                        </div>
+				                    </div>
+	                                {% endif %}
+	                            {% endfor %}
+	                        </div>
+	                        
+	                    </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
                     
                 </div>
+
+
             </div>
             <!-- /.panel-body -->
         </div>

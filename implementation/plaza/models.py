@@ -170,8 +170,8 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     sender = models.ForeignKey(Person, related_name='notifications_sent')
     receiver = models.ForeignKey(Person, related_name='notifications_received')
-    ACTON_CHOICES = (('0', " answered your question"), ('1', " followed your question"), ('2', " assigned you a question"), ('3', " upvoted your answer"),
-                     ('4', " commented your answer"), ('5', " replied to your comments"), ('6'," posted a new question in your following tag"), ('7', " followed you"))
+    ACTON_CHOICES = (('0', " answered your question"), ('1', " followed your question"), ('2', " commented your question"), ('3', " upvoted your answer"),
+                     ('4', " downvoted your answer"), ('5', " replied to your comments"), ('6'," posted a new question in your following tag"), ('7', " followed you"), ('8', " add you to a team"))
     action = models.CharField(max_length=1, choices=ACTON_CHOICES) 
     extra_content = models.CharField(max_length=256)
     STATUS_CHOICES = (('0', 'unseen'),('1', 'seen'))
