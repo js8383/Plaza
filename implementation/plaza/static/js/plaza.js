@@ -103,7 +103,7 @@ function log_error(xhr, status, errorThrown)
 }
 
 
-$('#dpicker').datepicker({});
+//$('#dpicker').datepicker({});
 
 // $("#my-checkbox").bootstrapSwitch();
 

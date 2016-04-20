@@ -126,9 +126,7 @@ def remove_person_from_course(request):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid",
-                                content_type="application/json",
-                                status=404)
+            return HttpJSONStatus("Request is not valid", status=404)
 
     course_number = request.POST.get("course_number", "")
     course_semester = request.POST.get("course_semester", "")
@@ -137,7 +135,7 @@ def remove_person_from_course(request):
 
     if (course_number == "" or course_semester == "" or
         username == "" or role == ""):
-        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+        return HttpJSONStatus("Invalid parameters", status=400)
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
@@ -148,15 +146,13 @@ def remove_person_from_course(request):
     elif role == 'student':
         group = course.students
     else:
-        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+        return HttpJSONStatus("Invalid parameters", status=400)
 
     # if we are removing an instructor, we need to check
     # that there are more in the course
     if role == 'instructor':
         if course.instructors.count() == 1:
-            return HttpResponse("Can't remove last instructor",
-                    content_type="applicaiton/json",
-                    status=400)
+            return HttpJSONStatus("Can't remove last instructor", status=400)
 
     user = get_object_or_404(User, username__exact=username)
 
@@ -165,7 +161,7 @@ def remove_person_from_course(request):
     if group.filter(username__exact=username).count() != 0:
         group.remove(user)
     else:
-        return HttpResponse("Not a member", content_type="application/json", status=400)
+        return HttpJSONStatus("Not a member", status=400)
 
     message = ("You have been removed from " + course_number + " " + course_semester +
                " as a " + role + ".")
@@ -185,16 +181,12 @@ def save_course_pref(request, course_number, course_semester):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid",
-                                content_type="application/json",
-                                status=404)
+            return HttpJSONStatus("Request is not valid", status=404)
 
     form = CourseForm(request.POST)
     # fix cleaning, error reporting
     if not form.is_valid():
-        return HttpResponse("Form is invalid",
-                            content_type="application/json",
-                            status=404)
+        return HttpJSONStatus("Form is invalid", status=404)
 
     course = get_object_or_404(
                 Course,
@@ -210,9 +202,7 @@ def save_course_pref(request, course_number, course_semester):
     course.public = form.cleaned_data['public']
     course.save()
 
-    json_obj = {"message": "Successfully updated"}
-
-    return HttpResponse(json.dumps(json_obj), content_type='application/json')
+    return HttpJSONStatus("Successfully updated", status=200)
 
 @login_required
 @transaction.atomic
@@ -283,7 +273,7 @@ def add_person_to_course(request):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid", content_type="application/json", status=404)
+            return HttpJSONStatus("Request is not valid", status=404)
 
     course_number = request.POST.get("course_number", "")
     course_semester = request.POST.get("course_semester", "")
@@ -292,7 +282,7 @@ def add_person_to_course(request):
 
     if (course_number == "" or course_semester == "" or
         username == "" or role == ""):
-        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+        return HttpJSONStatus("Invalid parameters", status=400)
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
@@ -303,10 +293,10 @@ def add_person_to_course(request):
     elif role == 'student':
         group = course.students
     else:
-        return HttpResponse("Invalid parameters", content_type="application/json", status=400)
+        return HttpJSONStatus("Invalid parameters", status=400)
 
     if group.filter(username__exact=username).count() != 0:
-        return HttpResponse("Already a member", content_type="application/json", status=400)
+        return HttpJSONStatus("Already a member", status=400)
 
     user = get_object_or_404(User, username__exact=username)
 
@@ -375,12 +365,10 @@ def add_person_to_team(request):
     team.members.add(user.person)
     team.save()
 
-    team_post_id = -team.id
-    p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = c, post_type = 2)
-    p.save()
-
-
-    return HttpJSONStatus("Added " +username+ " to team!", status=200)
+    return HttpResponse(
+            json.dumps(user_as_simple_json(user)),
+            content_type="application/json",
+            status=200)
 
 @login_required
 @transaction.atomic
@@ -472,7 +460,7 @@ def my_team_page(request, course_number, course_semester, assignment_number):
     try:
         assignment = course.assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
-        return HttpResponse("Invalid assignment", status=400)
+        return HttpJSONStatus("Invalid assignment", status=400)
 
     person = request.user.person
     try:
@@ -533,7 +521,7 @@ def view_post(request, post_id):
     posts = [Post.objects.get(id=root_id)]
     posts += Post.objects.filter(root_id=root_id)
 
-    
+
     context = {'posts' : posts }
     context['root_id'] = root_id
     context['course_id'] = p.course.number
@@ -713,13 +701,13 @@ def search_student(request):
     if not request.is_ajax():
         if request.method != 'POST':
             # respond with error
-            return HttpResponse("Request is not valid", status=404)
+            return HttpJSONStatus("Request is not valid", status=404)
 
 
     username = request.POST.get("username","")
 
     if username == "":
-        return HttpResponse("Username not provided", status=404)
+        return HttpJSONStatus("Username not provided", status=404)
 
     user_acc = get_object_or_404(User, username__exact=username)
 
