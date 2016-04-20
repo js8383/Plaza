@@ -111,7 +111,6 @@ class Item(models.Model):
         return self.__unicode__()
 
 
-
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
     number = models.IntegerField(default=0)
@@ -167,26 +166,20 @@ class Resource(models.Model):
 
 # Modified by Jason
 class Notification(models.Model):
-    # title = models.CharField(max_length=128)
-    # text = models.CharField(max_length=128)
-    course = models.ForeignKey(Course)
+    # course = models.ForeignKey(Course)
     created_at = models.DateTimeField(auto_now_add=True)
     sender = models.OneToOneField(Person, related_name='notifications_sent')
     receiver = models.OneToOneField(Person, related_name='notifications_received')
-
-    ACTION_CHOICES = (('ANSWER', "answered"), ('FOLLOW', "followed"), ('ASSIGN', "invited "))
-    action = models.CharField(max_length=10, choices=ACTION_CHOICES)
-
-    target_text = models.CharField(max_length=128)
-    target_link = models.URLField(max_length=300)
-
+    ACTON_CHOICES = (('0', " answered your question"), ('1', " followed your question"), ('2', " assigned you a question"), ('3', " upvoted your answer"),
+                     ('4', " commented your answer"), ('5', " replied to your comments"), ('6'," posted a new question in your following tag"), ('7', " followed you"))
+    action = models.CharField(max_length=1, choices=ACTON_CHOICES) 
+    extra_content = models.CharField(max_length=256)
     STATUS_CHOICES = (('0', 'unseen'),('1', 'seen'))
     status =  models.CharField(max_length=1, choices=STATUS_CHOICES,  default='0')
-
-    destination = models.URLField(max_length=300)
+    destination = models.URLField(max_length=256)
 
     def __unicode__(self):
-        return self.title
+        return self.sender + self.get_action_display() + " (" + extra_content + ")"
     def __str__(self):
         return self.__unicode__()
 

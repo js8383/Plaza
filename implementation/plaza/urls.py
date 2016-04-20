@@ -25,7 +25,7 @@ urlpatterns = [
 
     url(r'^login$', auth_views.login, {'template_name':'login.html'}, name='login'),
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
-
+    
     url(r'^administration/(?P<id>\d+)$', plaza_views.administration_page, name='administration'),
 
     url(r'^$', plaza_views.home_page, name='home'),

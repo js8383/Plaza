@@ -1,0 +1,34 @@
+/*#unfollowbtn {
+	background-color: #5cb85c;
+}*/
+
+#unfollowbtn:hover{
+  background-color: #f0ad4e;
+  border-color: #eea236;
+}
+
+#unfollowbtn:hover span{
+  display: none;
+}
+
+#unfollowbtn:hover:before{
+  content: "Click to unfollow";
+}
+
+/*#followbtn {
+  background-color: #f0ad4e;
+}
+*/
+#followbtn:hover{
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+
+#followbtn:hover span{
+  display: none;
+}
+
+#followbtn:hover:before{
+  content: "Click to follow";
+}

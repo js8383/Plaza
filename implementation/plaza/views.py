@@ -795,25 +795,29 @@ def search(request):
 # All notifications stuff and resources and etc.
 
 # General notification API
-def save_and_notify(nfilter, sender, receiver, action, target):
-    if nfilter == "People":
-        if action == "FOLLOW":
-            notification = Notification(sender=sender, receiver=receiver, action=action, target_text="you")
-            notification.save()
-            # notify the leancloud api
+def save_and_notify(action, sender, receiver, extra_content, destination):
+    notification = Notification(action=action, sender=sender, receiver=receiver, extra_content=extra_content, destination=destination)
+    notification.save()
     return
 
 # @login_required
 @transaction.atomic
 def follow_user(request, id):
-    user = request.user
-    save_and_notify("People", user, user, "FOLLOW", "")
-    return
+    person = request.user.person
+    # save_and_notify("People", user, user, "FOLLOW", "")
+    target_user = User.objects.get(id=id)
+    person.following.add(target_user)
+    return redirect(reverse('profile', kwargs={'id': id}))
 
 # @login_required
 @transaction.atomic
 def unfollow_user(request,id):
-    return
+    person = request.user.person
+    # save_and_notify("People", user, user, "FOLLOW", "")
+    target_user = User.objects.get(id=id)
+    person.following.add(target_user)
+    person.following.remove(target_user)
+    return redirect(reverse('profile', kwargs={'id': id}))
 
 # @login_required
 def get_profile_picture(request, id):
@@ -863,8 +867,11 @@ def staffhome_page(request, id):
 # @login_required
 def profile_page(request, id):
     context = {}
-    context["person"] = request.user.person
-    context["target_id"] = id
+    user = User.objects.get(id=id)
+    context["person"] = user.person
+    context["request_id"] = request.user.id
+    if user in request.user.person.following.all():
+        context['following'] = 'Yes'
     return render(request, "profile.html", context)
 
 # @login_required
