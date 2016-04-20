@@ -9,6 +9,57 @@ $("#person_search_field").keyup(function(event){
     }
     else
     {
+        $.ajax({
+
+                url: "/dynamic_obj_suggestion/",
+
+                async: false,
+
+                data: {
+                    input_type: "username",
+                    input_data: $("#person_search_field").val(),
+                    course_number: course_number,
+                    course_semester: course_semester,
+                    csrfmiddlewaretoken: getCSRFToken()
+                },
+
+                type: "POST",
+
+                dataType: "json",
+
+                success: function (response) {
+                    $("#student_list").empty();
+                    console.log(response);
+                    if (response != null)
+                    {
+                        for (var i = 0; i < response.length; i++)
+                        {
+                            var s = response[i];
+                            $("#students_list").empty();
+                            $("#students_list").append(
+                            '<li>'+
+                                '<a href="#">'+s.username+'</a></li>');
+                        }
+                        if (response.length != 0)
+                        {
+                            $("#students_list").show();
+                        }
+                        else
+                        {
+                            $("#students_list").hide();
+                        }
+                    }
+                    else
+                    {
+                        $("#students_list").hide();
+                    }
+                },
+
+                error: function (xhr, status, errorThrown) {
+                    display_error(xhr, status, errorThrown);
+                }
+            });
+
     }
 });
 
@@ -112,7 +163,8 @@ function get_person(username)
 }
 
 $("#add_person").click(function(event){
-    get_person($("#person_search_field").val());
+    get_person($("#students_list").find('a').first().text());
+    $("#students_list").hide();
     $("#person_search_field").val('');
 });
 
