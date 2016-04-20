@@ -26,7 +26,8 @@ function leave_team()
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr.responseJSON.message);
+               if (xhr.response != undefined)
+                    display_error(xhr.responseJSON.message);
                log_error(xhr, status, errorThrown);
            }
     });
@@ -50,7 +51,8 @@ function add_person(teammate)
     dataType: "json",
 
     success: function (user) {
-        $('#member_table').append(
+        console.log(user);
+        $('#member_table').prepend(
         '<tr>'+
             '<td>'+user.first_name+' '+user.last_name+'</td>'+
             '<td>'+user.username+'</td>'+
@@ -59,7 +61,8 @@ function add_person(teammate)
     },
 
     error: function (xhr, status, errorThrown) {
-               display_error(xhr.responseJSON.message);
+               if (xhr.response != undefined)
+                   display_error(xhr.responseJSON.message);
                log_error(xhr, status, errorThrown);
            }
     });
@@ -68,17 +71,21 @@ function add_person(teammate)
 $("#student_search_field").keyup(function(event){
     if(event.keyCode == 13)
     {
-        $("#add_student").click();
+        $("#add_member").click();
     }
     else
     {
+       get_people_suggestions($("#student_search_field").val(),$("#students_list"));
     }
 });
 
 $("#add_member").click(function(event){
-    add_person($("#person_search_field").val());
-    $("#person_search_field").val('');
+    add_person($("#students_list").find('a').first().text(), 'student');
+    $("#students_list").empty();
+    $("#students_list").hide();
+    $("#student_search_field").val('');
 });
+
 $("#alert_cancel").click(function(event){
     $("#alert_leave").modal("hide");
 });
