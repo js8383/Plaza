@@ -484,6 +484,7 @@ def my_team_page(request, course_number, course_semester, assignment_number):
     context['team_members'] = team.members
     context['team_name'] = team.name
     context['team_id'] = team.id
+    context['post_id'] = -int(team.id)
 
     return render(request, "my_team_page.html", context)
 
