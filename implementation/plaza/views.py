@@ -195,8 +195,6 @@ def save_course_pref(request, course_number, course_semester):
                 semester=course_semester)
 
     course.name = form.cleaned_data['name']
-    course.number = form.cleaned_data['number']
-    course.semester = form.cleaned_data['semester']
     course.max_enroll = form.cleaned_data['max_enroll']
     course.description = form.cleaned_data['description']
     course.access_code = form.cleaned_data['access_code']
@@ -506,7 +504,7 @@ def forum(request, semester_id, course_id):
     q = request.GET.get('q', '')
     for search_term in q.split():
       posts=posts.filter(Q(title__icontains = search_term) | Q(text__icontains = search_term))
-    
+
 
     context = {'posts' : posts }
     filters = [ ('All',24),('Unread',18) ]

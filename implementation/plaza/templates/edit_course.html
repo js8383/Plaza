@@ -131,7 +131,8 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Course Number</label>
-                                    <input name="number" class="form-control" value="{{course.number}}">
+                                    <input name="number" class="form-control"
+                                    value="{{course.number}}" readonly>
                                 </div>
                             </div>
 
@@ -145,7 +146,8 @@
                             <div class="col-lg-2">
                                 <div class="form-group">
                                     <label>Semester</label>
-                                    <input name="semester" class="form-control" value="{{course.semester}}">
+                                    <input name="semester" class="form-control"
+                                    value="{{course.semester}}" readonly>
                                 </div>
                             </div>
 
@@ -183,10 +185,12 @@
 
                             <div class="col-lg-2">
                                 <label>Public</label>
-                                <div class="checkbox">
+                                <div class="form-group">
                                     &nbsp;&nbsp;
                                     <label>
-                                        <input name="public" type="checkbox" value="{{course.public}}">
+                                        <input name="public"
+                                        type="checkbox"
+                                        {% if course.public %} checked {%endif%}>
                                     </label>
                                 </div>
                             </div>
