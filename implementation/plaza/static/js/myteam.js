@@ -34,8 +34,9 @@ function leave_team()
 
 }
 
-function add_person(teammate)
+function add_person(a)
 {
+    var teammate = a.text;
     $.ajax({
 
         url: "/add_person_to_team/",
@@ -68,23 +69,21 @@ function add_person(teammate)
     });
 }
 
-$("#student_search_field").keyup(function(event){
-    if(event.keyCode == 13)
-    {
-        $("#add_member").click();
-    }
-    else
-    {
-       get_people_suggestions($("#student_search_field").val(),$("#students_list"));
-    }
-});
+function make_member_html(user)
+{
+    return '<a href="#">'+user.username+'</a>';
+}
 
-$("#add_member").click(function(event){
-    add_person($("#students_list").find('a').first().text(), 'student');
-    $("#students_list").empty();
-    $("#students_list").hide();
-    $("#student_search_field").val('');
-});
+init_suggestions(
+        "username",
+        $("#student_search_field"),
+        $("#add_member"),
+        $("#students_list"),
+        make_member_html,
+        add_person,
+        course_semester,
+        course_number);
+
 
 $("#alert_cancel").click(function(event){
     $("#alert_leave").modal("hide");
