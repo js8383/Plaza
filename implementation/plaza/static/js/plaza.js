@@ -35,6 +35,11 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+// remove special characters
+function remove_special(str) {
+     return str.replace(/([!@~#%^&*{}()_=+$`\[\]\|\\:;'<>\/? .,])+/g, '');
+}
+
 
 function remove_tag(type, id)
 {
