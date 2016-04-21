@@ -71,21 +71,20 @@
             <div class="panel-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#Recent" data-toggle="tab">Recent</a>
+
+                    <li class="active"><a href="#questions" data-toggle="tab">Questions</a>
                     </li>
-                    <li><a href="#questions" data-toggle="tab">Questions</a>
+                    
+                    <li><a href="#ctaught" data-toggle="tab">Courses Instructed</a>
                     </li>
-                    <li><a href="#answers" data-toggle="tab">Answers</a>
-                    </li>
-                    <li><a href="#courses" data-toggle="tab">Courses</a>
-                    </li>
-                    <li><a href="#topics" data-toggle="tab">Topics</a>
+
+                    <li><a href="#cjoined" data-toggle="tab">Courses Attended</a>
                     </li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="Recent">
+                    <!-- <div class="tab-pane fade in active" id="Recent">
                         <ul class="list-unstyled">
                         <br>
                         <li> <h4>What's your name?</h4>
@@ -94,8 +93,27 @@
                         <li> <h4>What's your name?</h4>
                         <p>Jason Song</p> </li>
                         </ul>
+                    </div> -->
+
+                    <div class="tab-pane fade in active" id="questions">
+
+                        <ul class="list-unstyled">
+                        <br>
+                        {% for rp in recentpost %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                    <h4 class="panel-title"> {{ rp.title }}
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                            {{ rp.text | safe }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        </ul>
                     </div>
-                    <div class="tab-pane fade" id="questions">
+
+                    <!-- <div class="tab-pane fade" id="answers">
                         <ul class="list-unstyled">
                         <br>
                         <li> <h4>What's your name?</h4>
@@ -104,31 +122,33 @@
                         <li> <h4>What's your name?</h4>
                         <p>Jason Song</p> </li>
                         </ul>
-                    </div>
-                    <div class="tab-pane fade" id="answers">
+                    </div> -->
+
+                    <div class="tab-pane fade" id="ctaught">
                         <ul class="list-unstyled">
                         <br>
-                        <li> <h4>What's your name?</h4>
-                        <p>Jason Song</p> </li>
-                        <hr>
-                        <li> <h4>What's your name?</h4>
-                        <p>Jason Song</p> </li>
+                        {% for c in taughtcourse %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                    <h4 class="panel-title"> {{ c }}
+                                </h4>
+                            </div>
+                        </div>
+                        {% endfor %}
                         </ul>
                     </div>
-                    <div class="tab-pane fade" id="courses">
+
+                    <div class="tab-pane fade" id="cjoined">
                         <ul class="list-unstyled">
                         <br>
-                        <li><h4>15-437 Web Application Development</h4></li> 
-                        <hr>
-                        <li><h4>15-418 Parallel Computer Architecture and Programming</h4></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="topics">
-                         <ul class="list-unstyled">
-                        <br>
-                        <li><h4>Django programming</h4></li> 
-                        <hr>
-                        <li><h4> AWS Deployment</h4></li>
+                        {% for c in joinedcourse %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                    <h4 class="panel-title"> {{ c }}
+                                </h4>
+                            </div>
+                        </div>
+                        {% endfor %}
                         </ul>
                     </div>
                 </div>

@@ -1134,7 +1134,7 @@ def staffhome_page(request, id):
     # With different users, display either home/staff home page
     return render(request, "staff_home.html",{})
 
-# @login_required
+@login_required
 def profile_page(request, id):
     context = {}
     user = User.objects.get(id=id)
@@ -1142,6 +1142,12 @@ def profile_page(request, id):
     context["request_id"] = request.user.id
     if user in request.user.person.following.all():
         context['following'] = 'Yes'
+    recentpost = Post.objects.filter(author=user.person).order_by('-created_at')
+    joinedcourse = user.courses_taken.all()
+    taughtcourse = user.courses_managed.all()
+    context['recentpost'] = recentpost
+    context['joinedcourse'] = joinedcourse
+    context['taughtcourse'] = taughtcourse
     return render(request, "profile.html", context)
 
 # @login_required
