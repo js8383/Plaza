@@ -74,28 +74,9 @@ function updownvote(post_id,vote_type)
           display_error(msg.message);
         }
         if (req.status != 200) return;
-        display_success("Voted successfully");
-
-        console.log("debug: ");
-        console.log($("#post_"+post_id));
-        console.log($("#post_"+post_id).find("col-sm-4"));
-        console.log($("#post_"+post_id).find("col-sm-4")[0]);
-        console.log($("#post_"+post_id).find("col-sm-4")[0].find("span"));
-        console.log($("#post_"+post_id).find("col-sm-4")[0].find("span")[0]);
-        console.log($("#post_"+post_id).find("col-sm-4")[0].find("span")[0].val());
-        if (vote_type == "upvote")
-        {
-            cnt = $("#post_"+post_id).find("col-sm-4")[0].find("span")[0].val();
-            cnt++;
-            $("#post_"+post_id).find("col-sm-4")[0].find("span")[0].val(cnt);
-        }
-        else
-        {
-            cnt = $("#post_"+post_id).find("col-sm-4")[0].find("span")[1].val();
-            cnt--;
-            $("#post_"+post_id).find("col-sm-4")[0].find("span")[1].val(cnt);
-        }
-
+        count = parseInt(($('#'+vote_type+'_'+post_id)[0]).innerHTML);
+        ($('#'+vote_type+'_'+post_id)[0]).innerHTML = ''+(count+1);
+        
         var msg = JSON.parse(req.responseText);
     }
     req.open("GET", "/"+vote_type+"/" + post_id ,true);

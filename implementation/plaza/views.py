@@ -758,6 +758,7 @@ def view_post(request, post_id):
     posts = [p]
     root_id = p.id
 
+  c = p.course
   if not user_has_permission(request.user, p.course, Role.student):
     return redirect('coursesignup', c.semester, c.number)
 

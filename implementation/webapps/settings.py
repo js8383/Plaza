@@ -25,7 +25,7 @@ SECRET_KEY = '01ny2_&#6nle+kw01@6*o3o35x+=_ig7-a%0xrtok8fcy*ugcm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['52.2.170.72','plaza.theproject.zone']
 
 
 # Application definition

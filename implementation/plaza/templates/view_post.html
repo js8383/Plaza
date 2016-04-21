@@ -39,8 +39,8 @@
         <div class="row">
           <div class="col-sm-4">
             {% if post.author %}
-            <a href="javascript:updownvote({{post.id}},'upvote')"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a><span><sub>{{post.upvoters.count}}</sub></span>
-            <a href="javascript:updownvote({{post.id}},'downvote')"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a><span><sub>{{post.downvoters.count}}</sub></span>
+            <a href="javascript:updownvote({{post.id}},'upvote')"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a><span><sub id="upvote_{{post.id}}">{{post.upvoters.count}}</sub></span>
+            <a href="javascript:updownvote({{post.id}},'downvote')"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a><span><sub id="downvote_{{post.id}}">{{post.downvoters.count}}</sub></span>
             {% endif %}
             {% if user == post.author.user or instructor %}
             <button class="btn btn-sm btn-warning" id="edit_{{post.id}}" onclick="edit_text({{post.id}})">Edit</button>
