@@ -54,17 +54,14 @@
         </div>
         <div class="col-sm-4">
           {% if post.author %}
-          <p>Posted by <a href="{% url 'profile' 1  %}">{{ post.author }}</a></p>
+          <p>Posted by <a href="{% url 'profile' post.author.id  %}" target="_top">{{ post.author }}</a> at {{post.created_at|date:"M d, H:m"}}</p>
+
           {% endif %}
           {% if post.assignee %}
           <p>Assigned to <a href="{% url 'profile' 1  %}">{{ post.assignee }}</a></p> 
           {% endif %}
         </div>
         <div class="col-sm-4">
-          {% if post.author %}
-          <p>Creation time&nbsp;&nbsp; : {{post.created_at|date:"d M Y H:m"}}</p>
-          <p>Last updated at : {{post.updated_at|date:"d M Y H:m"}}</p>
-          {% endif %}
         </div>
       </div>
     </div>

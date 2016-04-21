@@ -101,6 +101,8 @@ urlpatterns = [
             name='removepersonfromcourse'),
     url(r'^dynamic_obj_suggestion/', plaza_views.dynamic_obj_suggestion,
             name='dynamicobjsuggestion'),
+    url(r'^get_new_posts_json/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<post_id>\d+)$',plaza_views.get_new_posts_json, name='get_new_posts_json'),
 
+    # Rich Text uses TinyMCE
     url(r'^tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
