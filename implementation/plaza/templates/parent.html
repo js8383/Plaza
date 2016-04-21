@@ -189,8 +189,8 @@
                 <div class="container-fluid">
 
                     <!-- Error and Status messages -->
-                    {% if errors or statuses %}
                     <div class="container">
+                        <br>
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2" id="errors">
                             {% for e in errors %}
@@ -214,7 +214,6 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
 
                     {% block content %}
                     {% endblock %}
