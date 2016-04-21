@@ -106,7 +106,7 @@ def register(request):
 
     # Mark the user as inactive to prevent login before email confirmation.
     new_user.save()
-    new_person, created = Person.objects.get_or_create(user=new_user)
+    new_person, created = Person.objects.get_or_create(user=new_user, nickname=new_user.username)
     new_person.save()
 
     # Create a default user profile image
@@ -1200,58 +1200,64 @@ def team_creation_page(request, course_number, course_semester, assignment_numbe
 
     return render(request, "team_creation.html", context)
 
-def resource_page(request, id):
+def resource_page(request, semester_id, course_id, id):
 	# Show the page of resources (notes, videos)
 	# For staff, there's an optiona for uploading new resources
     context = {}
+    context['sid'] = semester_id
+    context['cid'] = course_id
     if id != '0':
         context['parent'] = Resource.objects.get(id=id)
     context['parent_rid'] = id
     context['resource_file_form'] = ResourceFileForm()
     context['resource_folder_form'] = ResourceFolderForm()
     if id == '0':
-        resources = Resource.objects.filter(parent=None)
+        c = Course.objects.get(semester=semester_id,number=course_id)
+        resources = Resource.objects.filter(parent=None, course=c)
         context['resources'] = resources
     else:
         resources = Resource.objects.get(id=id).children.all()
         context['resources'] = resources
     return render(request, "resources.html", context)
 
-def create_resource(request, id):
+def create_resource(request, semester_id, course_id, id):
     rtype = request.POST.get('rtype', False)
+    c = Course.objects.get(semester=semester_id,number=course_id)
     parent = None
     if id != '0':
         parent = Resource.objects.get(id=id)
     if rtype == "folder":
-        resource = Resource(resource_type='F', parent=parent)
+        resource = Resource(resource_type='F', parent=parent, course=c)
         resource_folder_form = ResourceFolderForm(request.POST, instance=resource)
         resource_folder_form.save()
     if rtype == "file":
-        resource = Resource(resource_type='P', parent=parent)
+        resource = Resource(resource_type='P', parent=parent, course=c)
         resource_file_form = ResourceFileForm(request.POST, request.FILES, instance=resource)
         if not resource_file_form.is_valid():
             errors = json.dumps([{'errors': True}, resource_file_form.errors])
             return HttpResponse(errors, content_type='application/json')
         resource_file_form.save()
-    return redirect(reverse('resource', kwargs={'id':id}))
+    return redirect(reverse('resource', kwargs={'semester_id':semester_id, 'course_id':course_id, 'id':id}))
 
-def delete_resource(request, id):
+def delete_resource(request, semester_id, course_id, id):
+    print id, "fuck"
     parent = Resource.objects.get(id=id).parent
     pid = 0
     if parent:
         pid = parent.id
     resource = Resource.objects.filter(id=id)
     resource.delete()
-    return redirect(reverse('resource', kwargs={'id':pid}))
+    return redirect(reverse('resource', kwargs={'semester_id':semester_id, 'course_id':course_id, 'id':pid}))
 
-def resource_parent(request, id):
+
+def resource_parent(request, semester_id, course_id, id):
     if id == '0':
-        return redirect(reverse('resource', kwargs={'id':0}))
+        return redirect(reverse('resource', kwargs={'semester_id':semester_id, 'course_id':course_id, 'id':id}))
     parent = Resource.objects.get(id=id).parent
     pid = 0
     if parent:
         pid = parent.id
-    return redirect(reverse('resource', kwargs={'id':pid}))
+    return redirect(reverse('resource', kwargs={'semester_id':semester_id, 'course_id':course_id, 'id':pid}))
 
 
 

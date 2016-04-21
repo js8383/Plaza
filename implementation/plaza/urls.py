@@ -50,11 +50,11 @@ urlpatterns = [
         plaza_views.my_team_page, name='myteamview'),
 
     ## Resource urls ##
-    url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
-    url(r'^resource/(?P<id>\d+)$', plaza_views.resource_page, name='resource'),
-    url(r'^createresource/(?P<id>\d+)$', plaza_views.create_resource, name='createresource'),
-    url(r'^deleteresource/(?P<id>\d+)$', plaza_views.delete_resource, name='deleteresource'),
-    url(r'^resourceparent/(?P<id>\d+)$', plaza_views.resource_parent, name='resourceparent'),
+    # url(r'^resourceslide$', plaza_views.resource_slide_page, name='resourceslide'),
+    url(r'^resource/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<id>\d+)$', plaza_views.resource_page, name='resource'),
+    url(r'^createresource/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<id>\d+)$', plaza_views.create_resource, name='createresource'),
+    url(r'^deleteresource/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<id>\d+)$', plaza_views.delete_resource, name='deleteresource'),
+    url(r'^resourceparent/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<id>\d+)$', plaza_views.resource_parent, name='resourceparent'),
 
     url(r'^forum/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum, name='forum'),
     url(r'^forum_home/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum_home, name='forum_home'),
