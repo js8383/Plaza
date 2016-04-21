@@ -501,7 +501,7 @@ def add_person_to_team(request):
         return HttpJSONStatus("Team does not exist!", status=400)
 
     # Check if the user is actually in the team
-    if not team.members.filter(person=user.person).exists():
+    if not team.members.filter(id=request.user.person.id).exists():
         return HttpJSONStatus("Cannot add a person to a team you're not part of!", status=400)
 
     assignment = team.assignment
