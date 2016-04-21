@@ -37,7 +37,7 @@
 				</div>
 				<div class="col-lg-12"> 
 				<hr>
-				<b>100</b> Followers &nbsp; - &nbsp; <b>100</b> Followings &nbsp; - &nbsp; <b>100</b> Upvotes 
+				<b>{{ person.user.follows.count }}</b> Followers &nbsp; - &nbsp; <b>{{ person.following.all.count }}</b> Followings &nbsp; - &nbsp; <b>0</b> Upvotes 
 				<span class="pull-right">
 
                 {% if request_id != person.user.id %}

@@ -133,7 +133,7 @@ class Assignment(models.Model):
 
 
 class Resource(models.Model):
-    # course = models.ForeignKey(Course, related_name='resources')
+    course = models.ForeignKey(Course, related_name='resources')
     title = models.CharField(max_length=128)
     notes = models.CharField(max_length=128)
     RTYPE_CHOICES = (('P', 'Plain'), ('D', 'Document'), ('V', 'Video'), ('F', 'Folder'),('N', 'N/A'))

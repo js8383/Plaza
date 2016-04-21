@@ -338,6 +338,7 @@ var pusher = new Pusher('692221dea02c47027435', {
 
 var channel = pusher.subscribe('noti_channel');
 channel.bind('my_event', function(data) {
+    console.log("wtf");
     update_unread_number();
 });
 

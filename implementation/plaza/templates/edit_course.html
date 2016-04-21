@@ -3,6 +3,7 @@
 
 {% block nav %}
 <li><a href="{% url 'forum' semester_id=course.semester course_id=course.number %}">Forum</a></li>
+<li><a href="{% url 'resource' course.semester course.number 0 %}">Resource</a></li>
 <li class="active"><a href="#">Manage Course</a></li>
 {% endblock %}
 
