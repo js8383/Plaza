@@ -9,31 +9,30 @@
   <form method="POST"> 
     {{form.errors}}
     {{form.non_field_errors}}
-    <div class = "page-header">
+    <div>
       <h1>Post to {{semester_id}}_{{course_id}}</h1>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="form-group col-lg-4 col-lg-offset-1">
+  <div class="form-group col-sm-4">
     <label>Enter a short summary of your post (max 128 characters)</label>
     <input name="title" value="" class="form-control" placeholder="Enter title here">
   </div>
 </div>
 
 {% for element in form %}
+{% if element.label == 'Text' %}
 <div class="row">
-  {% if element.label == 'Text' %}
-  <div class="row">
-    <div class="form-group col-lg-4 col-lg-offset-1">
-      <label>{{ element.label }}</label>{{ element }} 
-    </div>
+  <div class="form-group col-sm-4">
+    <label>{{ element.label }}</label> 
+    <div>{{element}}</div>
   </div>
-  {% endif %}
-  {% endfor %}
 </div>
+{% endif %}
+{% endfor %}
 <div class="row">
-  <div class="form-group col-lg-4 col-lg-offset-1">
+  <div class="form-group col-sm-4 ">
     {% if tags %}
     <label>Tags</label> 
     {% endif %}
@@ -47,7 +46,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="form-group col-lg-4 col-lg-offset-1" {% if typeslength < 2 %} style="display:none" {% endif %} >
+  <div class="form-group col-sm-4 " {% if typeslength < 2 %} style="display:none" {% endif %} >
     <label>Type of post</label> 
     <select class="form-control" name="post_type">
       {% for element in types %}
@@ -56,9 +55,9 @@
     </select>
   </div>
 </div>
-<div class="form-group col-lg-4 col-lg-offset-1">
+<div class="form-group col-sm-4 ">
   {% csrf_token %}
   <button type="submit" class="btn btn-submit">Submit</button>
-  </form>
+</form>
 </div>
 {% endblock %}
