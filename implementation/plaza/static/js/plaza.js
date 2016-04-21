@@ -375,7 +375,7 @@ $(function() {
 
 // resource check 
 function create_file() {
-    if ($("#createfileform input[name='title']").val() == '' || $("#uploadfile").files.length === 0){
+    if ($("#createfileform input[name='title']").val() == '' || $("#uploadfile").val() == ''){
         var innerhtml = "<div class='alert alert-warning alert-dismissable'>" + 
                                "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>" + 
                                 "You must upload a file and enter a title! </div>";
