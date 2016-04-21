@@ -892,6 +892,11 @@ def get_new_posts_json(request,semester_id,course_id,post_id):
       return HttpResponse('[]', content_type="application/json")
 
     posts = Post.objects.filter(course=c).filter(parent_id=0,id__gt=post_id).order_by('updated_at')
+
+    q = request.GET.get('q', '')
+    for search_term in q.split():
+      posts=posts.filter(Q(title__icontains = search_term) | Q(text__icontains = search_term))
+
     for post in posts:
       response_text +=  '{"post_id":'+str(post.id)
       response_text +=  ', "title":"'+escape(str(post.title))+'"'

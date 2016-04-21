@@ -19,11 +19,12 @@
         </div>
         <div class="col-md-8 pull-right">
           <form action="{% url 'forum' semester_id course_id %}" method="get">
-            <input type="text" name="q" class="form-control" placeholder="Search this forum" value="{{search_term}}"/>
+            <input type="text" name="q" id="q" class="form-control" placeholder="Search this forum" value="{{search_term}}"/>
           </form>
         </div>
       </form>
     </div>
+    <!--
     <div class="dropdown">
       <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <a href="#">
@@ -43,6 +44,7 @@
           </li>
         </ul>
       </div>
+      -->
       <div class="list-group" style="word-wrap: break-word;" id="posts-list">
         {% for post in posts %}
         <div class="list-group-item panel panel-default clickable visborder" id="post_{{ post.id }}">

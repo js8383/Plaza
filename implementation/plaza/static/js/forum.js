@@ -36,7 +36,7 @@ function getPosts()
     if($("div").filter(".clickable").length > 0) last_post = $("div").filter(".clickable")[0].id.split("_")[1]
     else last_post = 0;
 
-    req.open("GET", "/get_new_posts_json/"+semester_id+"/"+course_id+"/" + last_post , true);
+    req.open("GET", "/get_new_posts_json/"+semester_id+"/"+course_id+"/" + last_post + '?q=' + $('#q')[0].value , true);
     req.send();
 }
 
