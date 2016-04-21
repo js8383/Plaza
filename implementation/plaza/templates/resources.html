@@ -22,6 +22,9 @@
                 <thead>
                     <th> Assignment Name </th>
                     <th> Assignment Number </th>
+                    <th> Min Team Size </th>
+                    <th> Max Team Size </th>
+                    <th> Due Date </th>
                     <th> Your Team </th>
                 </thead>
                 {% if assignments.count %}
@@ -32,6 +35,15 @@
                     </td>
                     <td>
                         {{assignment.number}}
+                    </td>
+                    <td>
+                        {{assignment.team_min_size}}
+                    </td>
+                    <td>
+                        {{assignment.team_max_size}}
+                    </td>
+                    <td>
+                        {{assignment.end_time}}
                     </td>
                     <td>
                         {% if role == 2 %} <!-- Only have a button if student !-->
@@ -179,10 +191,10 @@
 
                                             <div class="tab-pane fade in active" id="File">
                                                 <div class="row">
-                                                
-                                                <div id="cfile_errorpopup" class="col-lg-12"></div>   
 
-                                                <div class="col-lg-12"> 
+                                                <div id="cfile_errorpopup" class="col-lg-12"></div>
+
+                                                <div class="col-lg-12">
                                                 <form id="createfileform" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">
 
                                                     {% for field in resource_file_form.visible_fields %}
@@ -223,7 +235,7 @@
                                             <div class="tab-pane fade" id="Folder">
                                                <div class="row">
 
-                                               <div id="cfolder_errorpopup" class="col-lg-12"></div>    
+                                               <div id="cfolder_errorpopup" class="col-lg-12"></div>
 
                                                 <div class="col-lg-12">
                                                    <form id="createfolderform" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">

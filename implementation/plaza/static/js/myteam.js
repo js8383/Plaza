@@ -62,8 +62,7 @@ function add_person(a)
     },
 
     error: function (xhr, status, errorThrown) {
-               if (xhr.response != undefined)
-                   display_error(xhr.responseJSON.message);
+               display_error(xhr.responseJSON.message);
                log_error(xhr, status, errorThrown);
            }
     });
