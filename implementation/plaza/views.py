@@ -827,13 +827,45 @@ def delete_post(request, id):
 @transaction.atomic
 def upvote(request,post_id):
     # Upvote a post
-    return
+    if not request.is_ajax():
+        if request.method != 'GET':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=404)
+
+    p = get_object_or_404(Post, id=post_id)
+
+    if p.author.user == request.user:
+      return HttpJSONStatus("You cannot upvote your own post", status=404)
+
+    if p.upvoters.all().filter(user=request.user).exists():
+      return HttpJSONStatus(request.user.first_name + " " + request.user.last_name + " already upvoted this post", status=404)
+
+    request.user.person.upvotes.add(p)
+    json_obj = {"success": "true"}
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 @login_required
 @transaction.atomic
 def downvote(request,post_id):
     # Downvote a post
-    return
+    if not request.is_ajax():
+        if request.method != 'GET':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=404)
+
+    p = get_object_or_404(Post, id=post_id)
+
+    if p.author.user == request.user:
+      return HttpJSONStatus("You cannot downvote your own post", status=404)
+
+    if p.downvoters.all().filter(user=request.user).exists():
+      return HttpJSONStatus(request.user.first_name + " " + request.user.last_name + " already downvoted this post", status=404)
+
+    request.user.person.downvotes.add(p)
+    json_obj = {"success": "true"}
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 @login_required
 @transaction.atomic

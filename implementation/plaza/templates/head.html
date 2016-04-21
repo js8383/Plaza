@@ -17,36 +17,70 @@
     <link href="{% static 'css/forum.css' %}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    
+
     <!-- jQuery -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
-                    {% block head %}
-                    {% endblock %}
-   
+    {% block head %}
+    {% endblock %}
+
   </head>
   <body>
-                    {% block content %}
-                    {% endblock %}
+    <!-- Page Content -->
+    <div id="page-wrapper">
+      <div class="container-fluid">
+
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2" id="errors">
+              {% for e in errors %}
+              <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">
+                  &times;
+                </a>
+                {{e}}
+              </div>
+              {% endfor %}
+            </div>
+            <div class="col-md-8 col-md-offset-2" id="statuses">
+              {% for s in statuses %}
+              <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">
+                  &times;
+                </a>
+                {{s}}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /#page-wrapper -->
+
   </body>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="{% static 'js/metisMenu.min.js' %}"></script>
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="{% static 'js/metisMenu.min.js' %}"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="{% static 'js/sb-admin-2.js' %}"></script>
+  <!-- Custom Theme JavaScript -->
+  <script src="{% static 'js/sb-admin-2.js' %}"></script>
 
-    <!-- Generic Javascript --!>
-    <script src="{% static 'js/plaza.js' %}"></script>
+  <!-- Generic Javascript --!>
+  <script src="{% static 'js/plaza.js' %}"></script>
 
-    <script src="{% static 'js/forum.js' %}"></script>
+  <script src="{% static 'js/forum.js' %}"></script>
 
-    <!-- Make user accessible by js --!>
-    <script type="text/javascript">
-        var current_username = "{{request.user.username}}";
+  <!-- Make user accessible by js --!>
+  <script type="text/javascript">
+    var current_username = "{{request.user.username}}";
     </script>
 
     {% block footer %} {% endblock %}
-</html>
+  </html>

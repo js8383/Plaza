@@ -63,8 +63,8 @@ urlpatterns = [
     url(r'^edit_post/(?P<post_id>\d+)$', plaza_views.edit_post, name='edit_post'),
     url(r'^delete_post/(?P<id>\d+)$', plaza_views.delete_post, name='delete_post'),
 
-    url(r'^upvote/(?P<id>\d+)$', plaza_views.upvote, name='upvote'),
-    url(r'^downvote/(?P<id>\d+)$', plaza_views.downvote, name='downvote'),
+    url(r'^upvote/(?P<post_id>\d+)$', plaza_views.upvote, name='upvote'),
+    url(r'^downvote/(?P<post_id>\d+)$', plaza_views.downvote, name='downvote'),
 
     url(r'^followtag/(?P<id>\d+)$', plaza_views.follow_tag, name='followtag'),
     url(r'^unfollowtag/(?P<id>\d+)$', plaza_views.unfollow_tag, name='unfollowtag'),
