@@ -685,6 +685,7 @@ def forum(request, semester_id, course_id):
     context['course_id'] = course_id
     context['semester_id'] = semester_id
     context['selected_post'] = int(request.GET.get('p',0))
+    context['role'] = get_user_role(request.user, c)
 
     return render(request, 'forum.html',context)
 

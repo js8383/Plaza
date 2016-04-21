@@ -5,7 +5,9 @@
 {% block nav %}
 <li class="active"><a href="{% url 'forum' semester_id=semester_id course_id=course_id %}">Forum</a></li>
 <li><a href="{% url 'resource' semester_id course_id 0 %}">Resource</a></li>
+{% if role == 0 or role == 1 %}
 <li><a href="{% url 'editcourse' course_semester=semester_id course_number=course_id %}">Manage Course</a></li>
+{% endif %}
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
