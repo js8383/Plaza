@@ -1135,7 +1135,9 @@ def course_creation_page(request):
 
     if Course.objects.filter(number=form.cleaned_data['number'],
                              semester=form.cleaned_data['semester']).exists():
-        redirect('home_msg',"","Course already exists!")
+        return render(request,
+                      "course_creation.html",
+                      {"form":form, "errors":["Course already exists!"]})
 
     course = Course(number=form.cleaned_data['number'],
                     name=form.cleaned_data['name'],
