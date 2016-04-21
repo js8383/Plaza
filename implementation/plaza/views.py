@@ -37,9 +37,7 @@ class Role:
 # used in sending status/error messages back
 # to the client
 def HttpJSONStatus(msg,status):
-
     json_obj = {"message":msg}
-
     return HttpResponse(json.dumps(json_obj),
                         content_type='application/json',
                         status=status)
@@ -726,6 +724,7 @@ def view_post(request, post_id):
   posts += Post.objects.filter(root_id=p.id)
 
 
+
   context = {'posts' : posts }
   context['form'] = PostForm()
   context['user'] = request.user
@@ -733,6 +732,9 @@ def view_post(request, post_id):
   context['root_id'] = int(root_id)
   context['course_id'] = int(p.course.number)
   context['semester_id'] = p.course.semester
+
+  if p.course.instructors.all().filter(id=request.user.id).exists():
+    context['instructor'] = request.user.username
   return render(request, 'view_post.html',context)
 
 
@@ -803,15 +805,16 @@ def post(request,semester_id,course_id,parent_id):
 @login_required
 @transaction.atomic
 def edit_post(request,post_id):
+  print request.POST.get('text')
   if request.method == 'POST':
     # TODO: VALIDATE
     #if not user_has_permission(request.user, c, Role.student):
     #    return redirect('coursesignup', c.semester, c.number)
-
+      print request
       author = request.user.person
       # TODO : Check if author can post in this course
       p = Post.objects.get(id=post_id)
-      if p.author == author:
+      if p.author == author or p.author is None or p.course.instructors.all().filter(id=request.user.id).exists():
         p.text = request.POST.get('text')
         p.save()
 
@@ -1306,7 +1309,6 @@ def create_resource(request, semester_id, course_id, id):
     return redirect(reverse('resource', kwargs={'semester_id':semester_id, 'course_id':course_id, 'id':id}))
 
 def delete_resource(request, semester_id, course_id, id):
-    print id, "fuck"
     parent = Resource.objects.get(id=id).parent
     pid = 0
     if parent:
