@@ -52,6 +52,9 @@ class RegistrationForm(forms.Form):
         # dictionary
         return username
 
+class CourseSignupForm(forms.Form):
+    access_code = forms.IntegerField()
+
 class CourseForm(forms.ModelForm):
 
     class Meta:
@@ -117,7 +120,7 @@ class ResourceFileForm(forms.ModelForm):
         # self.fields['file'].required = False
         self.fields['tags'].required = False
         self.fields['due'].required = False
-        
+
     class Meta:
         model = Resource
         fields = ('title','notes', 'file', 'tags', 'due',)
@@ -135,7 +138,7 @@ class ResourceFileForm(forms.ModelForm):
             'tags':'Tags',
             'due': 'Due'
         }
-        
+
     def clean(self):
         cleaned_data = super(ResourceFileForm, self).clean()
         return cleaned_data
@@ -146,20 +149,20 @@ class ResourceFolderForm(forms.ModelForm):
         kwargs.setdefault('label_suffix', '')
         super(ResourceFolderForm, self).__init__(*args, **kwargs)
         self.fields['notes'].required = False
-        
+
     class Meta:
         model = Resource
         fields = ('title','notes',)
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
             'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
-            
+
         }
         labels = {
             'title': 'Title',
             'notes': 'Notes',
         }
-        
+
     def clean(self):
         cleaned_data = super(ResourceFolderForm, self).clean()
         return cleaned_data

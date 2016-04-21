@@ -19,6 +19,13 @@ from django.conf import settings
 from datetime import datetime
 import pusher 
 
+## Role based course/user interaction ##
+class Role:
+    instructor = 0
+    staff = 1
+    student = 2
+    none = 3
+
 # Create your views here.
 
 ############################################## Functionality #############################################
@@ -34,6 +41,35 @@ def HttpJSONStatus(msg,status):
     return HttpResponse(json.dumps(json_obj),
                         content_type='application/json',
                         status=status)
+
+### Role/Permission Helper Function ####
+
+def get_user_role(user, course):
+    if course.instructors.filter(username=user.username).exists():
+        return Role.instructor
+    elif course.staff.filter(username=user.username).exists():
+        return Role.staff
+    elif course.students.filter(username=user.username).exists():
+        return Role.student
+    else:
+        return Role.none
+
+def user_has_permission(user, course, required_role):
+    user_role = get_user_role(user, course)
+    print("user_role " + `user_role`)
+    print("required_role " + `required_role`)
+    if required_role == Role.instructor:
+        if user_role == Role.instructor:
+            return True
+    if required_role == Role.staff:
+        if (user_role == Role.instructor or
+            user_role == Role.staff):
+            return True
+    if required_role == Role.student:
+        if (user_role == Role.instructor or
+            user_role == Role.staff or user_role == Role.student):
+            return True
+    return False
 
 ####### Login/register #######
 
@@ -141,14 +177,22 @@ def remove_person_from_course(request):
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
+
     if role == 'instructor':
         group = course.instructors
+        required_role = Role.instructor
     elif role == 'staff':
         group = course.staff
+        required_role = Role.instructor
     elif role == 'student':
+        required_role = Role.staff
         group = course.students
     else:
         return HttpJSONStatus("Invalid parameters", status=400)
+
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, required_role):
+        return HttpJSONStatus("You don't have permission to remove a person!", status=400)
 
     # if we are removing an instructor, we need to check
     # that there are more in the course
@@ -195,6 +239,11 @@ def save_course_pref(request, course_number, course_semester):
                 number=course_number,
                 semester=course_semester)
 
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, Role.instructor):
+        return HttpJSONStatus("You don't have permission to edit course!", status=400)
+
+
     course.name = form.cleaned_data['name']
     course.max_enroll = form.cleaned_data['max_enroll']
     course.description = form.cleaned_data['description']
@@ -221,6 +270,9 @@ def add_tag_to_course(request):
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, Role.staff):
+        return HttpJSONStatus("You don't have permission to add a tag!", status=400)
 
     if (course.tags.filter(name=tag_name).count() != 0):
         return HttpJSONStatus("Tag with name already exists.", status=400)
@@ -250,6 +302,10 @@ def add_assignment_to_course(request):
         return HttpJSONStatus("Invalid parameters", status=400)
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, Role.staff):
+        return HttpJSONStatus("You don't have permission to add assignments!", status=400)
 
 
     if (course.assignments.filter(title=assignment_title).count() != 0):
@@ -288,6 +344,11 @@ def remove_tag_from_course(request):
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, Role.staff):
+        return HttpJSONStatus("You don't have permission to remove a tag!", status=400)
+
+
     tags = course.tags.filter(name=tag_name)
     if tags.count() > 0:
         tags.all()[0].delete()
@@ -314,6 +375,10 @@ def remove_assignment_from_course(request):
         return HttpJSONStatus("Invalid parameters", status=400)
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
+
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, Role.staff):
+        return HttpJSONStatus("You don't have permission to remove an assignment!", status=400)
 
     try:
         assignment = course.assignments.get(title=assignment_title)
@@ -352,12 +417,21 @@ def add_person_to_course(request):
 
     if role == 'instructor':
         group = course.instructors
+        required_role = Role.instructor
     elif role == 'staff':
         group = course.staff
+        required_role = Role.instructor
     elif role == 'student':
+        required_role = Role.staff
         group = course.students
     else:
         return HttpJSONStatus("Invalid parameters", status=400)
+
+    ## check if user has the required permissions
+    if not user_has_permission(request.user, course, required_role):
+        return HttpJSONStatus("You don't have permission to add this person!", status=400)
+
+
 
     if group.filter(username__exact=username).count() != 0:
         return HttpJSONStatus("Already a member", status=400)
@@ -414,6 +488,10 @@ def add_person_to_team(request):
     except ObjectDoesNotExist:
         return HttpJSONStatus("Team does not exist!", status=400)
 
+    # Check if the user is actually in the team
+    if not team.members.filter(person=user.person).exists():
+        return HttpJSONStatus("Cannot add a person to a team you're not part of!", status=400)
+
     assignment = team.assignment
     if assignment == None:
         return HttpJSONStatus("Team does not have an assignment!", status=400)
@@ -447,6 +525,9 @@ def remove_person_from_team(request):
 
     if username == "" or team_id == "":
         return HttpJSONStatus("Invalid request parameters", status=400)
+
+    if request.user.username != username:
+        return HttpJSONStatus("You can not remove someone else from a team!", status=400)
 
     try:
         team = Team.objects.get(id=team_id)
@@ -482,6 +563,11 @@ def submit_team(request):
     course_number = request.POST.get("course_number", "")
     course_semester = request.POST.get("course_semester", "")
 
+    try:
+        course = Course.objects.get(number=course_number, semester=course_semester)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("Course does not exist", status=400)
+
     # add ourselves to the list
     team_members.append(request.user.username)
 
@@ -489,16 +575,18 @@ def submit_team(request):
         course_number == "" or assignment_number == ""):
         return HttpJSONStatus("No team name provided", status=400)
 
+    # check that every person is a student
+    # and not in a team for this assingment
     for member in team_members:
         person = Person.objects.get(user__username=member);
+
+        if get_user_role(person.user, course) != Role.student:
+            return HttpJSONStatus("Only students of the class can be in a team!", status=400)
+
         teams = person.teams
         if teams != None:
             if teams.filter(assignment__number=assignment_number).count() != 0:
                 return HttpJSONStatus("Person is already in a team", status=400)
-    try:
-        course = Course.objects.get(number=course_number, semester=course_semester)
-    except ObjectDoesNotExist:
-        return HttpJSONStatus("Course does not exist", status=400);
 
     course_assignments = course.assignments
 
@@ -511,9 +599,7 @@ def submit_team(request):
     team.save()
 
     team_post_id = -team.id
-    print team_post_id
     p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = course, post_type = 2)
-    print p
     p.save()
 
 
@@ -564,6 +650,9 @@ def forum(request, semester_id, course_id):
     # View all posts (within a single course 'c')
     c = Course.objects.get(semester=semester_id,number=course_id)
 
+    if not user_has_permission(request.user, c, Role.student):
+        return redirect('coursesignup', c.semester, c.number)
+
     posts = Post.objects.filter(course=c).filter(parent_id=0).order_by('-updated_at')
 
     q = request.GET.get('q', '')
@@ -587,9 +676,14 @@ def forum(request, semester_id, course_id):
 @login_required
 def forum_home(request, semester_id, course_id):
     c = Course.objects.get(semester=semester_id,number=course_id)
+
+    if not user_has_permission(request.user, c, Role.student):
+        return redirect('coursesignup', c.semester, c.number)
+
     context = {}
     context['course_id'] = course_id
     context['semester_id'] = semester_id
+
 
     return render(request, 'forum_home.html',context)
 
@@ -605,9 +699,13 @@ def view_post(request, post_id):
     posts = [p]
     root_id = p.id
 
+  if not user_has_permission(request.user, p.course, Role.student):
+    return redirect('coursesignup', c.semester, c.number)
+
   posts += Post.objects.filter(root_id=p.id)
 
   context = {'posts' : posts }
+  context['form'] = PostForm()
   context['root_id'] = int(root_id)
   context['course_id'] = int(p.course.number)
   context['semester_id'] = p.course.semester
@@ -622,6 +720,10 @@ def post(request,semester_id,course_id,parent_id):
     context = {'form':form}
     if form.is_valid():
       c = Course.objects.get(semester=semester_id,number=course_id)
+
+      if not user_has_permission(request.user, c, Role.student):
+        return redirect('coursesignup', c.semester, c.number)
+
       author = Person.objects.get(user=request.user)
       # TODO : Check if author can post in this course
 
@@ -679,6 +781,10 @@ def edit_post(request,post_id):
     context = {'form':form}
     if form.is_valid():
       c = Course.objects.get(semester=semester_id,number=course_id)
+
+      if not user_has_permission(request.user, c, Role.student):
+        return redirect('coursesignup', c.semester, c.number)
+
       author = Person.objects.get(user=request.user)
       # TODO : Check if author can post in this course
 
@@ -822,6 +928,9 @@ def edit_course(request, course_semester, course_number):
         HttpResponse("Course not found", status=400);
 
     role = ''
+
+    if not user_has_permission(request.user, course, Role.staff):
+        return redirect('home_msg',"","You do not have permission to view this course!")
 
     if course.instructors.filter(username=request.user.username).count() > 0:
         role = "instructor"
@@ -987,8 +1096,32 @@ def administration_page(request, id):
 	# This is only accessible by staffs (from staff_home_page)
 	return
 
-# @login_required
-# @transaction.atomic
+@login_required
+@transaction.atomic
+def course_signup_page(request, course_semester, course_number):
+    course = get_object_or_404(Course, number=course_number, semester=course_semester)
+    errors=[]
+    context = {"course": course, "errors":errors}
+    if get_user_role(request.user, course) != Role.none:
+        redirect('forum',course_semester,course_number)
+    if request.method == "GET":
+        return render(request, "course_signup.html", context)
+    if request.method == "POST":
+        form = CourseSignupForm(request.POST)
+        if not course.public:
+            if not form.is_valid():
+                errors.append("Enter an access code")
+                return render(request, "course_signup.html",context)
+            if form.cleaned_data['access_code'] != course.access_code:
+                errors.append("The access code you entered was not valid!")
+                return render(request, "course_signup.html", context)
+
+        course.students.add(request.user)
+        return redirect('forum', course_semester, course_number)
+
+
+@login_required
+@transaction.atomic
 def course_creation_page(request):
 	# Show the page to create courses
 	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
@@ -999,6 +1132,10 @@ def course_creation_page(request):
 
     if not form.is_valid():
         return render(request, 'course_creation.html', {'form': form})
+
+    if Course.objects.filter(number=form.cleaned_data['number'],
+                             semester=form.cleaned_data['semester']).exists():
+        redirect('home_msg',"","Course already exists!")
 
     course = Course(number=form.cleaned_data['number'],
                     name=form.cleaned_data['name'],
@@ -1036,12 +1173,23 @@ def team_creation_page(request, course_number, course_semester, assignment_numbe
                 course_semester=course_semester,
                 course_number=course_number,
                 assignment_number=assignment_number)
+    try:
+        course = Course.objects.get(
+                semester=course_semester,
+                number=course_number)
+        assignment = Course.assignments.get(number=assignment_number)
+    except ObjectDoesNotExist:
+        return redirect('home_msg', '', 'Invalid team page!')
+
+    if user_get_permission(request.user, course) != Role.student:
+        return redirect('home_msg', '', 'You are not a student of this course!')
 
     context = {
             "course_number": course_number,
             "course_semester": course_semester,
             "assignment_number":assignment_number
             }
+
     return render(request, "team_creation.html", context)
 
 def resource_page(request, id):
