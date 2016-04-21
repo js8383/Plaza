@@ -1,6 +1,7 @@
 {% extends "parent.html" %}
 {% load staticfiles %}
-
+{% block header %}
+{% endblock %}
 {% block nav %}
 <li class="active"><a href="#">Forum</a></li>
 <li><a href="{% url 'editcourse' course_semester=semester_id course_number=course_id %}">Manage Course</a></li>
@@ -11,7 +12,7 @@
     <div class="col-md-3" style="height: 85vh; min-height: 85%; max-height: 85vh; overflow-y: scroll;">
       <div class="row form-group">
         <div class="col-md-4 pull-left">
-          <button onclick="post('{{ semester_id }}','{{ course_id  }}','0')" class="btn btn-default btn-success"> &#43; New Post</button>
+          <button onclick="post('0')" class="btn btn-default btn-success"> &#43; New Post</button>
         </div>
         <div class="col-md-8 pull-right">
           <form action="{% url 'forum' semester_id course_id %}" method="get">
@@ -39,7 +40,7 @@
           </li>
         </ul>
       </div>
-      <div class="list-group" style="word-wrap: break-word;">
+      <div class="list-group" style="word-wrap: break-word;" id="posts-list">
         {% for post in posts %}
         <div class="list-group-item panel panel-default clickable visborder" id="post_{{ post.id }}">
           <div class="panel-heading">
@@ -72,8 +73,8 @@
 {% endblock %}
 {% block footer %}
 <script type="text/javascript">
-  semester_id = "{{semester_id}}";
-  course_id = "{{course_id}}";
-  </script>
+  var semester_id = "{{semester_id}}";
+  var course_id = "{{course_id}}";
+</script>
 {% endblock %}
 

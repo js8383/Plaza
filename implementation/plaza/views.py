@@ -17,6 +17,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.conf import settings
 from datetime import datetime
+from django.utils.html import *
+from annoying.functions import get_object_or_None
 import pusher
 
 ## Role based course/user interaction ##
@@ -663,7 +665,7 @@ def forum(request, semester_id, course_id):
 
 
     context = {'posts' : posts }
-    filters = [ ('All',24),('Unread',18) ]
+    filters = [ ('All',len(posts)),('Unread',18) ]
     context['filters'] = filters
     context['search_term'] = q
     context['selected'] = None
@@ -839,18 +841,6 @@ def delete_post(request, id):
 
 @login_required
 @transaction.atomic
-def create_tags(request):
-    # Create a tag for students to follow
-    return
-
-@login_required
-@transaction.atomic
-def delete_tags(request, id):
-    # Delete a tag
-    return
-
-@login_required
-@transaction.atomic
 def upvote(request,post_id):
     # Upvote a post
     return
@@ -880,6 +870,29 @@ def follow_tag(request):
 def unfollow_tag(request):
     # unfollow a specific tag
     return
+
+@login_required
+def get_new_posts_json(request,semester_id,course_id,post_id):
+    response_text = ''
+    p = get_object_or_None(Post,id=post_id)
+    c = Course.objects.get(number=course_id,semester=semester_id)
+    if p is None and int(post_id) > 0:
+      return HttpResponse('[]', content_type="application/json")
+
+    posts = Post.objects.filter(course=c).filter(parent_id=0,id__gt=post_id).order_by('updated_at')
+    for post in posts:
+      response_text +=  '{"post_id":'+str(post.id)
+      response_text +=  ', "title":"'+escape(str(post.title))+'"'
+      response_text +=  ', "text":"'+escape(strip_tags(str(post.text)))[:66]+'"'
+      response_text +=  ', "timestamp":"'+post.updated_at.strftime('%b %d, %H:%M') +'"'
+      response_text +=  '},\n'
+
+    
+    response_text = '[' + response_text[:-2] + ']'
+    print
+    print response_text
+    print
+    return HttpResponse(response_text, content_type="application/json")
 
 ####### For ajax  #######
 # Mrigesh's part ends here
