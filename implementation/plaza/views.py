@@ -795,6 +795,8 @@ def post(request,semester_id,course_id,parent_id):
   if str(parent_id) == '0' and request.user in c.students.all():
     context['types'].insert(0,('0','Question') )
 
+  context['typeslength'] = len(context['types'])
+
   return render(request, 'post.html',context)
 
 
