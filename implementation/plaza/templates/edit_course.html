@@ -11,7 +11,8 @@
 <div class="container">
     <div class = "row">
         <div>
-            <h1 class="display3">Manage Course {{course.number}}: {{course.name}} {{course.semester}}</h1>
+            <h1 class="display3">Manage Course {{course.number}}: {{course.name}}({{course.semester}})</h1>
+            <br>
         </div>
     </div>
     <div class = "row">
@@ -198,8 +199,8 @@
 
 
                             <div class="col-lg-2">
-                                <button class="btn btn-primary"
-                                    type="submit">
+                                <div class="control-group"> &nbsp;</div>
+                                <button class="btn btn-primary" style="display: block; width: 100%;" type="submit">
                                     Save
                                 </button>
                             </div>
