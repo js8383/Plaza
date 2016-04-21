@@ -1,0 +1,32 @@
+{% extends "parent.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+    <div class="col-md-6 col-md-offset-3">
+    <div class="panel-heading">
+        <h2 class="panel-title">Sign up for {{course.number}} {{course.semester}}</h2>
+    </div>
+    <div class="panel-body">
+        <form method="post" action="{% url 'coursesignup' course.semester course.number %}">
+
+            <fieldset>
+                <div class="form-group">
+                    {% if not course.public %}
+                    <p>This is not a public course, so an access code is required.</p>
+                    <input class="form-control" placeholder="Access Code"
+                    name="access_code" type="text" autofocus>
+                    {% else %}
+                    <p>This is a public course, so an access code is not required.</p>
+                    <input class="form-control" placeholder="Access Code"
+                    name="access_code" type="text" readonly>
+                    {% endif %}
+                </div>
+                <input type="submit" class="btn btn-lg btn-success btn-block" value="Sign Up" />
+            </fieldset>
+            {% csrf_token %}
+        </form>
+        <br>
+    </div>
+</div>
+</div>
+{% endblock %}
