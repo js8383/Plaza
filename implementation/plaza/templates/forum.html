@@ -5,7 +5,9 @@
 {% block nav %}
 <li class="active"><a href="{% url 'forum' semester_id=semester_id course_id=course_id %}">Forum</a></li>
 <li><a href="{% url 'resource' semester_id course_id 0 %}">Resource</a></li>
+{% if role == 0 or role == 1 %}
 <li><a href="{% url 'editcourse' course_semester=semester_id course_number=course_id %}">Manage Course</a></li>
+{% endif %}
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
@@ -17,11 +19,12 @@
         </div>
         <div class="col-md-8 pull-right">
           <form action="{% url 'forum' semester_id course_id %}" method="get">
-            <input type="text" name="q" class="form-control" placeholder="Search this forum" value="{{search_term}}"/>
+            <input type="text" name="q" id="q" class="form-control" placeholder="Search this forum" value="{{search_term}}"/>
           </form>
         </div>
       </form>
     </div>
+    <!--
     <div class="dropdown">
       <button class="btn btn-default dropdown-toggle" style="width:100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <a href="#">
@@ -41,6 +44,7 @@
           </li>
         </ul>
       </div>
+      -->
       <div class="list-group" style="word-wrap: break-word;" id="posts-list">
         {% for post in posts %}
         <div class="list-group-item panel panel-default clickable visborder" id="post_{{ post.id }}">
@@ -76,7 +80,7 @@
 <script type="text/javascript">
   var semester_id = "{{semester_id}}";
   var course_id = "{{course_id}}";
-  window.setInterval(getPosts, 1000);
+  window.onload = function () { window.setInterval(getPosts, 1000); }
 </script>
 {% endblock %}
 

@@ -4,7 +4,9 @@
 {% block nav %}
 <li ><a href="{% url 'forum' semester_id=sid course_id=cid %}">Forum</a></li>
 <li class="active"><a href="{% url 'resource' sid cid 0 %}">Resource</a></li>
+{% if role == 0 or role == 1 %}
 <li><a href="{% url 'editcourse' course_semester=sid course_number=cid %}">Manage Course</a></li>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -17,6 +19,11 @@
                 Assignments
             </div>
             <table class="table table-striped table-hover" id="assignment_table">
+                <thead>
+                    <th> Assignment Name </th>
+                    <th> Assignment Number </th>
+                    <th> Your Team </th>
+                </thead>
                 {% if assignments.count %}
                 {% for assignment in assignments.all %}
                 <tr id="assignment_{{assignment.title}}_row">
@@ -30,6 +37,9 @@
                         {% if role == 2 %} <!-- Only have a button if student !-->
                         <a class="btn btn-default"
                         href={% url 'createteam' semester_id course_id assignment.number %}>
+                        Team</a>
+                        {% else %}
+                        <a class="btn btn-default" href=# disabled>
                         Team</a>
                         {% endif %}
                     </td>

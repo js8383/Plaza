@@ -5,13 +5,14 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-offset-2">
-            <h1 class="display3"> {{course_number}} Assignment {{assignment_number}} Team Up
+            <h1 class="display3"> {{course_number}} Assignment {{assignment_number}}
+                Team Creation
             </h1>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a data-toggle="collapse" href="#collapse1">1. Manually enter teammates</a>
+                    <h2>Create a Team</h2>
                 </div>
-                <div id="collapse1" class="panel-collapse collapse">
+                <div id=class="panel-default">
                     <div class="panel-body">
                         <h4>Team Name: </h4>
                         <div class="row">
@@ -42,95 +43,6 @@
                                 <div class="btn btn-info" onclick="submit_team()">Done</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a data-toggle="collapse" href="#collapse2">2. Enter matchmaking</a>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="usr">Add Skill:</label>
-                            <input type="text" class="form-control" id="usr">
-                        </div>
-                        Preferred number of teammates:
-                        <select class="form-control">
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                        Match me with:
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
-                                teammates of similar skills
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="blankCheckbox" value="option2" aria-label="...">
-                                some preference
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="blankCheckbox" value="option3" aria-label="...">
-                                some other preference
-                            </label>
-                        </div>
-                        <div class="btn btn-info" onclick="enter_matchmaking()">Match Me!</div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a data-toggle="collapse" href="#collapse3">3. Manually search for teammates</a>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="usr">Post:</label>
-                            <input type="text" class="form-control" id="usr">
-                        </div>
-                        <a class="btn btn-default" href="#" role="button">Post!</a>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    Jill
-                                </div>
-                                <div class="panel-body">
-                                    Hey guys im looking some people for my team pls contact <br>
-                                    <a class="btn btn-default" href="#" role="button">Contact</a>
-                                </div>
-                            </div>
-                            </li>
-                            <li class="list-group-item">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    Jason
-                                </div>
-                                <div class="panel-body">
-                                    Hey guys im looking some people for my team pls contact <br>
-                                    <a class="btn btn-default" href="#" role="button">Contact</a>
-                                </div>
-                            </div>
-                            </li>
-                            <li class="list-group-item">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    John
-                                </div>
-                                <div class="panel-body">
-                                    Hey guys im looking some people for my team pls contact <br>
-                                    <a class="btn btn-default" href="#" role="button">Contact</a>
-                                </div>
-                            </div>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>

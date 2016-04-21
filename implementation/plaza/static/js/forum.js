@@ -36,7 +36,7 @@ function getPosts()
     if($("div").filter(".clickable").length > 0) last_post = $("div").filter(".clickable")[0].id.split("_")[1]
     else last_post = 0;
 
-    req.open("GET", "/get_new_posts_json/"+semester_id+"/"+course_id+"/" + last_post , true);
+    req.open("GET", "/get_new_posts_json/"+semester_id+"/"+course_id+"/" + last_post + '?q=' + $('#q')[0].value , true);
     req.send();
 }
 
@@ -62,4 +62,24 @@ function updatePosts(posts)
 
 
 
+function updownvote(post_id,vote_type)
+{
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() 
+    {
+        if (req.readyState != 4) return;
+        if (req.status == 404)
+        {
+          var msg = JSON.parse(req.responseText);
+          display_error(msg.message);
+        }
+        if (req.status != 200) return;
+        display_success("Voted successfully");
+        var msg = JSON.parse(req.responseText);
+    }
+    req.open("GET", "/"+vote_type+"/" + post_id ,true);
+    req.send();
+
+
+}
 

@@ -501,7 +501,7 @@ def add_person_to_team(request):
         return HttpJSONStatus("Team does not exist!", status=400)
 
     # Check if the user is actually in the team
-    if not team.members.filter(person=user.person).exists():
+    if not team.members.filter(id=request.user.person.id).exists():
         return HttpJSONStatus("Cannot add a person to a team you're not part of!", status=400)
 
     assignment = team.assignment
@@ -685,6 +685,7 @@ def forum(request, semester_id, course_id):
     context['course_id'] = course_id
     context['semester_id'] = semester_id
     context['selected_post'] = int(request.GET.get('p',0))
+    context['role'] = get_user_role(request.user, c)
 
     return render(request, 'forum.html',context)
 
@@ -700,6 +701,7 @@ def forum_home(request, semester_id, course_id):
     context['course_id'] = course_id
     context['semester_id'] = semester_id
     context['user'] = request.user
+    context['course'] = c
 
 
     return render(request, 'forum_home.html',context)
@@ -793,6 +795,8 @@ def post(request,semester_id,course_id,parent_id):
   if str(parent_id) == '0' and request.user in c.students.all():
     context['types'].insert(0,('0','Question') )
 
+  context['typeslength'] = len(context['types'])
+
   return render(request, 'post.html',context)
 
 
@@ -827,13 +831,45 @@ def delete_post(request, id):
 @transaction.atomic
 def upvote(request,post_id):
     # Upvote a post
-    return
+    if not request.is_ajax():
+        if request.method != 'GET':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=404)
+
+    p = get_object_or_404(Post, id=post_id)
+
+    if p.author.user == request.user:
+      return HttpJSONStatus("You cannot upvote your own post", status=404)
+
+    if p.upvoters.all().filter(user=request.user).exists():
+      return HttpJSONStatus(request.user.first_name + " " + request.user.last_name + " already upvoted this post", status=404)
+
+    request.user.person.upvotes.add(p)
+    json_obj = {"success": "true"}
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 @login_required
 @transaction.atomic
 def downvote(request,post_id):
     # Downvote a post
-    return
+    if not request.is_ajax():
+        if request.method != 'GET':
+            # respond with error
+            return HttpJSONStatus("Request is not valid", status=404)
+
+    p = get_object_or_404(Post, id=post_id)
+
+    if p.author.user == request.user:
+      return HttpJSONStatus("You cannot downvote your own post", status=404)
+
+    if p.downvoters.all().filter(user=request.user).exists():
+      return HttpJSONStatus(request.user.first_name + " " + request.user.last_name + " already downvoted this post", status=404)
+
+    request.user.person.downvotes.add(p)
+    json_obj = {"success": "true"}
+
+    return HttpResponse(json.dumps(json_obj), content_type='application/json')
 
 @login_required
 @transaction.atomic
@@ -856,6 +892,11 @@ def get_new_posts_json(request,semester_id,course_id,post_id):
       return HttpResponse('[]', content_type="application/json")
 
     posts = Post.objects.filter(course=c).filter(parent_id=0,id__gt=post_id).order_by('updated_at')
+
+    q = request.GET.get('q', '')
+    for search_term in q.split():
+      posts=posts.filter(Q(title__icontains = search_term) | Q(text__icontains = search_term))
+
     for post in posts:
       response_text +=  '{"post_id":'+str(post.id)
       response_text +=  ', "title":"'+escape(str(post.title))+'"'
