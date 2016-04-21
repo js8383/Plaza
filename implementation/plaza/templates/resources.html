@@ -113,6 +113,14 @@
 
                                         {% if resource.notes %} {{resource.notes}} {% else %} No description {% endif %}
 
+                                        {% if resource.tags.count != 0 %}
+                                          <hr>
+                                          Tags:
+                                          {% for tag in resource.tags.all %}
+                                             <span class="label label-success label-pill">  {{ tag }}  </span>
+                                          {% endfor %}
+                                        {% endif %}
+
                                         {% if resource.file %}
                                         <hr>
                                         <a href="/media/{{resource.file}}">Attached File</a>
