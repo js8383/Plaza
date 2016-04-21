@@ -597,7 +597,8 @@ def submit_team(request):
 
         teams = person.teams
         if teams != None:
-            if teams.filter(assignment__number=assignment_number).count() != 0:
+            if teams.filter(assignment__number=assignment_number,
+                            assignment__course__id=course.id).exists():
                 return HttpJSONStatus("Person is already in a team", status=400)
 
     course_assignments = course.assignments
@@ -619,7 +620,8 @@ def submit_team(request):
         team.members.add(get_object_or_404(Person,user__username=member))
 
     notif_url = "/myteam/"+course_semester+"/"+course_number+"/"+assignment_number
-    save_and_notify_multiple('8', request.user.person, team.members.all(), '', notif_url)
+    msg = "You were added to team " + team_name + " for course " + course_number + "."
+    save_and_notify_multiple('8', request.user.person, team.members.all(), msg, notif_url)
 
     return HttpJSONStatus("Team "+team_name+" created!", status=200)
 
@@ -1058,10 +1060,17 @@ def home_page_with_msg(request, status, error):
         errors.append(error)
 
     # With different users, display either home/staff home page
+    context = {'c_student'  : request.user.courses_taken.all()}
+    context['c_staff']      = request.user.courses_assisted.all()
+    context['c_instructor'] = request.user.courses_managed.all()
+    context['statuses'] = statuses
+    context['errors'] = errors
+
+    # With different users, display either home/staff home page
     return render(
             request,
             "home.html",
-            {"statuses":statuses, "errors":errors})
+            context)
 
 
 @login_required

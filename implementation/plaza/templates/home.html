@@ -1,265 +1,136 @@
 {% extends "parent.html" %}
 {% block content %}
 <div id="page-wrapper" style="min-height: 545px;">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Welcome to Plaza, {{user.first_name}}</h1>
-    </div>
-    <!-- /.col-lg-12 -->
-  </div>
-  <!-- /.row -->
-  <div class="row">
-    <div class="col-lg-3">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-comments fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge">26</div>
-              <div>New Comments!</div>
-            </div>
-          </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Welcome to Plaza, {{user.first_name}}</h1>
         </div>
-        <a href="#">
-          <div class="panel-footer">
-            <span class="pull-left">View Details</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
     </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-green">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-tasks fa-5x"></i>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Courses You Are an Instructor In
+                </div>
+                <div class="panel-body">
+                    {% if not c_instructor %}
+                    <p> You are not an instructor in any courses! </p>
+                    {% endif %}
+                    {% for course in c_instructor %}
+                    <div class="panel panel-default course">
+                        <div class="panel-heading">
+                            <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                            <span class="pull-right">
+                                <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                            </button>
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge">12</div>
-              <div>New Tasks!</div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Courses You Are Staff In
+                </div>
+                <div class="panel-body">
+                    {% if not c_staff %}
+                    <p> You are not an staff in any courses! </p>
+                    {% endif %}
+                    {% for course in c_staff %}
+                    <div class="panel panel-default course">
+                        <div class="panel-heading">
+                            <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                            <span class="pull-right">
+                                <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                            </button>
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-          </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Courses You Are a Student In
+                </div>
+                <div class="panel-body">
+                    {% if not c_student %}
+                    <p> You are not a student in any courses! </p>
+                    {% endif %}
+                    {% for course in c_student %}
+                    <div class="panel panel-default course">
+                        <div class="panel-heading">
+                            <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
+                            <span class="pull-right">
+                                <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
+                            </button>
+                        </span>
+                        <div class="panel-body">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <a href="#">
-          <div class="panel-footer">
-            <span class="pull-left">View Details</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
     </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-yellow">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-shopping-cart fa-5x"></i>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> Notifications Panel
             </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge">124</div>
-              <div>New Orders!</div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-comment fa-fw"></i> New Comment
+                        <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                        <span class="pull-right text-muted small"><em>12 minutes ago</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-envelope fa-fw"></i> Message Sent
+                        <span class="pull-right text-muted small"><em>27 minutes ago</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-tasks fa-fw"></i> New Task
+                        <span class="pull-right text-muted small"><em>43 minutes ago</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                        <span class="pull-right text-muted small"><em>11:32 AM</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-bolt fa-fw"></i> Server Crashed!
+                        <span class="pull-right text-muted small"><em>11:13 AM</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-warning fa-fw"></i> Server Not Responding
+                        <span class="pull-right text-muted small"><em>10:57 AM</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
+                        <span class="pull-right text-muted small"><em>9:49 AM</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-money fa-fw"></i> Payment Received
+                        <span class="pull-right text-muted small"><em>Yesterday</em>
+                        </span>
+                    </a>
+                </div>
+                <!-- /.list-group -->
+                <a href="#" class="btn btn-default btn-block">View All Alerts</a>
             </div>
-          </div>
+            <!-- /.panel-body -->
         </div>
-        <a href="#">
-          <div class="panel-footer">
-            <span class="pull-left">View Details</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
+
     </div>
-    <div class="col-lg-3 col-md-6">
-      <div class="panel panel-red">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-xs-3">
-              <i class="fa fa-support fa-5x"></i>
-            </div>
-            <div class="col-xs-9 text-right">
-              <div class="huge">13</div>
-              <div>Support Tickets!</div>
-            </div>
-          </div>
-        </div>
-        <a href="#">
-          <div class="panel-footer">
-            <span class="pull-left">View Details</span>
-            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-            <div class="clearfix"></div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-  <!-- /.row -->
-  <div class="row">
-    <div class="col-lg-8">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Courses
-        </div>
-        <div class="panel-body">
-          <ul class="nav nav-tabs the-tabs">
-            <li role="presentation" class="active"><a href="#">Current</a></li>
-            <li role="presentation"><a href="#">Past</a></li>
-            <li role="presentation"><a href="#">Future</a></li>
-          </ul>
-
-
-
-          {% for course in c_instructor %}
-          <div class="panel-body">
-            <div class="panel panel-default course">
-              <div class="panel-heading">
-                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
-                <span class="pull-right">
-                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
-                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
-                    <span class="glyphicon glyphicon-edit" title="Manage Course"></span>
-                  </a>
-                </span>
-              </div>
-              <div class="panel-body">
-                <small>
-                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
-                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
-                </small>
-              </div>
-              <div class="well" style="padding:25px;margin:25px">
-                {{course.description}}
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-
-
-          {% for course in c_staff %}
-          <div class="panel-body">
-            <div class="panel panel-default course">
-              <div class="panel-heading">
-                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
-                <span class="pull-right">
-                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
-                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
-                  </button>
-                </span>
-              </div>
-              <div class="panel-body">
-                <small>
-                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
-                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
-                </small>
-              </div>
-              <div>
-                {{course.description}}
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-
-          {% for course in c_student %}
-          <div class="panel-body">
-            <div class="panel panel-default course">
-              <div class="panel-heading">
-                <a href="{% url 'forum' course.semester course.number %}">{{course.semester}}: {{course.number}} {{course.name}}</a>
-                <span class="pull-right">
-                  <a href="{% url 'forum' course.semester course.number %}"><span class="glyphicon glyphicon-education" title="View forum"></span></a>
-                  <a role="button" class="btn btn-link" href="{% url 'editcourse' course.semester course.number %}">
-                  </button>
-                </span>
-              </div>
-              <div class="panel-body">
-                <small>
-                  <span class="pull-left start-time">Start Time: {{course.start_time}} </span>
-                  <span class="pull-right end-time">End Time: {{course.end_time}}</span>
-                </small>
-              </div>
-              <div>
-                {{course.description}}
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-    <!-- /.panel courses-->
-  </div>
-  <!-- /.col-lg-8 -->
-  <div class="col-lg-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <i class="fa fa-bell fa-fw"></i> Notifications Panel
-      </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-        <div class="list-group">
-          <a href="#" class="list-group-item">
-            <i class="fa fa-comment fa-fw"></i> New Comment
-            <span class="pull-right text-muted small"><em>4 minutes ago</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-            <span class="pull-right text-muted small"><em>12 minutes ago</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-envelope fa-fw"></i> Message Sent
-            <span class="pull-right text-muted small"><em>27 minutes ago</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-tasks fa-fw"></i> New Task
-            <span class="pull-right text-muted small"><em>43 minutes ago</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-upload fa-fw"></i> Server Rebooted
-            <span class="pull-right text-muted small"><em>11:32 AM</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-            <span class="pull-right text-muted small"><em>11:13 AM</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-warning fa-fw"></i> Server Not Responding
-            <span class="pull-right text-muted small"><em>10:57 AM</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-            <span class="pull-right text-muted small"><em>9:49 AM</em>
-            </span>
-          </a>
-          <a href="#" class="list-group-item">
-            <i class="fa fa-money fa-fw"></i> Payment Received
-            <span class="pull-right text-muted small"><em>Yesterday</em>
-            </span>
-          </a>
-        </div>
-        <!-- /.list-group -->
-        <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-      </div>
-      <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
-
-    <!-- /.panel -->
-
-    <!-- /.panel .chat-panel -->
-  </div>
-  <!-- /.col-lg-4 -->
 </div>
-<!-- /.row -->
-        </div>
-        {% endblock %}
+{% endblock %}
