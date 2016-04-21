@@ -53,5 +53,5 @@ Thumbs.db
 nohup.out
 
 media/resources/
-implementation/plaza/migrations/
+implementation/plaza/migrations/*
 config.ini
