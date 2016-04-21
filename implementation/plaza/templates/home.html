@@ -9,7 +9,7 @@
   </div>
   <!-- /.row -->
   <div class="row">
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3">
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="row">
@@ -132,13 +132,13 @@
                   <span class="pull-right end-time">End Time: {{course.end_time}}</span>
                 </small>
               </div>
-              <div>
+              <div class="well" style="padding:25px;margin:25px">
                 {{course.description}}
               </div>
             </div>
           </div>
           {% endfor %}
-          
+
 
           {% for course in c_staff %}
           <div class="panel-body">

@@ -24,6 +24,10 @@ class Person(models.Model):
     profile_image = models.ImageField(upload_to=profile_image_rename, blank = True, default = 'profile-photos/user_ico.png')
     following = models.ManyToManyField(User, related_name='follows')
     updated_at = models.DateTimeField(auto_now=True)
+
+    upvotes = models.ManyToManyField('plaza.Post', related_name='upvoters')
+    downvotes = models.ManyToManyField('plaza.Post', related_name='downvoters')
+
     def __unicode__(self):
         return self.user.username
     def __str__(self):
@@ -80,9 +84,6 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    upvotes = models.IntegerField(default=0) #Duplicate upvotes?
-    downvotes = models.IntegerField(default=0)
-
     assignee = models.OneToOneField(User, related_name="assigned_posts", null=True)
     editors = models.ManyToManyField(User, related_name="edited_posts")
     followers = models.ManyToManyField(User, related_name="followed_posts")
@@ -101,6 +102,8 @@ class Item(models.Model):
     title = models.CharField(max_length=128)
     post = models.ForeignKey(Post, related_name="item")
     owner = models.ForeignKey(Person,related_name='uploads')
+
+
 
     CATEGORY_CHOICES = (('PDF', 'application/pdf'),('JPEG', 'image/jpeg'),('GIF', 'image/gif'),('MP4', 'video/mp4'),('EMBED','text/html'),('PNG','image/png'),('CAL','text/calendar'))
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES,  default='0')

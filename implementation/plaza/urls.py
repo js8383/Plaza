@@ -58,7 +58,7 @@ urlpatterns = [
 
     url(r'^forum/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum, name='forum'),
     url(r'^forum_home/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)$', plaza_views.forum_home, name='forum_home'),
-    url(r'^view_post/(?P<post_id>-?\d+)$', plaza_views.view_post, name='view_posts'),
+    url(r'^view_post/(?P<post_id>-?\d+)$', plaza_views.view_post, name='view_post'),
     url(r'^post/(?P<semester_id>[a-zA-Z][0-9]{2})/(?P<course_id>\d+)/(?P<parent_id>\d+)$', plaza_views.post, name='post'),
     url(r'^edit_post/(?P<post_id>\d+)$', plaza_views.edit_post, name='edit_post'),
     url(r'^delete_post/(?P<id>\d+)$', plaza_views.delete_post, name='delete_post'),

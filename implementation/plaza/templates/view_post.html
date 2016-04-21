@@ -7,42 +7,25 @@
 {% block content %}
 <div class="list-group" style="word-wrap: break-word;">
   {% for post in posts %}
-  <div class="list-group-item panel
-    {% if post.post_type == 3 %}
-    panel-primary
-    {% elif post.post_type == 2 %}
-    panel-info
-    {% elif post.post_type == 1 %}
-    panel-success
-    {% elif post.post_type == 0 %}
-    panel-danger
-    {% else %}
-    panel-warning
-    {% endif %}
-    visborder">
+  <div class="list-group-item panel panel-info visborder">
     <div class="panel-heading">
       <div class="row">
-        <div class="col-md-8" style="margins:30px">
+        <div class="col-md-8">
           <h4> <p>{{ post.title }}</p></h4>
         </div>
-        <div class="col-md-4" style="margins:30px">
+        <div class="col-md-4 visborder pull-right" align="right">
           <p><small><small>{{ post.updated_at }}</small></small></p>
         </div>
       </div>
     </div>
     <div class="panel-body">
-      <div class="row">
-        <div class="col-md-12">
-          <p>{{ post.text|safe }}</p>
-          <div class="row">
-            <div class="form-group col-lg-4 col-lg-offset-1" style="display:none;" id="edit_post_div_{{post.id}}">
-              <form action = "{% url 'edit_post' post.id %} " method="post">
-                <textarea class="tinymce form-control" cols="85" data-mce-conf="{&quot;relative_urls&quot;: false, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Hungarian=hu,Interlingua=ia,Indonesian=id,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Burmese=my,Norwegian Bokmal=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Thai=th,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;theme&quot;: &quot;simple&quot;, &quot;strict_loading_mode&quot;: 1, &quot;mode&quot;: &quot;exact&quot;, &quot;language&quot;: &quot;en&quot;, &quot;elements&quot;: &quot;id_text&quot;, &quot;directionality&quot;: &quot;ltr&quot;}" id="id_text" name="text" rows="10"></textarea> 
-                <button type="submit" class="btn btn-submit">Submit</button>
-              </form>
-            </div>
-          </div> 
-        </div>
+      <div id="to_hide_{{post.id}}">{{ post.text|safe }}</div>
+      <div class="form-group hidden-divs" id="edit_post_div_{{post.id}}" style="display:block">
+        <form action = "{% url 'edit_post' post.id %} " method="post">
+          <textarea class="tinymce form-control" cols="85" data-mce-conf="{&quot;relative_urls&quot;: false, &quot;spellchecker_languages&quot;: &quot;+English / Australian English / British English=en&quot;, &quot;theme&quot;: &quot;simple&quot;, &quot;strict_loading_mode&quot;: 1, &quot;mode&quot;: &quot;exact&quot;, &quot;language&quot;: &quot;en&quot;, &quot;elements&quot;: &quot;id_text&quot;, &quot;directionality&quot;: &quot;ltr&quot;}" id="id_text" name="text" rows="10">{{ post.text|safe }}</textarea> 
+          {% csrf_token %}
+          <button type="submit" class="btn btn-submit">Submit</button>
+        </form>
       </div>
     </div>
     <div class="panel-footer">
@@ -76,4 +59,12 @@
 <a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Start new thread of comments</a>
 
       </div>
+      {% endblock %}
+      {% block footer %}
+      <script>
+        {% for post in posts %}
+        d = document.getElementById('edit_post_div_'+{{post.id}});
+        if( d.style.display == 'block')  d.style.display = 'none';
+        {% endfor %}
+      </script>
       {% endblock %}

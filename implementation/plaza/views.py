@@ -58,8 +58,6 @@ def get_user_role(user, course):
 
 def user_has_permission(user, course, required_role):
     user_role = get_user_role(user, course)
-    print("user_role " + `user_role`)
-    print("required_role " + `required_role`)
     if required_role == Role.instructor:
         if user_role == Role.instructor:
             return True
@@ -762,7 +760,7 @@ def post(request,semester_id,course_id,parent_id):
         s = Post(title = 'staff answer', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
         s.save()
 
-      return view_post(request,p.id)
+      return redirect('view_post',(p.root_id if p.root_id <> 0 else p.id))
     else:
       print form.errors
 
@@ -785,56 +783,21 @@ def post(request,semester_id,course_id,parent_id):
 @transaction.atomic
 def edit_post(request,post_id):
   if request.method == 'POST':
-    form = PostForm(request.POST)
-    context = {'form':form}
-    if form.is_valid():
-      c = Course.objects.get(semester=semester_id,number=course_id)
+    # TODO: VALIDATE
+    #if not user_has_permission(request.user, c, Role.student):
+    #    return redirect('coursesignup', c.semester, c.number)
 
-      if not user_has_permission(request.user, c, Role.student):
-        return redirect('coursesignup', c.semester, c.number)
-
-      author = Person.objects.get(user=request.user)
+      author = request.user.person
       # TODO : Check if author can post in this course
+      p = Post.objects.get(id=post_id)
+      if p.author == author:
+        p.text = request.POST.get('text')
+        p.save()
 
-      parent_post = None
-      root_post   = None
+      return redirect('view_post',(p.root_id if p.root_id <> 0 else p.id))
 
-      p = Post(title      = form.cleaned_data['title'],
-               text       = form.cleaned_data['text'],
-               author     = author,
-               parent_id  = parent_id,
-               root_id    = root_post.id if root_post is not None else 0,
-               course     = c,
-               post_type  = form.cleaned_data['post_type'],
-               )
+  return(redirect('view_post',post_id))
 
-      p.save()
-
-      if str(p.post_type[0]) == '0':
-        q = Post(title = 'student answer', text = 'Students, please use this space to answer the question', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 1)
-        q.save()
-
-        s = Post(title = 'staff answer', text = 'The staff will answer here', author = None, parent_id = p.id, root_id = p.id, course = c, post_type = 2)
-        s.save()
-
-      return render(request, 'home.html',{})
-    else:
-      print form.errors
-
-  else:
-    form = PostForm()
-
-  context = {'form':form}
-  c = Course.objects.get(semester=semester_id,number=course_id)
-  context['course_id'] = course_id
-  context['semester_id'] = semester_id
-  context['tags']=c.tags.all()
-  context['types'] = [('3','Comment')]
-
-  if str(parent_id) == '0' and request.user in c.students.all():
-    context['types'].insert(0,('0','Question') )
-
-  return render(request, 'post.html',context)
 
 
 @login_required
@@ -853,14 +816,6 @@ def upvote(request,post_id):
 @transaction.atomic
 def downvote(request,post_id):
     # Downvote a post
-    return
-
-@login_required
-@transaction.atomic
-def edit_post(request, post_id):
-	# Edit content
-	# Change visibility
-	# Assign to students
     return
 
 @login_required
@@ -893,9 +848,6 @@ def get_new_posts_json(request,semester_id,course_id,post_id):
 
     
     response_text = '[' + response_text[:-2] + ']'
-    print
-    print response_text
-    print
     return HttpResponse(response_text, content_type="application/json")
 
 ####### For ajax  #######

@@ -17,9 +17,8 @@ $('.clickable').click( function ()
 
 function edit_text(post_id)
 {
-  d = document.getElementById('edit_post_div_'+post_id);
-  d.style.display = 'block';
-  d.style.width = '100%';
+  document.getElementById('edit_post_div_'+post_id).style.display = 'block';
+  document.getElementById('to_hide_'+post_id).style.display = 'none';
 }
 
 
@@ -63,5 +62,4 @@ function updatePosts(posts)
 
 
 
-window.setInterval(getPosts, 1000);
 
