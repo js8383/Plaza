@@ -62,6 +62,7 @@
 		</div>
 	 </div>
 
+
 	<div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -157,6 +158,55 @@
         </div>
         <!-- /.panel -->
     </div>
+
+
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Friends
+            </div>
+            <div class="panel-body">
+
+                <ul class="nav nav-tabs">
+
+                    <li class="active"><a href="#following" data-toggle="tab">Following</a>
+                    </li>
+                
+                    <li><a href="#follower" data-toggle="tab">Follower</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                <div class="tab-pane fade in active" id="following">
+                <br>
+                {% for friend in targetuser.person.following.all %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                            <h4 class="panel-title"> <a href='{% url 'profile' friend.id %}'> {{ friend.first_name }} {{ friend.last_name }} ({{ friend }}) </a>
+                        </h4>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+
+                <div class="tab-pane fade" id="follower">
+                <br>
+                {% for friend in targetuser.follows.all %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                            <h4 class="panel-title"> <a href='{% url 'profile' friend.id %}'> {{ friend.user.first_name }} {{ friend.user.last_name }} ({{ friend }}) </a>
+                        </h4>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

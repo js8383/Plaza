@@ -1188,6 +1188,7 @@ def profile_page(request, id):
     context['recentpost'] = recentpost
     context['joinedcourse'] = joinedcourse
     context['taughtcourse'] = taughtcourse
+    context['targetuser'] = user
     return render(request, "profile.html", context)
 
 # @login_required
