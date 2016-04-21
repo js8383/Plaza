@@ -431,8 +431,6 @@ def add_person_to_course(request):
     if not user_has_permission(request.user, course, required_role):
         return HttpJSONStatus("You don't have permission to add this person!", status=400)
 
-
-
     if group.filter(username__exact=username).count() != 0:
         return HttpJSONStatus("Already a member", status=400)
 
@@ -442,8 +440,14 @@ def add_person_to_course(request):
     # may have been for the course
 
     if course.instructors.filter(username__exact=username).count() != 0:
+        if not user_has_permission(request.user, course, Role.instructor):
+            return HttpJSONStatus("You don't have permission to transfer "+username, status=400)
+        if course.instructors.count() == 1:
+            return HttpJSONStatus("Can't transfer the last instructor in the course!",status=400)
         course.instructors.remove(user)
     if course.staff.filter(username__exact=username).count() != 0:
+        if not user_has_permission(request.user, course, Role.instructor):
+            return HttpJSONStatus("You don't have permission to transfer "+username, status=400)
         course.staff.remove(user)
     if course.students.filter(username__exact=username).count() != 0:
         course.students.remove(user)
