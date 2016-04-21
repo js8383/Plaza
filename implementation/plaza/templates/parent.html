@@ -137,7 +137,7 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  
+                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>
 
                         <span id="bbadge" class="label label-danger label-as-badge">...</span> <i style="color:#337AB7;" class="fa fa-caret-down"></i> </button>
 
@@ -155,7 +155,7 @@
 
                         <li>
                         <a class="text-center" href="{% url 'notification' %}">
-                            <strong>See Detail</strong> 
+                            <strong>See Detail</strong>
                             <i class="fa fa-angle-right"></i>
                         </a>
                         </li>
@@ -276,6 +276,7 @@
             removeLabel: "Discard "
         });
     });
+</script>
 
     {% block footer %} {% endblock %}
 

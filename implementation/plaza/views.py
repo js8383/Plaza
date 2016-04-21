@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.conf import settings
 from datetime import datetime
-import pusher 
+import pusher
 
 ## Role based course/user interaction ##
 class Role:
@@ -602,10 +602,12 @@ def submit_team(request):
     p = Post(title = team.name + ' personal thread', text = 'You can communicate here',author = None, parent_id = team_post_id, root_id = team_post_id, course = course, post_type = 2)
     p.save()
 
-
     #add ourselves to the team and then the other members
     for member in team_members:
         team.members.add(get_object_or_404(Person,user__username=member))
+
+    notif_url = "/myteam/"+course_semester+"/"+course_number+"/"+assignment_number
+    save_and_notify('8', person, target_user.person, '', "/profile/"+str(request.user.id))
 
     return HttpJSONStatus("Team "+team_name+" created!", status=200)
 

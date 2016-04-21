@@ -307,18 +307,18 @@ function displaynotidropdown(id) {
                                    "<span class='pull-right text-muted small'>" + created_at + "</span></div></a>" +
                                    "</li> <li class='divider'></li>"
             // console.log(innerhtml_format);
-            
+
         }
         $('#notidropdown li:not(:last)').remove();
         $('#notidropdown').prepend(innerhtml_format);
-    
-        
+
+
     }
 
     req.open("POST", "/getnotification/" + id, true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.send("csrfmiddlewaretoken="+getCSRFToken());
-    
+
     $('#notidropdown').toggle();
 }
 
@@ -355,7 +355,7 @@ function update_unread_number() {
         },
 
         error: function (xhr, status, errorThrown) {
-            
+
         }
     });
 }
@@ -363,5 +363,4 @@ function update_unread_number() {
 $(function() {
     update_unread_number()
 });
-
 
