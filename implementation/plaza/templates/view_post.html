@@ -5,67 +5,79 @@
 {% endblock %}
 
 {% block content %}
-<div class="list-group" style="word-wrap: break-word;">
-  {% for post in posts %}
-  <div class="list-group-item panel panel-info visborder">
-    <div class="panel-heading">
-      <div class="row">
-        <div class="col-md-8">
-          <h4> <p>{{ post.title }}</p></h4>
-        </div>
-        <div class="col-md-4 visborder pull-right" align="right">
-          <p><small><small>{{ post.updated_at }}</small></small></p>
-        </div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <div id="to_hide_{{post.id}}">{{ post.text|safe }}</div>
-      <div class="form-group hidden-divs" id="edit_post_div_{{post.id}}" style="display:block">
-        <form action = "{% url 'edit_post' post.id %} " method="post">
-          <textarea class="tinymce form-control" cols="85" data-mce-conf="{&quot;relative_urls&quot;: false, &quot;spellchecker_languages&quot;: &quot;+English / Australian English / British English=en&quot;, &quot;theme&quot;: &quot;simple&quot;, &quot;strict_loading_mode&quot;: 1, &quot;mode&quot;: &quot;exact&quot;, &quot;language&quot;: &quot;en&quot;, &quot;elements&quot;: &quot;id_text&quot;, &quot;directionality&quot;: &quot;ltr&quot;}" id="id_text" name="text" rows="10">{{ post.text|safe }}</textarea> 
-          {% csrf_token %}
-          <button type="submit" class="btn btn-submit">Submit</button>
-        </form>
-      </div>
-    </div>
-    <div class="panel-footer">
-      <div class="row">
-        <div class="col-sm-4">
-          <a href="javascript:updownvote({{post.id}},'upvote')"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a><span><sub>{{post.upvoters.count}}</sub></span>
-          <a href="javascript:updownvote({{post.id}},'downvote')"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a><span><sub>{{post.downvoters.count}}</sub></span>
-          {% if user == post.author.user or instructor %}
-          <button class="btn btn-sm btn-warning" id="edit_{{post.id}}" onclick="edit_text({{post.id}})">Edit</button>
-          {% endif %}
-        </div>
-        <div class="col-sm-4">
-          {% if post.author %}
-          <p>Posted by <a href="{% url 'profile' post.author.id  %}" target="_top">{{ post.author }}</a> at {{post.created_at|date:"M d, H:m"}}</p>
+<div class="container-fluid">
+  <div class="list-group" style="word-wrap: break-word;">
 
-          {% endif %}
-          {% if post.assignee %}
-          <p>Assigned to <a href="{% url 'profile' 1  %}">{{ post.assignee }}</a></p> 
-          {% endif %}
-        </div>
-        <div class="col-sm-4">
+    {% for post in posts %}
+    <div class="list-group-item panel panel-info visborder">
+
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-8">
+            <h4> <p>{{ post.title }}</p></h4>
+          </div>
+          <div class="col-md-4 visborder pull-right" align="right">
+            <p><small><small>{{ post.updated_at }}</small></small></p>
+          </div>
         </div>
       </div>
-    </div>
+      <!-- panel-heading ended above -->
 
-    {% for tag in post.tags.all %}
-    <button class="btn btn-default btn-sm" >{{ tag }}</button>
+      <div class="panel-body">
+        <div id="to_hide_{{post.id}}">{{ post.text|safe }}</div>
+        <div class="form-group hidden-divs" id="edit_post_div_{{post.id}}" style="display:block">
+          <form action = "{% url 'edit_post' post.id %} " method="post">
+            <textarea class="tinymce form-control" cols="85" data-mce-conf="{&quot;relative_urls&quot;: false, &quot;spellchecker_languages&quot;: &quot;+English / Australian English / British English=en&quot;, &quot;theme&quot;: &quot;simple&quot;, &quot;strict_loading_mode&quot;: 1, &quot;mode&quot;: &quot;exact&quot;, &quot;language&quot;: &quot;en&quot;, &quot;elements&quot;: &quot;id_text&quot;, &quot;directionality&quot;: &quot;ltr&quot;}" id="id_text" name="text" rows="10">{{ post.text|safe }}</textarea> 
+            {% csrf_token %}
+            <button type="submit" class="btn btn-submit">Submit</button>
+          </form>
+        </div>
+      </div>
+      <!-- panel-body ended above -->
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-4">
+            <a href="javascript:updownvote({{post.id}},'upvote')"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a><span><sub>{{post.upvoters.count}}</sub></span>
+            <a href="javascript:updownvote({{post.id}},'downvote')"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a><span><sub>{{post.downvoters.count}}</sub></span>
+            {% if user == post.author.user or instructor %}
+            <button class="btn btn-sm btn-warning" id="edit_{{post.id}}" onclick="edit_text({{post.id}})">Edit</button>
+            {% endif %}
+          </div>
+          <div class="col-sm-4">
+            {% if post.author %}
+            <p>Posted by <a href="{% url 'profile' post.author.id  %}" target="_top">{{ post.author }}</a> at {{post.created_at|date:"M d, H:m"}}</p>
+
+            {% endif %}
+            {% if post.assignee %}
+            <p>Assigned to <a href="{% url 'profile' 1  %}">{{ post.assignee }}</a></p> 
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!-- panel-footer ended above -->
+
+      {% for tag in post.tags.all %}
+      <button class="btn btn-default btn-sm" >{{ tag }}</button>
+      {% endfor %}
+
+
+    </div>
+    <!-- panel ends here -->
     {% endfor %}
+
   </div>
+  <!-- list-group ends here -->
 
+  <a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Reply / Comment</a>
 </div>
-{% endfor %}<a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Reply / Comment</a>
+{% endblock %}
 
-      </div>
-      {% endblock %}
-      {% block footer %}
-      <script>
-        {% for post in posts %}
-        d = document.getElementById('edit_post_div_'+{{post.id}});
-        if( d.style.display == 'block')  d.style.display = 'none';
-        {% endfor %}
-      </script>
-      {% endblock %}
+{% block footer %}
+<script>
+  {% for post in posts %}
+  d = document.getElementById('edit_post_div_'+{{post.id}});
+  if( d.style.display == 'block')  d.style.display = 'none';
+  {% endfor %}
+</script>
+{% endblock %}
