@@ -53,7 +53,7 @@ class Course(models.Model):
     instructors = models.ManyToManyField(User, related_name='courses_managed')
 
     def __unicode__(self):
-        return self.semester+'. '+self.name
+        return self.number + " " + self.name + "["+self.semester+"]"
     def __str__(self):
         return self.__unicode__()
 

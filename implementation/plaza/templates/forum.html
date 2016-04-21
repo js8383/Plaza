@@ -3,7 +3,7 @@
 {% block header %}
 {% endblock %}
 {% block nav %}
-<li class="active"><a href="#">Forum</a></li>
+<li class="active"><a href="{% url 'forum' semester_id=semester_id course_id=course_id %}">Forum</a></li>
 <li><a href="{% url 'resource' semester_id course_id 0 %}">Resource</a></li>
 <li><a href="{% url 'editcourse' course_semester=semester_id course_number=course_id %}">Manage Course</a></li>
 {% endblock %}
@@ -32,7 +32,7 @@
           {% for element in filters %}
           <li>
           <a href="#">
-            <span class="badge pull-right">{{ element.1 }}</span><input type="checkbox"/>{{ element.0 }}</a>
+            <span class="badge pull-right">{{ element.1 }}</span><input type="checkbox"/> {{ element.0 }}</a>
           </li>
           {% endfor %}
           <li><hr></li>

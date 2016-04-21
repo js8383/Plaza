@@ -107,8 +107,9 @@ function log_error(xhr, status, errorThrown)
     console.dir( xhr );
 }
 
-
-//$('#dpicker').datepicker({});
+if ($( "#dpicker" ).length) {
+    $('#dpicker').datepicker({});
+}
 
 // $("#my-checkbox").bootstrapSwitch();
 
@@ -352,6 +353,12 @@ function update_unread_number() {
         type: "POST",
         dataType: "json",
         success: function (response) {
+            num_unread = response['un'];
+            if (num_unread == 0) {
+                $('#bbadge').addClass('label-success').removeClass('label-danger');
+            } else {
+                $('#bbadge').addClass('label-danger').removeClass('label-success');
+            }
             $('#bbadge').html(response['un']);
         },
 

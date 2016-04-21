@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block nav %}
-<li ><a href="#">Forum</a></li>
+<li ><a href="{% url 'forum' semester_id=sid course_id=cid %}">Forum</a></li>
 <li class="active"><a href="{% url 'resource' sid cid 0 %}">Resource</a></li>
 <li><a href="{% url 'editcourse' course_semester=sid course_number=cid %}">Manage Course</a></li>
 {% endblock %}
