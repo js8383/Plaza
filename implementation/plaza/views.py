@@ -608,6 +608,7 @@ def view_post(request, post_id):
   posts += Post.objects.filter(root_id=p.id)
 
   context = {'posts' : posts }
+  context['form'] = PostForm()
   context['root_id'] = int(root_id)
   context['course_id'] = int(p.course.number)
   context['semester_id'] = p.course.semester

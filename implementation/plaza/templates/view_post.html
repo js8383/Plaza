@@ -1,5 +1,9 @@
 {% extends "head.html" %}
 {% load staticfiles %}
+{% block head %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 <div class="list-group" style="word-wrap: break-word;">
   {% for post in posts %}
@@ -30,6 +34,14 @@
       <div class="row">
         <div class="col-md-12">
           <p>{{ post.text|safe }}</p>
+          <div class="row">
+            <div class="form-group col-lg-4 col-lg-offset-1" style="display:none;" id="edit_post_div_{{post.id}}">
+              <form action = "{% url 'edit_post' post.id %} " method="post">
+                <textarea class="tinymce form-control" cols="85" data-mce-conf="{&quot;relative_urls&quot;: false, &quot;spellchecker_languages&quot;: &quot;Afrikaans=af,Arabic=ar,Asturian=as,Azerbaijani=az,Bulgarian=bg,Belarusian=be,Bengali=bn,Breton=br,Bosnian=bs,Catalan=ca,Czech=cs,Welsh=cy,Danish=da,German=de,Greek=el,+English / Australian English / British English=en,Esperanto=eo,Spanish / Argentinian Spanish / Colombian Spanish / Mexican Spanish / Nicaraguan Spanish / Venezuelan Spanish=es,Estonian=et,Basque=eu,Persian=fa,Finnish=fi,French=fr,Frisian=fy,Irish=ga,Scottish Gaelic=gd,Galician=gl,Hebrew=he,Hindi=hi,Croatian=hr,Hungarian=hu,Interlingua=ia,Indonesian=id,Ido=io,Icelandic=is,Italian=it,Japanese=ja,Georgian=ka,Kazakh=kk,Khmer=km,Kannada=kn,Korean=ko,Luxembourgish=lb,Lithuanian=lt,Latvian=lv,Macedonian=mk,Malayalam=ml,Mongolian=mn,Marathi=mr,Burmese=my,Norwegian Bokmal=nb,Nepali=ne,Dutch=nl,Norwegian Nynorsk=nn,Ossetic=os,Punjabi=pa,Polish=pl,Portuguese / Brazilian Portuguese=pt,Romanian=ro,Russian=ru,Slovak=sk,Slovenian=sl,Albanian=sq,Serbian / Serbian Latin=sr,Swedish=sv,Swahili=sw,Tamil=ta,Telugu=te,Thai=th,Turkish=tr,Tatar=tt,Udmurt=ud,Ukrainian=uk,Urdu=ur,Vietnamese=vi,Simplified Chinese / Traditional Chinese=zh&quot;, &quot;theme&quot;: &quot;simple&quot;, &quot;strict_loading_mode&quot;: 1, &quot;mode&quot;: &quot;exact&quot;, &quot;language&quot;: &quot;en&quot;, &quot;elements&quot;: &quot;id_text&quot;, &quot;directionality&quot;: &quot;ltr&quot;}" id="id_text" name="text" rows="10"></textarea> 
+                <button type="submit" class="btn btn-submit">Submit</button>
+              </form>
+            </div>
+          </div> 
         </div>
       </div>
     </div>
@@ -38,7 +50,7 @@
         <div class="col-sm-4">
           <a href="{% url 'upvote' post.id %}"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a>
           <a href="{% url 'downvote' post.id %}"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a>
-          <a href="{% url 'edit_post' post.id %}" role="button"  class="btn btn-sm btn-warning">Edit</a>
+          <button class="btn btn-sm btn-warning" id="edit_{{post.id}}" onclick="edit_text({{post.id}})">Edit</button>
         </div>
         <div class="col-sm-4">
           {% if post.author %}
