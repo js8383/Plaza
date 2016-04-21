@@ -37,7 +37,7 @@
 				</div>
 				<div class="col-lg-12"> 
 				<hr>
-				<b>{{ person.user.follows.count }}</b> Followers &nbsp; - &nbsp; <b>{{ person.following.all.count }}</b> Followings &nbsp; - &nbsp; <b>0</b> Upvotes 
+				<b>{{ person.user.follows.count }}</b> Followers &nbsp; - &nbsp; <b>{{ person.following.all.count }}</b> Followings &nbsp; - &nbsp; <b>{{ person.upvotes.all.count }}</b> Upvotes 
 				<span class="pull-right">
 
                 {% if request_id != person.user.id %}
@@ -52,7 +52,7 @@
                     </form>
                     <button id="followbtn" type="submit" form="followform" class="btn btn-outline btn-primary btn-xs"><span>Not Following</span></button>
                     {% endif %}
-    				<button type="button" class="btn btn-outline btn-primary btn-xs">InMail</button>
+    				<button type="button" class="btn btn-outline btn-primary btn-xs disabled">InMail</button>
                 {% endif %}
 
 				</span>
