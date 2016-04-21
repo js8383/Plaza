@@ -104,6 +104,11 @@ function add_assignment(dirty_title, number, team_min, team_max, end_time)
         dataType: "json",
 
         success: function (message) {
+            $("#assignment_title_field").val('');
+            $("#assignment_number_field").val('');
+            $("#assignment_tm_mn_field").val('');
+            $("#assignment_tm_mx_field").val('');
+            $("#ass_dpicker").val('');
             // add the user to the new roles table
             append_assignment(title, number, team_min, team_max, end_time);
             // append a tag as well if
@@ -354,8 +359,6 @@ $("#add_assignment").click(function(event){
         $("#assignment_tm_mn_field").val(),
         $("#assignment_tm_mx_field").val(),
         $("#ass_dpicker").val());
-    $("#assignment_title_field").val('');
-    $("#assignment_number_field").val('');
 });
 
 // asynchronously submit the class preferences
