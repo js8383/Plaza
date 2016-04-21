@@ -16,7 +16,7 @@ from mimetypes import guess_type
 from django.db.models import Q
 from django.http import JsonResponse
 from django.conf import settings
-from datetime import datetime
+from datetime import datetime, date
 from django.utils.html import *
 from annoying.functions import get_object_or_None
 import pusher
@@ -303,10 +303,17 @@ def add_assignment_to_course(request):
     course_semester = request.POST.get("course_semester", "")
     assignment_title = request.POST.get("assignment_title", "")
     assignment_number = request.POST.get("assignment_number", "")
-
+    d_team_min_size = request.POST.get("assignment_team_min_size","")
+    d_team_max_size = request.POST.get("assignment_team_max_size","")
+    end_time = request.POST.get("assignment_end_time","")
     if (course_number == "" or course_semester == "" or
-        assignment_title == "" or assignment_number == ""):
+        assignment_title == "" or assignment_number == "" or
+        d_team_min_size == "" or d_team_max_size == "" or end_time == ""):
         return HttpJSONStatus("Invalid parameters", status=400)
+
+
+    team_min_size = int(d_team_min_size)
+    team_max_size = int(d_team_max_size)
 
     course = get_object_or_404(Course, number=course_number, semester=course_semester)
 
@@ -314,15 +321,27 @@ def add_assignment_to_course(request):
     if not user_has_permission(request.user, course, Role.staff):
         return HttpJSONStatus("You don't have permission to add assignments!", status=400)
 
-
     if (course.assignments.filter(title=assignment_title).count() != 0):
         return HttpJSONStatus("Assignment with title already exists.", status=400)
 
     if (course.assignments.filter(number=assignment_number).count() != 0):
         return HttpJSONStatus("Assignment with number already exists.", status=400)
 
+
+    if (team_min_size < 0 or team_min_size > team_max_size or
+            team_max_size > course.max_enroll):
+        return HttpJSONStatus("Invalid team sizes", status=400)
+
+    due_date = datetime.strptime(end_time, "%m/%d/%Y").date()
+    today = date.today()
+    if (due_date <= today):
+        return HttpJSONStatus("Due date must be a date after today", status=400)
+
     assignment = Assignment(title=assignment_title,
                             number=assignment_number,
+                            team_min_size=team_min_size,
+                            team_max_size=team_max_size,
+                            end_time=due_date,
                             course=course)
     assignment.save()
 
@@ -430,6 +449,8 @@ def add_person_to_course(request):
         required_role = Role.instructor
     elif role == 'student':
         required_role = Role.staff
+        if course.students.count() == course.max_enroll:
+            return HttpJSONStatus("Max enroll reached!", status=400)
         group = course.students
     else:
         return HttpJSONStatus("Invalid parameters", status=400)
@@ -507,10 +528,16 @@ def add_person_to_team(request):
     if assignment == None:
         return HttpJSONStatus("Team does not have an assignment!", status=400)
 
+    if assignment.team_max_size == team.members.count():
+        return HttpJSONStatus("Team is already at max capacity", status=400)
+
     try:
         user = User.objects.get(username__exact=username)
     except ObjectDoesNotExist:
         return HttpJSONStatus("User does not exist!", status=400)
+
+    if get_user_role(user, assignment.course) != Role.student:
+        return HttpJSONStatus("User is not in this class!", status=400)
 
     if user.person.teams.filter(assignment__id=assignment.id).count() == 1:
         return HttpJSONStatus(username+" already has a team for this assignment!", status=400)
@@ -579,8 +606,20 @@ def submit_team(request):
     except ObjectDoesNotExist:
         return HttpJSONStatus("Course does not exist", status=400)
 
+    try:
+        assignment = Assignment.objects.get(number=assignment_number, course=course)
+    except ObjectDoesNotExist:
+        return HttpJSONStatus("Assignment does not exist!", status=400)
+
     # add ourselves to the list
     team_members.append(request.user.username)
+
+    if (len(team_members) > assignment.team_max_size or
+        len(team_members) < assignment.team_min_size):
+        return HttpJSONStatus(
+                "Team must be at most "+assignment.team_max_size+
+                " and at minimum " + assignment.team_min_size+" people.",
+                status=400)
 
     if (team_name == "" or team_members == "" or
         course_number == "" or assignment_number == ""):
@@ -719,6 +758,7 @@ def view_post(request, post_id):
     posts = [p]
     root_id = p.id
 
+  c = p.course
   if not user_has_permission(request.user, p.course, Role.student):
     return redirect('coursesignup', c.semester, c.number)
 

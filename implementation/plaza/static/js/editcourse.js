@@ -18,7 +18,7 @@ function append_tag(name)
     );
 }
 
-function append_assignment(title, number)
+function append_assignment(title, number, team_min, team_max, end_time)
 {
     $("#assignment_table").prepend(
         '<tr id="assignment_'+title+'_row">'+
@@ -27,6 +27,15 @@ function append_assignment(title, number)
             '</td>'+
             '<td>'+
                 number+
+            '</td>'+
+            '<td>'+
+                team_min+
+            '</td>'+
+            '<td>'+
+                team_max+
+            '</td>'+
+            '<td>'+
+                end_time+
             '</td>'+
             '<td>'+
                 '<button class="btn btn-default"'+
@@ -69,9 +78,12 @@ function add_tag(dirty_name)
 }
 
 
-function add_assignment(dirty_title, number)
+function add_assignment(dirty_title, number, team_min, team_max, end_time)
 {
     var title=remove_special(dirty_title)
+    console.log(team_min);
+    console.log(team_max);
+    console.log(end_time);
     $.ajax({
 
         url: "/add_assignment_to_course/",
@@ -79,6 +91,9 @@ function add_assignment(dirty_title, number)
         data: {
             assignment_title: title,
             assignment_number: number,
+            assignment_team_min_size: team_min,
+            assignment_team_max_size: team_max,
+            assignment_end_time: end_time,
             course_number: course_number,
             course_semester: course_semester,
             csrfmiddlewaretoken: getCSRFToken()
@@ -90,7 +105,7 @@ function add_assignment(dirty_title, number)
 
         success: function (message) {
             // add the user to the new roles table
-            append_assignment(title, number);
+            append_assignment(title, number, team_min, team_max, end_time);
             // append a tag as well if
             // one doesn't exist already
             if (!($("#tag_"+title+"_row").length))
@@ -335,7 +350,10 @@ $("#assignment_number_field").keyup(function(event){
 $("#add_assignment").click(function(event){
     add_assignment(
         $("#assignment_title_field").val(),
-        $("#assignment_number_field").val());
+        $("#assignment_number_field").val(),
+        $("#assignment_tm_mn_field").val(),
+        $("#assignment_tm_mx_field").val(),
+        $("#ass_dpicker").val());
     $("#assignment_title_field").val('');
     $("#assignment_number_field").val('');
 });
@@ -372,4 +390,7 @@ $("#course_pref_form").submit(function(event) {
 });
 
 
+if ($( "#ass_dpicker" ).length) {
+    $('#ass_dpicker').datepicker({});
+}
 

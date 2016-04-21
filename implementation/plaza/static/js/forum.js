@@ -4,9 +4,9 @@ function post(parent_id)
   document.getElementById('frame').src="/post/"+semester_id+"/"+course_id+"/"+parent_id;
 }
 
-$('.clickable').click( function () 
+$('.clickable').click( function ()
 {
-  if (typeof oldPostId !== 'undefined') 
+  if (typeof oldPostId !== 'undefined')
   {
     $(document.getElementById(oldPostId)).removeClass('panel-primary').addClass('panel-default');
   }
@@ -23,10 +23,10 @@ function edit_text(post_id)
 
 
 // Sends a new request to update the post list
-function getPosts() 
+function getPosts()
 {
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() 
+    req.onreadystatechange = function()
     {
         if (req.readyState != 4) return;
         if (req.status != 200) return;
@@ -42,9 +42,9 @@ function getPosts()
 
 
 
-function updatePosts(posts) 
+function updatePosts(posts)
 {
-  for(var i=0; i<posts.length;++i) 
+  for(var i=0; i<posts.length;++i)
   {
   new_post_html = '<div class="list-group-item panel panel-default clickable visborder" id="post_'
    + posts[i]["post_id"]
@@ -65,7 +65,7 @@ function updatePosts(posts)
 function updownvote(post_id,vote_type)
 {
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() 
+    req.onreadystatechange = function()
     {
         if (req.readyState != 4) return;
         if (req.status == 404)
@@ -74,7 +74,9 @@ function updownvote(post_id,vote_type)
           display_error(msg.message);
         }
         if (req.status != 200) return;
-        display_success("Voted successfully");
+        count = parseInt(($('#'+vote_type+'_'+post_id)[0]).innerHTML);
+        ($('#'+vote_type+'_'+post_id)[0]).innerHTML = ''+(count+1);
+        
         var msg = JSON.parse(req.responseText);
     }
     req.open("GET", "/"+vote_type+"/" + post_id ,true);
