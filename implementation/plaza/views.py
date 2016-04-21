@@ -700,6 +700,7 @@ def forum_home(request, semester_id, course_id):
     context['course_id'] = course_id
     context['semester_id'] = semester_id
     context['user'] = request.user
+    context['course'] = c
 
 
     return render(request, 'forum_home.html',context)
