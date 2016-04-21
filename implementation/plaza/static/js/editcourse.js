@@ -177,10 +177,10 @@ function ajax_remove(username, role)
 
     data: {
         username: username,
-    role: role,
-    course_number: course_number,
-    course_semester: course_semester,
-    csrfmiddlewaretoken: getCSRFToken()
+        role: role,
+        course_number: course_number,
+        course_semester: course_semester,
+        csrfmiddlewaretoken: getCSRFToken()
     },
 
     type: "POST",
@@ -188,7 +188,7 @@ function ajax_remove(username, role)
     dataType: "json",
 
     success: function () {
-        $("#assignment_"+username+"_row").remove();
+        $("#"+username+"_row").remove();
     },
 
     error: function (xhr, status, errorThrown) {
