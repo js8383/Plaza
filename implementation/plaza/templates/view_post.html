@@ -33,7 +33,9 @@
         <div class="col-sm-4">
           <a href="{% url 'upvote' post.id %}"><img src = "/media/photos/up.png" width="32px" height="32px"></img></a><span><sub>{{post.upvoters.count}}</sub></span>
             <a href="{% url 'downvote' post.id %}"><img src = "/media/photos/down.png" width="32px" height="32px"></img></a><span><sub>{{post.downvoters.count}}</sub></span>
+          {% if user == post.author.user or instructor %}
           <button class="btn btn-sm btn-warning" id="edit_{{post.id}}" onclick="edit_text({{post.id}})">Edit</button>
+          {% endif %}
         </div>
         <div class="col-sm-4">
           {% if post.author %}
@@ -55,8 +57,7 @@
   </div>
 
 </div>
-{% endfor %}
-<a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Start new thread of comments</a>
+{% endfor %}<a href="{% url 'post' semester_id course_id root_id %}" class="btn btn-default" role="button" style="width: 100%" >Reply / Comment</a>
 
       </div>
       {% endblock %}

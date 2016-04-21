@@ -699,6 +699,7 @@ def forum_home(request, semester_id, course_id):
     context = {}
     context['course_id'] = course_id
     context['semester_id'] = semester_id
+    context['user'] = request.user
 
 
     return render(request, 'forum_home.html',context)
@@ -708,6 +709,8 @@ def view_post(request, post_id):
   if int(post_id) > 0:
     p = Post.objects.get(id=post_id)
     root_id = p.id if p.root_id == 0 else p.root_id
+    if root_id < 0:
+      return view_post(request,root_id)
     posts = [Post.objects.get(id=root_id)]
 
   elif int(post_id) < 0:
@@ -720,8 +723,11 @@ def view_post(request, post_id):
 
   posts += Post.objects.filter(root_id=p.id)
 
+
   context = {'posts' : posts }
   context['form'] = PostForm()
+  context['user'] = request.user
+
   context['root_id'] = int(root_id)
   context['course_id'] = int(p.course.number)
   context['semester_id'] = p.course.semester
@@ -780,6 +786,7 @@ def post(request,semester_id,course_id,parent_id):
   context = {'form':form}
   c = Course.objects.get(semester=semester_id,number=course_id)
   context['course_id'] = course_id
+  context['user'] = request.user
   context['semester_id'] = semester_id
   context['tags']=c.tags.all()
   context['types'] = [('3','Comment')]
