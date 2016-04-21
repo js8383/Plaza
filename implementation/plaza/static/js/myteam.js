@@ -73,7 +73,8 @@ function make_member_html(user)
     return '<a href="#">'+user.username+'</a>';
 }
 
-init_suggestions(
+window.onload = function() {
+    init_suggestions(
         "username",
         $("#student_search_field"),
         $("#add_member"),
@@ -82,6 +83,7 @@ init_suggestions(
         add_person,
         course_semester,
         course_number);
+};
 
 
 $("#alert_cancel").click(function(event){

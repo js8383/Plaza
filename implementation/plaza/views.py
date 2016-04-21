@@ -255,7 +255,8 @@ def save_course_pref(request, course_number, course_semester):
     course.max_enroll = form.cleaned_data['max_enroll']
     course.description = form.cleaned_data['description']
     course.access_code = form.cleaned_data['access_code']
-    course.public = form.cleaned_data['public']
+    if course.access_code == None:
+        course.public = True;
     course.save()
 
     return HttpJSONStatus("Successfully updated", status=200)
@@ -545,6 +546,12 @@ def add_person_to_team(request):
     team.members.add(user.person)
     team.save()
 
+    course = assignment.course
+    notif_url = "/myteam/"+str(course.semester)+"/"+str(course.number)+"/"+str(assignment.number)
+    msg = "You were added to team " + team.name + " for course " + str(course.number) + "."
+    save_and_notify('8', request.user.person, user.person, msg, notif_url)
+
+
     return HttpResponse(
             json.dumps(user_as_simple_json(user)),
             content_type="application/json",
@@ -617,8 +624,8 @@ def submit_team(request):
     if (len(team_members) > assignment.team_max_size or
         len(team_members) < assignment.team_min_size):
         return HttpJSONStatus(
-                "Team must be at most "+assignment.team_max_size+
-                " and at minimum " + assignment.team_min_size+" people.",
+                "Team must be at most "+`assignment.team_max_size`+
+                " and at minimum " + `assignment.team_min_size`+" people.",
                 status=400)
 
     if (team_name == "" or team_members == "" or
