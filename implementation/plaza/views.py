@@ -71,6 +71,14 @@ def user_has_permission(user, course, required_role):
             return True
     return False
 
+def user_has_team_for_assignment(user, assignment):
+    person = user
+    teams = person.teams
+    if teams != None:
+        if teams.filter(assignment__id=assignment.id).exists():
+            return True
+    return False
+
 ####### Login/register #######
 
 @transaction.atomic
@@ -611,7 +619,7 @@ def submit_team(request):
         team.members.add(get_object_or_404(Person,user__username=member))
 
     notif_url = "/myteam/"+course_semester+"/"+course_number+"/"+assignment_number
-    save_and_notify('8', person, target_user.person, '', "/profile/"+str(request.user.id))
+    save_and_notify_multiple('8', request.user.person, team.members.all(), '', notif_url)
 
     return HttpJSONStatus("Team "+team_name+" created!", status=200)
 
@@ -846,7 +854,7 @@ def get_new_posts_json(request,semester_id,course_id,post_id):
       response_text +=  ', "timestamp":"'+post.updated_at.strftime('%b %d, %H:%M') +'"'
       response_text +=  '},\n'
 
-    
+
     response_text = '[' + response_text[:-2] + ']'
     return HttpResponse(response_text, content_type="application/json")
 
@@ -962,6 +970,15 @@ def get_profile_picture(request, id):
         raise Http404
     content_type = guess_type(person.profile_image.name)
     return HttpResponse(person.profile_image, content_type=content_type)
+
+# General notification API
+def save_and_notify_multiple(action, sender, receivers, extra_content, destination):
+    for receiver in receivers:
+        notification = Notification(action=action, sender=sender, receiver=receiver,
+                extra_content=extra_content, destination=destination)
+        notification.save()
+        pusher_client.trigger('noti_channel', 'my_event', {'message': 'New Notification!'})
+    return
 
 # General notification API
 def save_and_notify(action, sender, receiver, extra_content, destination):
@@ -1150,11 +1167,11 @@ def team_creation_page(request, course_number, course_semester, assignment_numbe
         course = Course.objects.get(
                 semester=course_semester,
                 number=course_number)
-        assignment = Course.assignments.get(number=assignment_number)
+        assignment = course.assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
         return redirect('home_msg', '', 'Invalid team page!')
 
-    if user_get_permission(request.user, course) != Role.student:
+    if get_user_role(request.user, course) != Role.student:
         return redirect('home_msg', '', 'You are not a student of this course!')
 
     context = {
@@ -1178,6 +1195,11 @@ def resource_page(request, semester_id, course_id, id):
     context['resource_folder_form'] = ResourceFolderForm()
     if id == '0':
         c = Course.objects.get(semester=semester_id,number=course_id)
+        ## Needed for assignments
+        context['assignments'] = c.assignments
+        context['semester_id'] = semester_id
+        context['course_id'] = course_id
+        context['role'] = get_user_role(request.user, c)
         resources = Resource.objects.filter(parent=None, course=c)
         context['resources'] = resources
     else:
