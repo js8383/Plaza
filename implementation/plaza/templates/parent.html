@@ -48,7 +48,19 @@
                 <ul class="nav navbar-nav">
                     {% block nav %}
                     {% endblock %}
-
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Your Teams<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if user.person.teams.count %}
+                        {% for team in user.person.teams.all %}
+                        <li>
+                        <a href="{% url 'myteamview' course_semester=team.assignment.course.semester course_number=team.assignment.course.number assignment_number=team.assignment.number %}">{{team}}</a></li>
+                        {% endfor %}
+                        {% else %}
+                        <li><a href="#">No Teams</a></li>
+                        {% endif %}
+                    </ul>
+                    </li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose course<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -122,11 +134,11 @@
                         </li>
                     </ul>
                     </li> -->
-                    
+
                     <!-- /.dropdown -->
                     <li class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  <i style="color:#337AB7;" class="fa fa-caret-down"></i></button>
-                    
+
                     <ul id="notidropdown" class="dropdown-menu dropdown-alerts">
                         <!-- <li>
                         <a href="#">
@@ -137,8 +149,8 @@
                         </a>
                         </li>
                         <li class="divider"></li> -->
-                        
-                        <li> 
+
+                        <li>
                         <a class="text-center" href="{% url 'notification' %}">
                             <strong>See Detail</strong>
                             <i class="fa fa-angle-right"></i>

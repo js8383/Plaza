@@ -45,17 +45,18 @@ def HttpJSONStatus(msg,status):
 ### Role/Permission Helper Function ####
 
 def get_user_role(user, course):
-    if course.students.filter(username=user.username).exists():
+    if course.instructors.filter(username=user.username).exists():
         return Role.instructor
     elif course.staff.filter(username=user.username).exists():
         return Role.staff
-    elif course.instructors.filter(username=user.username).exists():
+    elif course.students.filter(username=user.username).exists():
         return Role.student
     else:
         return Role.none
 
 def user_has_permission(user, course, required_role):
     user_role = get_user_role(user, course)
+    print("user_role " + `user_role`)
     if required_role == Role.instructor:
         if user_role == Role.instructor:
             return True
