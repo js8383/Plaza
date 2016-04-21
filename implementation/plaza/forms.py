@@ -56,11 +56,16 @@ class CourseSignupForm(forms.Form):
     access_code = forms.IntegerField()
 
 class CourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(CourseForm, self).__init__(*args, **kwargs)
+        self.fields['description'].required = False
+        self.fields['access_code'].required = False
 
     class Meta:
         model = Course
         fields=['number', 'name', 'semester', 'description',
-                'max_enroll', 'access_code', 'public']
+                'max_enroll', 'access_code']
 
 # TODO: add more validation
 class PersonForm(forms.Form):

@@ -20,6 +20,7 @@ from datetime import datetime
 from django.utils.html import *
 from annoying.functions import get_object_or_None
 import pusher
+import re
 
 ## Role based course/user interaction ##
 class Role:
@@ -1190,21 +1191,44 @@ def course_signup_page(request, course_semester, course_number):
 @login_required
 @transaction.atomic
 def course_creation_page(request):
-	# Show the page to create courses
-	# This is only accessible by staffs (actuallt it could be integrated into administration page as a dropdown panel)
     context = {}
     if request.method == 'GET':
         return render(request, 'course_creation.html')
+
     form = CourseForm(request.POST)
 
     if not form.is_valid():
         return render(request, 'course_creation.html', {'form': form})
 
+    errors = []
+    iferror = False
+    number = form.cleaned_data['number']
+    max_enroll = form.cleaned_data['max_enroll']
+    semester=form.cleaned_data['semester']
+    access_code=form.cleaned_data['access_code']
+
+    if not number.isdigit():
+        iferror = True
+        errors.append("Course number must be a NUMBER!")
+
     if Course.objects.filter(number=form.cleaned_data['number'],
                              semester=form.cleaned_data['semester']).exists():
+        iferror = True
+        errors.append("Course already exists!")
+
+    pattern = re.compile("^[FS]\d{2}$")
+    if pattern.match(semester) is None:
+        iferror = True
+        errors.append("Semster should start with F or S and followed by 2 digits (e.g. F16)!")
+
+    if iferror:
         return render(request,
                       "course_creation.html",
-                      {"form":form, "errors":["Course already exists!"]})
+                      {"form":form, "errors":errors})
+
+    public = True
+    if access_code is not None:
+        public = False
 
     course = Course(number=form.cleaned_data['number'],
                     name=form.cleaned_data['name'],
@@ -1212,8 +1236,7 @@ def course_creation_page(request):
                     description=form.cleaned_data['description'],
                     max_enroll=form.cleaned_data['max_enroll'],
                     access_code=form.cleaned_data['access_code'],
-                    public=form.cleaned_data['public'])
-
+                    public=public)
     course.save()
 
     # add ourselves as the manager of this course

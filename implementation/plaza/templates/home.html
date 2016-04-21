@@ -25,7 +25,11 @@
                             </span>
                         </div>
                         <div class="panel-body">
-                            <p>{{course.description}}</p>
+                            {% if course.description %}
+                            <p> Description: {{course.description}}</p>
+                            {% else %}
+                            No course description
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
