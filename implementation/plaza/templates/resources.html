@@ -160,105 +160,99 @@
                                         <div class="tab-content">
 
                                             <div class="tab-pane fade in active" id="File">
-                                            <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">
+                                                <div class="row">
+                                                
+                                                <div id="cfile_errorpopup" class="col-lg-12"></div>   
 
-                                                {% for field in resource_file_form.visible_fields %}
-                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
-                                                    <div class="col-md-9">
-                                                       {{field}}
+                                                <div class="col-lg-12"> 
+                                                <form id="createfileform" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">
+
+                                                    {% for field in resource_file_form.visible_fields %}
+                                                     <div class="form-group">
+                                                        <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                        <div class="col-md-9">
+                                                           {{field}}
+                                                        </div>
                                                     </div>
+
+                                                    {% endfor %}
+
+                                                    <input type="hidden" name="rtype" value="file">
+
+                                                    <!-- <div class="form-group">
+                                                        <div class="col-md-offset-3 col-md-9">
+                                                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                                        </div>
+                                                    </div> -->
+
+                                                    {% if form.errors %}
+                                                        <div class="alert alert-warning">
+                                                           {{form.errors}}
+                                                        </div>
+                                                    {% endif %}
+
+                                                    {% csrf_token %}
+
+                                                </form>
+                                                </div>
                                                 </div>
 
-                                                {% endfor %}
-
-                                                <input type="hidden" name="rtype" value="file">
-
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                                    </div>
-                                                </div>
-
-                                                {% if form.errors %}
-                                                    <div class="alert alert-warning">
-                                                       {{form.errors}}
-                                                    </div>
-                                                {% endif %}
-
-                                                {% csrf_token %}
-
-                                            </form>
-
+                                                <div class="row"> <div class="col-lg-12">
+                                                <button class="btn btn-primary pull-right" onclick="create_file()">Submit</button>
+                                                </div> </div>
                                             </div>
 
                                             <div class="tab-pane fade" id="Folder">
-                                               <form enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">
-                                               <!-- <div class="form-group">
-                                                    <label class="control-label col-md-3" for="number">Title</label>
-                                                    <div class="col-md-9">
-                                                        <input type="text" class="form-control" name="title">
+                                               <div class="row">
+
+                                               <div id="cfolder_errorpopup" class="col-lg-12"></div>    
+
+                                                <div class="col-lg-12">
+                                                   <form id="createfolderform" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="{% url 'createresource' sid cid parent_rid %}">
+
+                                                     {% for field in resource_folder_form.visible_fields %}
+
+                                                     <div class="form-group">
+                                                        <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
+                                                        <div class="col-md-9">
+                                                           {{field}}
+                                                        </div>
                                                     </div>
+
+                                                    {% endfor %}
+
+                                                    <input type="hidden" name="rtype" value="folder">
+
+                                                    <div class="form-group">
+                                                        <div class="col-md-offset-3 col-md-9">
+                                                        </div>
+                                                    </div>
+
+                                                    {% csrf_token %}
+                                                    </form>
+                                                </div>
                                                 </div>
 
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-3" for="number">Notes</label>
-                                                    <div class="col-md-9">
-                                                        <textarea name="notes" style="resize:none;"class="form-control" rows="4"></textarea>
-                                                    </div>
-                                                </div> -->
+                                                <div class="row"> <div class="col-lg-12">
+                                                <button class="btn btn-primary pull-right" onclick="create_folder()">Submit</button>
+                                                </div> </div>
 
-                                                 {% for field in resource_folder_form.visible_fields %}
-                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3" for="name">{{field.label_tag}}</label>
-                                                    <div class="col-md-9">
-                                                       {{field}}
-                                                    </div>
-                                                </div>
-
-                                                {% endfor %}
-
-                                                <input type="hidden" name="rtype" value="folder">
-
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                                    </div>
-                                                </div>
-
-                                                {% csrf_token %}
-
-                                                </form>
                                             </div>
 
+                                        <!-- tab_content -->
                                         </div>
+                                    <!-- modal body -->
                                     </div>
+                                <!-- modal content -->
                                 </div>
                             </div>
                         </div>
-
-                        <!-- </ul> -->
-                    </div>
-
-<!--                     <div class="tab-pane fade" id="Homework">
-
-                    </div>
-
-                    <div class="tab-pane fade" id="Video">
-
-                    </div>
-
-                    <div class="tab-pane fade" id="Notes">
-
-                    </div> -->
-                <!-- </div> -->
-            <!-- </div> -->
-            <!-- /.panel-body -->
+                <!-- panel boday -->
+                </div>
+            </div>
         </div>
-        <!-- /.panel -->
         <br>
-
-    </div>
+<!-- row -->
 </div>
 
 {% endblock %}

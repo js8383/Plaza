@@ -127,13 +127,13 @@ class ResourceFileForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': "",'class': 'form-control'}),
             'notes': forms.Textarea(attrs={'placeholder': "", 'style': 'resize:none;', 'rows':'4', 'class': 'form-control'}),
-            'file': forms.FileInput(attrs={'placeholder': "",'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'id': "uploadfile",'placeholder': "",'class': 'form-control'}),
             'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'due': forms.DateInput(attrs={'placeholder': "", 'id':'dpicker', 'class': 'form-control'}),
         }
         labels = {
             'title': 'Title',
-            'notes': 'Notes',
+            'notes': 'Description',
             'file': 'Attach File',
             'tags':'Tags',
             'due': 'Due'
@@ -159,8 +159,8 @@ class ResourceFolderForm(forms.ModelForm):
 
         }
         labels = {
-            'title': 'Title',
-            'notes': 'Notes',
+            'title': 'Name',
+            'notes': 'Description',
         }
 
     def clean(self):
