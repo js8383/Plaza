@@ -57,11 +57,13 @@ def get_user_role(user, course):
 def user_has_permission(user, course, required_role):
     user_role = get_user_role(user, course)
     print("user_role " + `user_role`)
+    print("required_role " + `required_role`)
     if required_role == Role.instructor:
         if user_role == Role.instructor:
             return True
     if required_role == Role.staff:
-        if user_role == Role.instructor or Role.staff:
+        if (user_role == Role.instructor or
+            user_role == Role.staff):
             return True
     if required_role == Role.student:
         if (user_role == Role.instructor or
@@ -928,7 +930,7 @@ def edit_course(request, course_semester, course_number):
     role = ''
 
     if not user_has_permission(request.user, course, Role.staff):
-        return redirect('home',"","You do not have permission to view this course!")
+        return redirect('home_msg',"","You do not have permission to view this course!")
 
     if course.instructors.filter(username=request.user.username).count() > 0:
         role = "instructor"
@@ -1121,7 +1123,7 @@ def course_creation_page(request):
 
     if Course.objects.filter(number=form.cleaned_data['number'],
                              semester=form.cleaned_data['semester']).exists():
-        redirect('home',"","Course already exists!")
+        redirect('home_msg',"","Course already exists!")
 
     course = Course(number=form.cleaned_data['number'],
                     name=form.cleaned_data['name'],
@@ -1165,10 +1167,10 @@ def team_creation_page(request, course_number, course_semester, assignment_numbe
                 number=course_number)
         assignment = Course.assignments.get(number=assignment_number)
     except ObjectDoesNotExist:
-        return redirect('home', '', 'Invalid team page!')
+        return redirect('home_msg', '', 'Invalid team page!')
 
     if user_get_permission(request.user, course) != Role.student:
-        return redirect('home', '', 'You are not a student of this course!')
+        return redirect('home_msg', '', 'You are not a student of this course!')
 
     context = {
             "course_number": course_number,
