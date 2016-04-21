@@ -994,6 +994,28 @@ def unread_number(request):
     count = Notification.objects.filter(receiver__user__id=request.user.id, status='0').count()
     return JsonResponse({'un':count}, safe=False)
 
+# Change password
+# @login_required
+def change_password(request):
+    errors = []
+    context = {}
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(username=request.user.username,password=data['opassword'])
+            if user is not None:
+                newuser = User.objects.get(username__exact=request.user.username)
+                newuser.set_password(data['npassword1'])
+                newuser.save()
+                return redirect(reverse('login'))
+            else:
+                errors.append('Old password is not correct')
+        print form.errors
+        context['errors'] = errors
+        context['form'] = form
+    return render(request, "account.html", context)
+
 ############################################## Display pages #############################################
 
 
@@ -1293,3 +1315,7 @@ def dynamic_obj_suggestion(request):
 
     return HttpResponse(suggestions, content_type='application/json')
 
+@login_required
+def account_page(request):
+    context = {}
+    return render(request, "account.html", context)

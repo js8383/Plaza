@@ -166,3 +166,31 @@ class ResourceFolderForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(ResourceFolderForm, self).clean()
         return cleaned_data
+
+class ChangePasswordForm(forms.Form):
+    opassword  = forms.CharField(max_length = 200,
+                                 label='Old Password',
+                                 widget = forms.PasswordInput())
+    npassword1  = forms.CharField(max_length = 200,
+                                 label='New Password',
+                                 widget = forms.PasswordInput())
+    npassword2  = forms.CharField(max_length = 200,
+                                 label='Confirm New Password',
+                                 widget = forms.PasswordInput())
+    def clean(self):
+        # Calls our parent (forms.Form) .clean function, gets a dictionary
+        # of cleaned data as a result
+        cleaned_data = super(ChangePasswordForm, self).clean()
+
+        # Confirms that the two password fields match
+        opassword = cleaned_data.get('opassword')
+        npassword1 = cleaned_data.get('npassword1')
+        npassword2 = cleaned_data.get('npassword2')
+        if npassword1 and npassword1 and npassword1 != npassword2:
+            raise forms.ValidationError("New passwords did not match.")
+        if opassword and opassword == npassword1:
+            raise forms.ValidationError("Your new passwords should be different from the old one.")
+
+        # We must return the cleaned data we got from our parent.
+        return cleaned_data
+    

@@ -105,4 +105,8 @@ urlpatterns = [
 
     # Rich Text uses TinyMCE
     url(r'^tinymce/', include('tinymce.urls')),
+
+    # account setting
+    url(r'^account/$', plaza_views.account_page, name='account'),
+    url(r'^changepassword$', plaza_views.change_password, name='changepassword'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
