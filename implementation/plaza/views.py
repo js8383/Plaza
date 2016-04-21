@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.conf import settings
 from datetime import datetime
-
+import pusher 
 
 # Create your views here.
 
@@ -850,6 +850,13 @@ def search(request):
 
 # All notifications stuff and resources and etc.
 
+pusher_client = pusher.Pusher(
+  app_id='199771',
+  key='692221dea02c47027435',
+  secret='3f8f9ff3b6fb3008becf',
+  ssl=True
+)
+
 # @login_required
 @transaction.atomic
 def follow_user(request, id):
@@ -880,11 +887,12 @@ def get_profile_picture(request, id):
 def save_and_notify(action, sender, receiver, extra_content, destination):
     notification = Notification(action=action, sender=sender, receiver=receiver, extra_content=extra_content, destination=destination)
     notification.save()
+    pusher_client.trigger('noti_channel', 'my_event', {'message': 'New Notification!'})
     return
 
 # @login_required
 def get_notification(request, id):
-    unread_notis = Notification.objects.filter(status='0', receiver__user__id=id).order_by('-created_at')
+    unread_notis = Notification.objects.filter(status='0', receiver__user__id=id).order_by('-created_at')[:5]
     json = []
     for n in unread_notis:
         noti_json = {
@@ -901,6 +909,10 @@ def get_notification(request, id):
 def mark_as_read(request, id):
     notification = Notification.objects.filter(id=id).update(status='1')
     return redirect(reverse('notification'))
+
+def unread_number(request):
+    count = Notification.objects.filter(receiver__user__id=request.user.id, status='0').count()
+    return JsonResponse({'un':count}, safe=False)
 
 ############################################## Display pages #############################################
 
@@ -1095,7 +1107,7 @@ def resource_slide_page(request):
 
 def notification_page(request):
     context = {}
-    context['notifications'] = Notification.objects.all()
+    context['notifications'] = Notification.objects.filter(receiver__user__id=request.user.id)
     return render(request, "notification.html", context)
 
 

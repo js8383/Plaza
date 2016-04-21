@@ -123,7 +123,10 @@
                     
                     <!-- /.dropdown -->
                     <li class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  <i style="color:#337AB7;" class="fa fa-caret-down"></i></button>
+                        <button class="btn btn-secondary dropdown-toggle" style="background:none;" type="button" onclick="displaynotidropdown({{ request.user.id }})"><i style="color:#337AB7;" class="fa fa-bell fa-fw"></i>  
+
+                        <span id="bbadge" class="label label-danger label-as-badge">...</span> <i style="color:#337AB7;" class="fa fa-caret-down"></i> </button>
+
                     
                     <ul id="notidropdown" class="dropdown-menu dropdown-alerts">
                         <!-- <li>
@@ -138,7 +141,7 @@
                         
                         <li> 
                         <a class="text-center" href="{% url 'notification' %}">
-                            <strong>See Detail</strong>
+                            <strong>See Detail</strong> 
                             <i class="fa fa-angle-right"></i>
                         </a>
                         </li>
@@ -212,7 +215,6 @@
     <!-- jQuery -->
     <!-- TODO: Solve duplication -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -230,9 +232,10 @@
     <script src="https://cdn.rawgit.com/kartik-v/bootstrap-fileinput/master/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
     <script src="https://cdn.rawgit.com/kartik-v/bootstrap-fileinput/master/js/fileinput.min.js"></script>
 
+    <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
+
     <!-- Generic Javascript -->
     <script src="{% static 'js/plaza.js' %}"></script>
-
     <script src="{% static 'js/forum.js' %}"></script>
 
     <script type="text/javascript">
@@ -259,9 +262,6 @@
             removeLabel: "Discard "
         });
     });
-
-    </script>
-
 
     {% block footer %} {% endblock %}
 

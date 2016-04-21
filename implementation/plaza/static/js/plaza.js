@@ -321,3 +321,47 @@ function displaynotidropdown(id) {
     
     $('#notidropdown').toggle();
 }
+
+
+// push notification
+
+// Enable pusher logging - don't include this in production
+// Pusher.log = function(message) {
+//   if (window.console && window.console.log) {
+//     window.console.log(message);
+//   }
+// };
+
+var pusher = new Pusher('692221dea02c47027435', {
+  encrypted: true
+});
+
+var channel = pusher.subscribe('noti_channel');
+channel.bind('my_event', function(data) {
+    update_unread_number();
+});
+
+// Get number of unread post
+function update_unread_number() {
+    data = {csrfmiddlewaretoken: getCSRFToken()}
+    $.ajax({
+        url: "/unreadnumber",
+        async: true,
+        data: data,
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+            $('#bbadge').html(response['un']);
+        },
+
+        error: function (xhr, status, errorThrown) {
+            
+        }
+    });
+}
+
+$(function() {
+    update_unread_number()
+});
+
+
