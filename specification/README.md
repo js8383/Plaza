@@ -20,11 +20,7 @@ Other features include:
 ### Model
 We have created the basic model on Django and generated an ER diagram based on it using graphviz from django-extensions (shown below)
 
-
-![alt text](https://raw.githubusercontent.com/CMU-Web-Application-Development/team2/master/specification/plaza.png?token=AIuszZoRiBQN78Y2jFowuYsbLzHTHyCXks5W9fpAwA%3D%3D "ER diagram")
-
-
-[Link](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/plaza.png)
+[Link](https://github.com/js8383/Plaza/blob/master/specification/plaza.png)
 
 The ERD is largely self-explantory. Users are free to define courses and automatically become instructors for that course. They cann add other instructors, TAs and students. All users can make posts with various degrees of anonymity. A course can have an associated schedule of assignments. 
 
@@ -38,7 +34,7 @@ Posts and replies can be assigned statuses and due dates similar to a bug tracki
 
 
 ### Backlog
-[You can view the table with the backlog details here](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/Project%20Backlog.html)
+[You can view the table with the backlog details here](https://github.com/js8383/Plaza/blob/master/specification/Project%20Backlog.html)
 
 
 
@@ -47,6 +43,6 @@ We have created a basic version of models.py, started with stubs for all the vie
 
 ### Rough templates of Views.py and Urls.py
 
-   [Urls.py](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/plaza/urls.py)
+   [Urls.py](https://github.com/js8383/Plaza/blob/master/specification/plaza/urls.py)
 
-   [Views.py](https://github.com/CMU-Web-Application-Development/team2/blob/master/specification/plaza/views.py)
+   [Views.py](https://github.com/js8383/Plaza/blob/master/specification/plaza/views.py)
